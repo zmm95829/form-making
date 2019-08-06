@@ -16,6 +16,7 @@ module.exports = {
     'vue'
   ],
   rules: {
+    "space-before-function-paren": 0,
     'generator-star-spacing': 'off',
     'semi': ['off', 'always'],    
     'quotes': [1, 'double'],
