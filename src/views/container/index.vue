@@ -8,7 +8,6 @@
     </aside>
     <aside class="aside-right"></aside>
     <section class="section"></section>
-Container
   </div>
 </template>
 <script>
@@ -27,27 +26,25 @@ export default {
 </script>
 <style>
 .header {
-  background-color: yellow;
+  /* background-color: yellow; */
+  border-bottom: 1px solid orange;
   width: 100%;
   height: 120px;
 }
 .nav {
   background-color: red;
-  width: calc(100% - 560px);
-  height: calc(100% - 200px);
-  position: fixed;
-  top: 120px;
-  left: 260px;
 }
 .footer {
-  background-color: orange;
+  border-top: 1px solid orange;
+  /* background-color: orange; */
   position: fixed;
   bottom: 0px;
   width: 100%;
   height: 80px;
 }
 .aside-left {
-  background-color: blue;
+  border-right: 1px solid blue;
+  /* background-color: blue; */
   position: fixed;
   left: 0;
   top: 120px;
@@ -55,7 +52,8 @@ export default {
   width: 260px;
 }
 .aside-right {
-  background-color: blue;
+  border-left: 1px solid blue;
+  /* background-color: blue; */
   position: fixed;
   right: 0;
   top: 120px;
@@ -63,6 +61,12 @@ export default {
   width: 300px;
 }
 .section {
-  background-color: green;
+  /* background-color: green; */
+  border: 1px solid green;
+  width: calc(100% - 562px);
+  height: calc(100% - 202px);
+  position: fixed;
+  top: 120px;
+  left: 260px;
 }
 </style>
