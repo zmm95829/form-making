@@ -7,15 +7,19 @@
       <FormElement/>
     </aside>
     <aside class="aside-right"></aside>
-    <section class="section"></section>
+    <section class="section">
+      <FormView/>
+    </section>
   </div>
 </template>
 <script>
 import FormElement from "./FormElement";
+import FormView from "./FormView.vue";
 export default {
   name: "Container",
   components: {
-    FormElement
+    FormElement,
+    FormView
   },
   data: function() {
     return {

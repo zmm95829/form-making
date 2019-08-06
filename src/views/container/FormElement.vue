@@ -1,5 +1,5 @@
 <template>
-  <div class="element-list">
+  <div class="form-element-list">
     <draggable
       element="ul"
       v-model="basicElement"
@@ -8,7 +8,7 @@
       @start="handleMoveStart"
       :move="handleMove"
     >
-      <li v-for="item in basicElement" :key="item.id" class="element-item">
+      <li v-for="item in basicElement" :key="item.id" class="form-element-item">
         <a>
           <span>{{item.name}}</span>
         </a>
@@ -48,12 +48,12 @@ export default {
 };
 </script>
 <style>
-.element-list ul {
+.form-element-list ul {
   margin: 0;
   padding: 16px;
   list-style-type: none;
 }
-.element-item {
+.form-element-item {
   font-size: 12px;
   display: flex;
   flex-wrap: wrap;
@@ -70,7 +70,7 @@ export default {
   color: #333;
   border: 1px solid #f4f6fc;
 }
-.element-item a {
+.form-element-item a {
   display: block;
   width: 105px;
   cursor: move;
@@ -78,7 +78,7 @@ export default {
   border: 1px solid #f4f6fc;
   text-align: center;
 }
-.element-item a:hover {
+.form-element-item a:hover {
   border: 1px dashed blue;
 }
 </style>
