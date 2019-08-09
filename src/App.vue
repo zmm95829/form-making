@@ -12,4 +12,5 @@ export default {
 
 <style>
 @import "./style/index.css";
+@import './style/iconfont/iconfont.css'
 </style>

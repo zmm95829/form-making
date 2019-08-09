@@ -4,11 +4,12 @@
       element="ul"
       v-model="basicElement"
       :sort="false"
+      v-bind="{group:{ name:'form', pull:'clone',put:false}}"
       @end="handleMoveEnd"
       @start="handleMoveStart"
-      :move="handleMove"
+      @update="handleMoveUpdate"
     >
-      <li v-for="item in basicElement" :key="item.id" class="form-element-item">
+      <li v-for="item in basicElement" :key="item.id" class="form-element-item itemdrag">
         <a>
           <span>{{item.name}}</span>
         </a>
@@ -31,18 +32,22 @@ export default {
   },
   methods: {
     handleMoveEnd: function(a, b, c) {
-      console.log("handleMoveEnd");
-      console.log(a);
+      // console.log("handleMoveEnd-formelement");
+      // console.log(a);
     },
     handleMoveStart: function(a, b, c) {
-      console.log("handleMoveStart");
-      console.log(a);
+      // console.log("handleMoveStart-formelement");
+      // console.log(a);
     },
-    handleMove: function(a, b, c) {
-      console.log("handleMove");
-      console.log(a);
-      console.log(b);
-      console.log(c);
+    // handleMove: function(a, b, c) {
+      // console.log("handleMove-formelement");
+      // console.log(a);
+      // return true;
+      // console.log(b);
+      // console.log(c);
+    // },
+    handleMoveUpdate() {
+      console.log("handleMoveUpdate");
     }
   }
 };

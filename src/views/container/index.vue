@@ -6,24 +6,32 @@
     <aside class="aside-left">
       <FormElement/>
     </aside>
-    <aside class="aside-right"></aside>
+    <aside class="aside-right">
+      <FormConfig :form-config="data.formConfig" :select="data.selectItem"/>
+    </aside>
     <section class="section">
-      <FormView/>
+      <FormView :form-config="data.formConfig" :select.sync="data.selectItem"/>
     </section>
   </div>
 </template>
 <script>
 import FormElement from "./FormElement";
 import FormView from "./FormView.vue";
+import FormConfig from "./FormConfig.vue";
+import formConfig from "./formConfig.js";
 export default {
   name: "Container",
   components: {
     FormElement,
-    FormView
+    FormView,
+    FormConfig
   },
   data: function() {
     return {
-
+      data: {
+        formConfig,
+        selectItem: {}
+      }
     }
   }
 };
