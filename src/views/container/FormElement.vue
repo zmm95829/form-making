@@ -4,14 +4,14 @@
       element="ul"
       v-model="basicElement"
       :sort="false"
-      v-bind="{group:{ name:'form', pull:'clone',put:false}}"
+      :group="{name:'form', pull:'clone', put:false}"
       @end="handleMoveEnd"
       @start="handleMoveStart"
       @update="handleMoveUpdate"
     >
       <li v-for="item in basicElement" :key="item.id" class="form-element-item itemdrag">
         <a>
-          <span>{{item.name}}</span>
+          <span>{{item.label}}</span>
         </a>
       </li>
     </draggable>
@@ -20,6 +20,7 @@
 <script>
 import Draggable from "vuedraggable"
 import { basicElement } from "./elementConfig.js";
+import { cloneDeep } from "lodash";
 export default {
   name: "FormElement",
   components: {
@@ -27,25 +28,14 @@ export default {
   },
   data: function() {
     return {
-      basicElement
+      basicElement: cloneDeep(basicElement)
     }
   },
   methods: {
     handleMoveEnd: function(a, b, c) {
-      // console.log("handleMoveEnd-formelement");
-      // console.log(a);
     },
     handleMoveStart: function(a, b, c) {
-      // console.log("handleMoveStart-formelement");
-      // console.log(a);
     },
-    // handleMove: function(a, b, c) {
-      // console.log("handleMove-formelement");
-      // console.log(a);
-      // return true;
-      // console.log(b);
-      // console.log(c);
-    // },
     handleMoveUpdate() {
       console.log("handleMoveUpdate");
     }

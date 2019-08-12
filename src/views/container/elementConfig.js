@@ -1,30 +1,28 @@
 export const basicElement = [{
   type: "input",
-  name: "单行文本",
   label: "单行文本",
   icon: "icon-input",
+  model: "",
   options: {
     width: "100%",
     defaultValue: "",
     required: false,
     dataType: "string",
-    pattern: "",
-    placeholder: "",
+    placeholder: "请输入内容",
     disabled: false
   }
 },
 {
   type: "textarea",
-  name: "多行文本",
   label: "多行文本",
   icon: "icon-diy-com-textarea",
+  model: "",
   options: {
     width: "100%",
     defaultValue: "",
     required: false,
     disabled: false,
-    pattern: "",
-    placeholder: "",
+    placeholder: "请输入内容",
     minRows: 3
   }
 } ];

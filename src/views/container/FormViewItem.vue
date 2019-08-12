@@ -36,13 +36,24 @@ export default {
     }
   },
   mounted() {
-    console.log("formviewitem-mounted");
-    console.log(this.data);
+    // console.log("formviewitem-mounted");
+    // console.log(this.data);
   },
   watch: {
+    select: {
+      handler: function() {
+        this.selectItem = this.select;
+        console.log("select改变")
+      },
+      deep: true
+    },
     selectItem: {
       handler: function() {
         this.$emit("update:select", this.selectItem);
+        console.log("------1-------");
+        console.log(this.selectItem.id);
+        console.log(this.item.id);
+        console.log("------2-------");
       },
       deep: true
     }
@@ -55,9 +66,10 @@ export default {
 };
 </script>
 <style>
-.active:hover.active {
-  outline: 2px solid #409eff;
+.active {
+  outline: 3px solid #409eff;
   /* border: 2px solid #409eff; */
+  outline-offset: -1px;
 }
 .item-view-drag {
   position: absolute;
@@ -80,6 +92,7 @@ export default {
   /* outline-offset: 2px; */
   position: relative;
   padding-bottom: 10px;
+  margin-bottom: 2px;
   background-color: #fafafa;
 }
 .item-container:hover {

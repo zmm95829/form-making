@@ -2,12 +2,18 @@
   <div class="form-config-container">
     <el-tabs v-model="activeName">
     <el-tab-pane label="字段属性" name="first">
-      <el-form label-position="top" style="padding: 10px">
-      <el-form-item label="标签名称">
+      <el-form v-if="showItemConfig" label-position="top" style="padding: 10px">
+        <el-form-item label="标签名称">
           <el-input
-          v-model="select.label"
-        />
-      </el-form-item>
+            v-model="select.label"
+          />
+        </el-form-item>
+        <el-form-item label="绑定字段" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
+          <el-input v-model="select.model"></el-input>
+        </el-form-item>
+        <el-form-item label="占位内容" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
+          <el-input v-model="select.options.placeholder"></el-input>
+        </el-form-item>
     </el-form>
     </el-tab-pane>
     <el-tab-pane label="表单属性" name="second">
@@ -42,7 +48,15 @@ export default {
   props: ["formConfig", "select"],
   data() {
     return {
-      activeName: ""
+      activeName: "first"
+    }
+  },
+  computed: {
+    /**
+     * 是否显示表单项属性编辑项
+     */
+    showItemConfig: function() {
+      return this.select && this.select.options;
     }
   }
 }
