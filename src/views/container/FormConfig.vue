@@ -14,6 +14,30 @@
         <el-form-item label="占位内容" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
           <el-input v-model="select.options.placeholder"></el-input>
         </el-form-item>
+        <el-form-item label="默认值" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
+          <el-input v-model="select.options.defaultValue"></el-input>
+        </el-form-item>
+        <template v-if="select.type === 'radio'">
+          <el-form-item label="数据源">
+            <el-radio-group v-model="select.options.defaultValue">
+              <el-table :data="select.options.options" border style="width: 100%">
+                <el-table-column prop="label" label="选项名称" width="130px">
+                  <template slot-scope="{row}">
+                    <el-input v-model="row.label"/>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="value" label="选项值" width="130px">
+                  <template slot-scope="{row}">
+                    <el-input v-model="row.value"/>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-radio-group>
+          </el-form-item>
+           <div style="margin-left: 22px;">
+            <el-button type="text" @click="handleAddOption">添加选项</el-button>
+          </div>
+        </template>
     </el-form>
     </el-tab-pane>
     <el-tab-pane label="表单属性" name="second">
@@ -57,6 +81,17 @@ export default {
      */
     showItemConfig: function() {
       return this.select && this.select.options;
+    }
+  },
+  methods: {
+    handleAddOption: function() {
+      this.select.options.options.push({
+        value: "",
+        label: ""
+      });
+    },
+    handleRemoveOptions: function(index) {
+      this.select.options.options.splice(index, 1);
     }
   }
 }

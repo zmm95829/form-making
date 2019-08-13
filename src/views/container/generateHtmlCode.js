@@ -1,7 +1,6 @@
 import getElFormCode from "./generateFormCode.js";
-import {getFormModel} from "./../../utils/handleData.js";
+import generateScriptCode from "./generateScriptCode.js";
 export default function(data, formConfig) {
-  const model = getFormModel(data.list);
   return `<!DOCTYPE html>
   <html>
     <head>
@@ -15,16 +14,7 @@ export default function(data, formConfig) {
         ${getElFormCode(data || {list: []}, formConfig)}
       </div>
     </body>
-    <script type="text/javascript">
-      new Vue({
-          el:"#app",
-          data: function(){
-            return {
-              model: ${JSON.stringify(model)}
-            }
-          }
-      })
-    </script>
+    ${generateScriptCode(data.list)}    
   </html>`;
 };
 

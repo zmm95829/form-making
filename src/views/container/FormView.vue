@@ -10,7 +10,7 @@
     </div>
     <div class="form-view">
     <el-form :label-position="formConfig.labelPosition" :label-width="formConfig.labelWidth+'px'" :size="formConfig.size" :label-suffix="formConfig.labelSuffix">
-      <draggable v-model="data.list" @end="handleMoveEnd" @add="handleMoveAdd" :move="handleMove" group="form" handle=".item-drag">
+      <draggable v-model="data.list" @end="handleMoveEnd" @add="handleMoveAdd" :move="handleMove" v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}">
         <template v-for="(item, index) in data.list" >
          <form-view-item :item="item" :key="item.id" :select.sync="selectItem" :index="index" :data="data.list"/>
         </template>
@@ -19,12 +19,12 @@
     <div v-if="data.list.length === 0" class="form-empty">从左侧拖拽来添加元素</div>
   </div>
   <my-dialog title="生成html代码" :visible.sync="page.getHtmlCodeVisible">
-    <p v-html="getHtmlCode"></p>
+
+<ace v-model="getHtmlCode"></ace>
   </my-dialog>
    <my-dialog title="预览" :visible.sync="page.getPreviewVisible">
      <template v-if="page.getPreviewVisible">
-  <preview-form :data="data" :form-config="formConfig" :template="generateFormCode(data, formConfig)"/>
-
+        <preview-form :data="data" :form-config="formConfig" :template="generateFormCode(data, formConfig)"/>
      </template>
   </my-dialog>
   </div>
@@ -62,7 +62,7 @@ export default {
   computed: {
     getHtmlCode: function() {
       if(this.page.getHtmlCodeVisible) {
-        console.log(generateHtmlCode(this.data, this.formConfig))
+        console.log(generateHtmlCode(this.data, this.formConfig));
         return generateHtmlCode(this.data, this.formConfig);
       } else {
         return ""
@@ -91,7 +91,7 @@ export default {
         options: {
           ...this.data.list[newIndex].options
         },
-        model: "_key" + id
+        model: this.data.list[newIndex].type + "_key_" + id
         });
       this.selectItem = this.data.list[newIndex];
     },
@@ -137,6 +137,7 @@ export default {
      */
     handleEmpty: function() {
       this.data.list = [];
+       this.$emit("update:select", {});
     },
     /**
      * 生成html测试代码
@@ -178,4 +179,19 @@ export default {
   background-color: #fafafa;
   position: relative;
 }
+.placeholder, .placeholder::after{
+  background: #F56C6C;
+        border: 2px solid #F56C6C;
+        outline-width: 0;
+        height: 3px;
+        width: 100%; 
+        margin-top: -3px;
+        margin-left: 0px;
+        box-sizing: border-box;
+        font-size: 0;
+        content: '';
+        overflow: hidden;
+        padding: 0;
+}
+
 </style>

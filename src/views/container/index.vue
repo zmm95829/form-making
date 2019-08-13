@@ -80,5 +80,6 @@ export default {
   position: fixed;
   top: 120px;
   left: 260px;
+  overflow-y: auto;
 }
 </style>

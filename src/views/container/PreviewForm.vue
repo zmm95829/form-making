@@ -1,7 +1,7 @@
 
 <script>
 import getElFormCode from "./generateFormCode.js";
-import {getFormModel} from "./../../utils/handleData.js";
+import { getFormModel } from "./../../utils/handleData.js";
 export default {
   name: "",
   props: {
@@ -13,7 +13,7 @@ export default {
     },
     formConfig: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     template: {
       type: String,
@@ -22,11 +22,12 @@ export default {
   },
   data: function() {
     return {
-      model: getFormModel(this.data.list || {list: []})
+      model: {}
     }
   },
   created() {
-        this.$options.template = `${this.template}`
+    this.$options.template = `${this.template}`;
+    this.model = getFormModel(this.data.list);
   },
   template: `<span></span>`
 };

@@ -11,6 +11,7 @@
     >
       <li v-for="item in basicElement" :key="item.id" class="form-element-item itemdrag">
         <a>
+          <i :class="['icon', 'iconfont', item.icon]"/>
           <span>{{item.label}}</span>
         </a>
       </li>
@@ -75,5 +76,11 @@ export default {
 }
 .form-element-item a:hover {
   border: 1px dashed blue;
+}
+.form-element-item a .icon {
+  margin-right: 6px;
+  margin-left: 8px;
+  font-size: 14px;
+  display: inline-block;
 }
 </style>

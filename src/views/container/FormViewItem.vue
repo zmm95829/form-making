@@ -14,12 +14,48 @@
           :placeholder="item.options.placeholder"
           :disabled="item.options.disabled"
           :autosize="{ minRows: item.options.minRows }"
+          type="textarea"
         />
+      </template>
+      <template v-if="item.type == 'radio'">
+        <el-radio-group
+          v-model="item.model"
+          :style="{width: item.options.width}"
+          :disabled="item.options.disabled"
+        >
+          <el-radio
+            :style="{display: item.options.inline ? 'inline-block' : 'block'}"
+            :label="itemSub.value"
+            v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            :key="index"
+          >
+            <template v-if="item.options.remote">{{itemSub.label}}</template>
+            <template v-else>{{ itemSub.label }}</template>
+          </el-radio>
+        </el-radio-group>
+      </template>
+
+      <template v-if="item.type == 'checkbox'">
+        <el-checkbox-group
+          v-model="item.model"
+          :style="{width: item.options.width}"
+          :disabled="item.options.disabled"
+        >
+          <el-checkbox
+            :style="{display: item.options.inline ? 'inline-block' : 'block'}"
+            :label="item.value"
+            v-for="(item, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            :key="index"
+          >
+            <template v-if="item.options.remote">{{item.label}}</template>
+            <template v-else>{{item.options.showLabel ? item.label : item.value}}</template>
+          </el-checkbox>
+        </el-checkbox-group>
       </template>
     </el-form-item>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
-      <i class="iconfont icon-icon_clone"></i>
-      <i class="iconfont icon-trash"></i>
+      <i class="iconfont icon-icon_clone" title="复制" @click="handleClone"></i>
+      <i class="iconfont icon-trash" title="删除" @click="handleDelete"></i>
     </div>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-drag">
       <i class="iconfont icon-drag item-drag"></i>
@@ -50,10 +86,6 @@ export default {
     selectItem: {
       handler: function() {
         this.$emit("update:select", this.selectItem);
-        console.log("------1-------");
-        console.log(this.selectItem.id);
-        console.log(this.item.id);
-        console.log("------2-------");
       },
       deep: true
     }
@@ -61,13 +93,35 @@ export default {
   methods: {
     handleSelectItem: function() {
       this.selectItem = this.data[this.index];
+    },
+    handleDelete: function() {
+      this.data.splice(this.index, 1);
+      if (this.index !== 0) {
+        this.$emit("update:select", this.data[this.index - 1]);
+      } else if (this.data.length > 0) {
+        this.$emit("update:select", this.data[this.index]);
+      } else {
+        this.$emit("update:select", {});
+      }
+    },
+    handleClone: function() {
+      const id = Date.parse(new Date());
+      this.data.splice(this.index + 1, 0, {
+        ...this.selectItem,
+        options: {
+          ...this.selectItem.options
+        },
+        id,
+        model: this.data[this.index].type + "_key_" + id
+      });
+      this.$emit("update:select", this.data[this.index + 1]);
     }
   }
 };
 </script>
 <style>
 .active {
-  outline: 3px solid #409eff;
+  outline: 2px solid #409eff;
   /* border: 2px solid #409eff; */
   outline-offset: -1px;
 }
@@ -113,5 +167,8 @@ export default {
   justify-content: space-around;
   align-items: center;
   padding: 2px;
+}
+.item-view-action i {
+  cursor: pointer;
 }
 </style>
