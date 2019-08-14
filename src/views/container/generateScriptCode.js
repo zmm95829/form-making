@@ -62,9 +62,6 @@ export function generateVueMixins(list, getString = false) {
     },
     methods: getMethods(getString)
   }
-  // const aaa = re.methods.replace(/\/n/g, "").replace(" ", "");
-  // console.log(aaa);
-  // console.log(JSON.parse(aaa));
   return re;
 }
 function getMethods(getString) {
@@ -124,7 +121,6 @@ function generateScriptCode(list) {
             mounted: ${mixins.mounted.toString().replace("__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default.a", "Promise")},
             methods: ${mixins.methods}
       }`;
-  console.log(vue);
   const re = `<script type="text/javascript">
       new Vue(${vue})
     </script>`;

@@ -71,13 +71,10 @@ export default {
       this.selectItem = this.data.list[newIndex];
     },
     handleMoveStart: function(val) {
-      console.log("start-formview");
     },
     handleMoveEnd: function() {
-      // console.log("end-formview");
     },
     handleMove: function() {
-      // console.log("move-formview");
     }
   }
 };

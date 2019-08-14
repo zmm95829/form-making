@@ -1,6 +1,6 @@
 <template>
-  <div :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}">
-    <el-form-item :label="item.label" class="item-view" @click.native.stop="handleSelectItem">
+  <!-- <div :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}"> -->
+    <el-form-item :label="item.label" :class="{'item-view': true, 'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
       <template v-if="item.type === 'input'">
         <el-input
           v-model="item.options.defaultValue"
@@ -52,7 +52,6 @@
           </el-checkbox>
         </el-checkbox-group>
       </template>
-    </el-form-item>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
       <i class="iconfont icon-icon_clone" title="复制" @click="handleClone"></i>
       <i class="iconfont icon-trash" title="删除" @click="handleDelete"></i>
@@ -60,7 +59,7 @@
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-drag">
       <i class="iconfont icon-drag item-drag"></i>
     </div>
-  </div>
+    </el-form-item>
 </template>
 <script>
 import { merge, cloneDeep } from "lodash";
@@ -74,14 +73,11 @@ export default {
     }
   },
   mounted() {
-    // console.log("formviewitem-mounted");
-    // console.log(this.data);
   },
   watch: {
     select: {
       handler: function() {
         this.selectItem = this.select;
-        console.log("select改变")
       },
       deep: true
     },
@@ -124,13 +120,18 @@ export default {
   /* border: 2px solid #409eff; */
   outline-offset: -1px;
 }
+.item-view{
+  padding-bottom: 18px;
+}
+.item-view div {
+  pointer-events: none;
+}
 .item-view-drag {
   position: absolute;
   left: -2px;
-  top: -2px;
+  top: -42px;
   height: 28px;
   line-height: 28px;
-  z-index: 9;
   background-color: #409eff;
 }
 
@@ -144,7 +145,7 @@ export default {
   border: 1px dashed #c2c2c3;
   /* outline-offset: 2px; */
   position: relative;
-  padding-bottom: 10px;
+  /* padding-bottom: 10px; */
   margin-bottom: 2px;
   background-color: #fafafa;
 }
@@ -153,10 +154,10 @@ export default {
   border: 1px solid #7cbcfe;
 }
 .item-view-action {
-  margin-top: 28px;
+  /* margin-top: 28px; */
   position: absolute;
   right: 0;
-  bottom: 0;
+  bottom: -18px;
   background-color: #409eff;
   width: 40px;
   height: 25px;

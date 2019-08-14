@@ -38,7 +38,6 @@ export default {
   computed: {
     getHtmlCode: function() {
       if (this.page.getHtmlCodeVisible) {
-        console.log(generateHtmlCode(this.data, this.formConfig));
         return generateHtmlCode(this.data, this.formConfig);
       } else {
         return ""

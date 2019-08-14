@@ -57,7 +57,6 @@ export default {
   },
   methods: {
     add: function(a) {
-      console.log(a);
       this.list.push({ name: "Juan" });
     },
     replace: function() {

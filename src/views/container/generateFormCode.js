@@ -50,16 +50,12 @@ function getElFormItemCode(item) {
   }
   return re;
 };
-export default function(data, formConfig, msg) {
+export default function(data, formConfig) {
   let items = "";
   data.list.forEach((v, index) => {
     items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  console.log(msg);
-  console.log(`<el-form label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}">
-        ${items}
-  </el-form>`)
   return `<el-form label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}">
 ${items}
         </el-form>`

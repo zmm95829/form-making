@@ -38,7 +38,6 @@ export default {
     handleMoveStart: function(a, b, c) {
     },
     handleMoveUpdate() {
-      console.log("handleMoveUpdate");
     }
   }
 };
