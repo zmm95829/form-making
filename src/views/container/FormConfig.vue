@@ -2,6 +2,7 @@
   <div class="form-config-container">
     <el-tabs v-model="activeName">
     <el-tab-pane label="字段属性" name="first">
+      <div class="form-config-first">
       <el-form v-if="showItemConfig" label-position="top" style="padding: 10px">
         <el-form-item label="标签名称">
           <el-input
@@ -14,7 +15,7 @@
         <el-form-item label="占位内容" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
           <el-input v-model="select.options.placeholder"></el-input>
         </el-form-item>
-        <el-form-item label="默认值" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
+        <el-form-item :label="'默认值'+(select.type==='checkbox'?'(英文逗号隔开)':'')" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
           <el-input v-model="select.options.defaultValue"></el-input>
         </el-form-item>
         <template v-if="select.type === 'radio' || select.type === 'checkbox'">
@@ -39,6 +40,7 @@
           </div>
         </template>
     </el-form>
+    </div>
     </el-tab-pane>
     <el-tab-pane label="表单属性" name="second">
       <el-form label-position="top" style="padding: 10px">
@@ -96,3 +98,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+.form-config-first {
+  position: fixed;
+  right: 0;
+  bottom: 81px;
+  height: calc(100% - 240px);
+  width: 290px;
+  overflow: auto;
+}
+</style>

@@ -4,18 +4,30 @@
     <nav class="nav"></nav>
     <footer class="footer"></footer>
     <aside class="aside-left">
-      <FormElement/>
+      <FormElement />
     </aside>
     <aside class="aside-right">
-      <FormConfig :form-config="data.formConfig" :select="data.selectItem"/>
+      <FormConfig :form-config="data.formConfig" :select="data.selectItem" />
     </aside>
     <section class="section">
-      <FormView :form-config="data.formConfig" :select.sync="data.selectItem"/>
+      <el-container style="width: 100%; height: 100%;">
+        <el-header height="40px">
+          <form-action :data="data.formElements" :form-config="data.formConfig" />
+        </el-header>
+        <el-main>
+          <FormView
+            :form-config="data.formConfig"
+            :data="data.formElements"
+            :select.sync="data.selectItem"
+          />
+        </el-main>
+      </el-container>
     </section>
   </div>
 </template>
 <script>
 import FormElement from "./FormElement";
+import FormAction from "./FormAction";
 import FormView from "./FormView.vue";
 import FormConfig from "./FormConfig.vue";
 import formConfig from "./formConfig.js";
@@ -24,11 +36,15 @@ export default {
   components: {
     FormElement,
     FormView,
-    FormConfig
+    FormConfig,
+    FormAction
   },
   data: function() {
     return {
       data: {
+        formElements: {
+          list: []
+        },
         formConfig,
         selectItem: {}
       }
@@ -82,5 +98,15 @@ export default {
   top: 120px;
   left: 260px;
   overflow-y: auto;
+}
+.el-header {
+  padding: 3px;
+  border-bottom: 2px solid #e4e7ed;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 15px;
+}
+.el-main {
+  padding: 10px;
 }
 </style>

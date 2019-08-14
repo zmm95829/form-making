@@ -108,11 +108,11 @@ export default {
     },
     handleClone: function() {
       const id = Date.parse(new Date());
-      this.data.splice(this.index + 1, 0, 
-      merge(cloneDeep(this.data[this.index]), {
-        id,
-        model: this.data[this.index].type + "_key_" + id
-      }));
+      this.data.splice(this.index + 1, 0,
+        merge(cloneDeep(this.data[this.index]), {
+          id,
+          model: this.data[this.index].type + "_key_" + id
+        }));
       this.$emit("update:select", this.data[this.index + 1]);
     }
   }

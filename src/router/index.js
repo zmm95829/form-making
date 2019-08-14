@@ -16,6 +16,6 @@ export default new VueRouter({
   },
   {
     path: "/",
-    redirect: "/home"
+    redirect: "/form-making"
   }]
 });

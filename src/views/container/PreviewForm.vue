@@ -1,23 +1,21 @@
 
 <script>
-import getElFormCode from "./generateFormCode.js";
 import { getFormModel, generateVueMixins, getDictOptions } from "./generateScriptCode.js";
+import generateFormCode from "./generateFormCode.js";
 export default {
   name: "",
   props: {
     data: {
       type: Object,
-      default: () => {
-        list: []
+      default: () => function() {
+        return {
+          list: []
+        }
       }
     },
     formConfig: {
       type: Object,
       default: () => { }
-    },
-    template: {
-      type: String,
-      default: ""
     }
   },
   data: function() {
@@ -27,25 +25,15 @@ export default {
       page: {}
     }
   },
-  mixins: [generateVueMixins(this.data && this.data.list || [])],
-  mounted(){},
+  mixins: [generateVueMixins((this.data && this.data.list) || [])],
+  mounted() {},
   methods: {},
   created() {
-      console.log("vue created");
-    this.$options.template = `${this.template}`;
+    this.$options.template = `${generateFormCode(this.data, this.formConfig)}`;
     this.model = getFormModel(this.data.list);
     this.dict = getDictOptions(this.data.list);
-    console.log(generateVueMixins(this.data && this.data.list || []));
-    // console.log(mixins);
-    // this.dict = mixins.data.dict;
-    // console.log("mixins");
-    // console.log();
-    // this.$options.mixins = [];
-    // console.log(this.$options.mixins);
-    // console.log(this);
-    // this.$extends(generateVueMixins(this.data.list));
   },
-  template: `<span></span>`
+  template: "<span></span>"
 };
 </script>
 <style>
