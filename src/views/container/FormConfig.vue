@@ -8,7 +8,7 @@
             v-model="select.label"
           />
         </el-form-item>
-        <el-form-item label="绑定字段" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
+        <el-form-item label="绑定字段" v-if="Object.keys(select).indexOf('model')>=0">
           <el-input v-model="select.model"></el-input>
         </el-form-item>
         <el-form-item label="占位内容" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
@@ -17,7 +17,7 @@
         <el-form-item label="默认值" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
           <el-input v-model="select.options.defaultValue"></el-input>
         </el-form-item>
-        <template v-if="select.type === 'radio'">
+        <template v-if="select.type === 'radio' || select.type === 'checkbox'">
           <el-form-item label="数据源">
             <el-radio-group v-model="select.options.defaultValue">
               <el-table :data="select.options.options" border style="width: 100%">

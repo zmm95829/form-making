@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import { merge, cloneDeep } from "lodash";
 import Draggable from "vuedraggable";
 import FormViewItem from "./FormViewItem.vue";
 import MyDialog from "./MyDialog.vue";
@@ -84,15 +85,10 @@ export default {
       // console.log(newIndex);
       // 为拖拽到容器的元素添加唯一id
       const id = Date.parse(new Date());
-      
-      this.$set(this.data.list, newIndex, {
+      this.data.list[newIndex] = merge(cloneDeep(this.data.list[newIndex]), {
         id,
-        ...this.data.list[newIndex],
-        options: {
-          ...this.data.list[newIndex].options
-        },
         model: this.data.list[newIndex].type + "_key_" + id
-        });
+      });
       this.selectItem = this.data.list[newIndex];
     },
     handleMoveStart: function(val) {

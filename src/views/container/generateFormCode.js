@@ -14,18 +14,36 @@ function getElFormItemCode(item) {
     case "radio":
       re = `          <el-form-item label=${item.label}>
       <el-radio-group
-          v-model="item.model"
+          v-model="model.${item.model}"
           :disabled="${item.options.disabled}"
         >
         <el-radio 
-          :style="{display: ${item.options.inline ? "inline-block" : "block"}}"
+          style="{display: ${item.options.inline ? "inline-block" : "block"}}"
           :label="itemSub.value"
-          v-for="(itemSub, index) in dict.${item.model}_options)"
+          v-for="(itemSub, index) in dict.${item.model}_options"
           :key="index"
         >
           {{ itemSub.label }}
         </el-radio>
       </el-radio-group>
+    </el-form-item>`;
+      break;
+    case "checkbox":
+      re = `          <el-form-item label=${item.label}>
+      <el-checkbox-group
+          v-model="model.${item.model}"
+          :disabled="${item.options.disabled}"
+        >
+        <el-checkbox 
+          style="{display: ${item.options.inline ? "inline-block" : "block"}}"
+          :label="itemSub.value"
+          :value="itemSub.value"
+          v-for="(itemSub, index) in dict.${item.model}_options"
+          :key="index"
+        >
+          {{ itemSub.label }}
+        </el-checkbox>
+      </el-checkbox-group>
     </el-form-item>`;
       break;
     default: break;

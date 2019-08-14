@@ -71,6 +71,7 @@ export default {
   top: 120px;
   height: calc(100% - 200px);
   width: 300px;
+  overflow: auto;
 }
 .section {
   /* background-color: green; */

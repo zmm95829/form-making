@@ -66,17 +66,19 @@ export const basicElement = [{
   model: "",
   options: {
     inline: false,
-    defaultValue: [],
-    showLabel: false,
+    defaultValue: "值1",
     options: [
       {
-        value: "选项1"
+        label: "选项1",
+        value: "值1"
       },
       {
-        value: "选项2"
+        label: "选项2",
+        value: "值2"
       },
       {
-        value: "选项3"
+        label: "选项3",
+        value: "值3"
       }
     ],
     required: false,

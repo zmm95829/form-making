@@ -43,12 +43,12 @@
         >
           <el-checkbox
             :style="{display: item.options.inline ? 'inline-block' : 'block'}"
-            :label="item.value"
-            v-for="(item, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            :label="itemSub.value"
+            v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
             :key="index"
           >
-            <template v-if="item.options.remote">{{item.label}}</template>
-            <template v-else>{{item.options.showLabel ? item.label : item.value}}</template>
+            <template v-if="item.options.remote">{{itemSub.label}}</template>
+            <template v-else>{{ itemSub.label }}</template>
           </el-checkbox>
         </el-checkbox-group>
       </template>
@@ -63,6 +63,8 @@
   </div>
 </template>
 <script>
+import { merge, cloneDeep } from "lodash";
+
 export default {
   name: "FormViewItem",
   props: ["data", "select", "item", "index"],
@@ -106,14 +108,11 @@ export default {
     },
     handleClone: function() {
       const id = Date.parse(new Date());
-      this.data.splice(this.index + 1, 0, {
-        ...this.selectItem,
-        options: {
-          ...this.selectItem.options
-        },
+      this.data.splice(this.index + 1, 0, 
+      merge(cloneDeep(this.data[this.index]), {
         id,
         model: this.data[this.index].type + "_key_" + id
-      });
+      }));
       this.$emit("update:select", this.data[this.index + 1]);
     }
   }
