@@ -2,6 +2,8 @@
 <script>
 import { getFormModel, generateVueMixins, getDictOptions } from "./generateScriptCode.js";
 import generateFormCode from "./generateFormCode.js";
+import { getDict } from "@/api/cofco.js";
+import { SYS_ACTION } from "@/constants/cofco.js";
 export default {
   name: "",
   props: {
@@ -26,7 +28,9 @@ export default {
     }
   },
   mixins: [generateVueMixins((this.data && this.data.list) || [])],
-  mounted() {},
+  mounted() {
+    getDict(SYS_ACTION).then(v => {})
+  },
   methods: {},
   created() {
     this.$options.template = `${generateFormCode(this.data, this.formConfig)}`;

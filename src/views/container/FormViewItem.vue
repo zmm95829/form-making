@@ -1,6 +1,7 @@
 <template>
   <!-- <div :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}"> -->
-    <el-form-item :label="item.label" :class="{'item-view': true, 'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
+    <el-form-item :label="item.label" :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
+      <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
           v-model="item.options.defaultValue"
@@ -52,6 +53,7 @@
           </el-checkbox>
         </el-checkbox-group>
       </template>
+      </div>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
       <i class="iconfont icon-icon_clone" title="复制" @click="handleClone"></i>
       <i class="iconfont icon-trash" title="删除" @click="handleDelete"></i>
@@ -157,7 +159,7 @@ export default {
   /* margin-top: 28px; */
   position: absolute;
   right: 0;
-  bottom: -18px;
+  bottom: 0;
   background-color: #409eff;
   width: 40px;
   height: 25px;

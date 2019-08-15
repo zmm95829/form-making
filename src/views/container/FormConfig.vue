@@ -18,24 +18,34 @@
         <el-form-item :label="'默认值'+(select.type==='checkbox'?'(英文逗号隔开)':'')" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
           <el-input v-model="select.options.defaultValue"></el-input>
         </el-form-item>
+        
         <template v-if="select.type === 'radio' || select.type === 'checkbox'">
-          <el-form-item label="数据源">
-            <el-radio-group v-model="select.options.defaultValue">
-              <el-table :data="select.options.options" border style="width: 100%">
-                <el-table-column prop="label" label="选项名称" width="130px">
-                  <template slot-scope="{row}">
-                    <el-input v-model="row.label"/>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="value" label="选项值" width="130px">
-                  <template slot-scope="{row}">
-                    <el-input v-model="row.value"/>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-radio-group>
+           <el-form-item>
+            <el-checkbox v-model="select.options.inline">是否行内显示</el-checkbox>
+           </el-form-item>
+          <el-form-item>
+            <el-checkbox v-model="select.options.remote">数据来源于数据库{{ select.options.remote ? "(请输入字典项常量)" : "(请编辑数据源)" }}</el-checkbox>
+            <el-input
+              v-model="select.options.remoteConstant"
+              :title="select.options.remoteConstant"
+              :disabled="!select.options.remote"
+            />
           </el-form-item>
-           <div style="margin-left: 22px;">
+          <el-form-item label="数据源" v-show="!select.options.remote">
+            <el-table :data="select.options.options" border style="width: 100%">
+              <el-table-column prop="label" label="选项名称" width="130px">
+                <template slot-scope="{row}">
+                  <el-input v-model="row.label"/>
+                </template>
+              </el-table-column>
+              <el-table-column prop="value" label="选项值" width="130px">
+                <template slot-scope="{row}">
+                  <el-input v-model="row.value"/>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item>
+           <div style="margin-left: 22px;" v-show="!select.options.remote">
             <el-button type="text" @click="handleAddOption">添加选项</el-button>
           </div>
         </template>

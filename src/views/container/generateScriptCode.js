@@ -28,6 +28,7 @@ export function getDictOptions(list) {
       default: break;
     }
   });
+  console.log(`${JSON.stringify(dict)}`)
   return dict;
 }
 /**
@@ -35,11 +36,19 @@ export function getDictOptions(list) {
  * @param {*} list 数据数组
  */
 export function generateImports(list) {
+  let re = "";
+  const constants = [];
   if (list.map(v => v.options.remote === true).length) {
-    return "import { getDict } from \"@/api/dict\";";
-  } else {
-    return "";
+    re += `import { getDict } from "@/api/dict";
+  `;
+    list.filter(v => v.options.remote).forEach(vv => {
+      constants.push(vv.options.remoteConstant);
+    })
+    if (constants.length) {
+      re += `  import { ${constants.join(", ")} } from "@/constants/dict"`;
+    }
   }
+  return re;
 }
 /**
  * 获取vue混入对象
@@ -121,7 +130,9 @@ function generateScriptCode(list) {
             mounted: ${mixins.mounted.toString().replace("__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default.a", "Promise")},
             methods: ${mixins.methods}
       }`;
-  const re = `<script type="text/javascript">
+  const re = `
+    <script type="text/javascript">
+    ${generateImports(list)}
       new Vue(${vue})
     </script>`;
   return re;

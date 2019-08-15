@@ -1,3 +1,13 @@
+const remoteOptions = [
+  {
+    label: "数据库数据1",
+    value: "值1"
+  },
+  {
+    label: "数据库数据2",
+    value: "值2"
+  }
+];
 export const basicElement = [{
   type: "input",
   label: "单行文本",
@@ -51,11 +61,8 @@ export const basicElement = [{
     required: false,
     width: "",
     remote: false,
-    remoteOptions: [],
-    props: {
-      value: "value",
-      label: "label"
-    },
+    remoteConstant: "",
+    remoteOptions,
     disabled: false
   }
 },
@@ -84,12 +91,8 @@ export const basicElement = [{
     required: false,
     width: "",
     remote: false,
-    remoteOptions: [],
-    props: {
-      value: "value",
-      label: "label"
-    },
-    remoteFunc: "",
+    remoteConstant: "",
+    remoteOptions,
     disabled: false
   }
 }];
