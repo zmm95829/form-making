@@ -25,6 +25,7 @@ export function getDictOptions(list) {
     switch (v.type) {
       case "radio":
       case "checkbox":
+      case "select":
         dict[v.model + "_options"] = v.options.remote ? [] : v.options.options;
         break;
       default: break;

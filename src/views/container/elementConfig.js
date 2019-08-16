@@ -106,4 +106,36 @@ export const basicElement = [{
     remoteProps,
     disabled: false
   }
+},
+{
+  type: "select",
+  label: "下拉选择框",
+  icon: "icon-select",
+  model: "",
+  class: itemClass,
+  options: {
+    defaultValue: "值1",
+    placeholder: "请选择",
+    options: [
+      {
+        label: "选项1",
+        value: "值1"
+      },
+      {
+        label: "选项2",
+        value: "值2"
+      },
+      {
+        label: "选项3",
+        value: "值3"
+      }
+    ],
+    required: false,
+    width: "",
+    remote: false,
+    remoteConstant: "",
+    remoteOptions,
+    remoteProps,
+    disabled: false
+  }
 }];

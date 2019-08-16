@@ -1,6 +1,6 @@
 <template>
   <!-- <div :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}"> -->
-    <el-form-item :label="item.label" :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
+    <el-form-item :label="item.label" :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.stop="handleSelectItem">
       <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
@@ -53,6 +53,16 @@
           </el-checkbox>
         </el-checkbox-group>
       </template>
+      <template v-if="item.type == 'select'">
+        <el-select v-model="showModel" :placeholder="item.options.placeholder" >
+          <el-option
+            v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            :key="index"
+            :label="itemSub.label"
+            :value="itemSub.value"
+          />
+        </el-select>
+      </template>
       </div>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
       <i class="iconfont icon-icon_clone" title="复制" @click="handleClone"></i>
@@ -71,7 +81,8 @@ export default {
   props: ["data", "select", "item", "index"],
   data: function() {
     return {
-      selectItem: this.select
+      selectItem: this.select,
+      showModel: ""
     }
   },
   mounted() {
@@ -125,7 +136,7 @@ export default {
 .item-view{
   padding-bottom: 18px;
 }
-.item-view div {
+.item-view div, .item-view span {
   pointer-events: none;
 }
 .item-view-drag {

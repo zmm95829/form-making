@@ -18,9 +18,8 @@
         <el-form-item :label="'默认值'+(select.type==='checkbox'?'(英文逗号隔开)':'')" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
           <el-input v-model="select.options.defaultValue"></el-input>
         </el-form-item>
-        
-        <template v-if="select.type === 'radio' || select.type === 'checkbox'">
-           <el-form-item>
+        <template v-if="select.type === 'radio' || select.type === 'checkbox' || select.type === 'select'">
+           <el-form-item v-if="Object.keys(select.options).indexOf('inline')!==-1">
             <el-checkbox v-model="select.options.inline">是否行内显示</el-checkbox>
            </el-form-item>
           <el-form-item>

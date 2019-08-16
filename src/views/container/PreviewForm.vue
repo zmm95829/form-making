@@ -2,7 +2,6 @@
 <script>
 import { getFormModel, generateVueMixins, getDictOptions } from "./generateScriptCode.js";
 import generateFormCode from "./generateFormCode.js";
-import { getDict } from "@/api/cofco.js";
 export default {
   name: "",
   props: {

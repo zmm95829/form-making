@@ -47,6 +47,18 @@ function getElFormItemCode(item) {
       </el-checkbox-group>
     </el-form-item>`;
       break;
+    case "select":
+      re = `          <el-form-item label=${item.label} class="${item.class}">
+      <el-select v-model="model.${item.model}"        >
+        <el-option
+          v-for="(itemSub, index) in dict.${item.model}_options"
+          :key="index"
+          :label="itemSub.${item.options.remote ? item.options.remoteProps.label : "label"}"
+          :value="itemSub.${item.options.remote ? item.options.remoteProps.value : "value"}"
+        />
+      </el-select>
+    </el-form-item>`;
+      break;
     default: break;
   }
   return re;
