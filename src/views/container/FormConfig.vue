@@ -31,6 +31,18 @@
               :disabled="!select.options.remote"
             />
           </el-form-item>
+          <el-form-item v-if="select.options.remote" label="数据绑定key">
+            <el-input
+              v-model="select.options.remoteProps.value"
+              :title="select.options.remoteProps.value"
+            />
+          </el-form-item>
+          <el-form-item v-if="select.options.remote" label="数据显示label">
+            <el-input
+              v-model="select.options.remoteProps.label"
+              :title="select.options.remoteProps.label"
+            />
+          </el-form-item>
           <el-form-item label="数据源" v-show="!select.options.remote">
             <el-table :data="select.options.options" border style="width: 100%">
               <el-table-column prop="label" label="选项名称" width="130px">

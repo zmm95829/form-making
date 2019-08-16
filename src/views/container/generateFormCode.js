@@ -19,11 +19,11 @@ function getElFormItemCode(item) {
         >
         <el-radio 
           style="{display: ${item.options.inline ? "inline-block" : "block"}}"
-          :label="itemSub.value"
+          :label="itemSub.${item.options.remote ? item.options.remoteProps.value : "value"}"
           v-for="(itemSub, index) in dict.${item.model}_options"
           :key="index"
         >
-          {{ itemSub.label }}
+          {{ itemSub.${item.options.remote ? item.options.remoteProps.label : "label"} }}
         </el-radio>
       </el-radio-group>
     </el-form-item>`;
@@ -36,12 +36,11 @@ function getElFormItemCode(item) {
         >
         <el-checkbox 
           style="{display: ${item.options.inline ? "inline-block" : "block"}}"
-          :label="itemSub.value"
-          :value="itemSub.value"
+          :label="itemSub.${item.options.remote ? item.options.remoteProps.value : "value"}"
           v-for="(itemSub, index) in dict.${item.model}_options"
           :key="index"
         >
-          {{ itemSub.label }}
+          {{ itemSub.${item.options.remote ? item.options.remoteProps.label : "label"} }}
         </el-checkbox>
       </el-checkbox-group>
     </el-form-item>`;

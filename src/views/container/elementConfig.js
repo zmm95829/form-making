@@ -8,6 +8,10 @@ const remoteOptions = [
     value: "值2"
   }
 ];
+const remoteProps = {
+  label: "itemValue",
+  value: "id"
+};
 export const basicElement = [{
   type: "input",
   label: "单行文本",
@@ -63,6 +67,7 @@ export const basicElement = [{
     remote: false,
     remoteConstant: "",
     remoteOptions,
+    remoteProps,
     disabled: false
   }
 },
@@ -93,6 +98,7 @@ export const basicElement = [{
     remote: false,
     remoteConstant: "",
     remoteOptions,
+    remoteProps,
     disabled: false
   }
 }];

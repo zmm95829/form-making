@@ -27,9 +27,8 @@ export default {
       page: {}
     }
   },
-  mixins: [generateVueMixins((this.data && this.data.list) || [])],
+  mixins: [generateVueMixins()],
   mounted() {
-    getDict(SYS_ACTION).then(v => {})
   },
   methods: {},
   created() {
