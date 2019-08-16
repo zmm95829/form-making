@@ -2,20 +2,21 @@ function getElFormItemCode(item) {
   let re = "";
   switch (item.type) {
     case "input":
-      re = `          <el-form-item label=${item.label}>
+      re = `          <el-form-item label=${item.label} class="${item.class}">
       <el-input v-model="model.${item.model}" :disabled=${item.options.disabled} placeholder="${item.options.placeholder}"/>
     </el-form-item>`;
       break;
     case "textarea":
-      re = `          <el-form-item label=${item.label}>
+      re = `          <el-form-item label=${item.label} class="${item.class}">
       <el-input v-model="model.${item.model}" :disabled=${item.options.disabled} :autosize="{ minRows: ${item.options.minRows} }" placeholder="${item.options.placeholder}" type="textarea"/>
     </el-form-item>`;
       break;
     case "radio":
-      re = `          <el-form-item label=${item.label}>
+      re = `          <el-form-item label=${item.label} class="${item.class}">
       <el-radio-group
           v-model="model.${item.model}"
           :disabled="${item.options.disabled}"
+         
         >
         <el-radio 
           style="{display: ${item.options.inline ? "inline-block" : "block"}}"
@@ -29,10 +30,11 @@ function getElFormItemCode(item) {
     </el-form-item>`;
       break;
     case "checkbox":
-      re = `          <el-form-item label=${item.label}>
+      re = `          <el-form-item label=${item.label} class="${item.class}">
       <el-checkbox-group
           v-model="model.${item.model}"
           :disabled="${item.options.disabled}"
+         
         >
         <el-checkbox 
           style="{display: ${item.options.inline ? "inline-block" : "block"}}"
@@ -55,7 +57,7 @@ export default function(data, formConfig) {
     items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  return `<el-form label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}">
+  return `<el-form label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}" class="${formConfig.class}">
 ${items}
         </el-form>`
 };

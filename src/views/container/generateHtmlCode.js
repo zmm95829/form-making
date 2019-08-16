@@ -14,7 +14,7 @@ export default function(data, formConfig) {
         ${getElFormCode(data || {list: []}, formConfig)}
       </div>
     </body>
-    ${generateScriptCode(data.list)}    
+    ${generateScriptCode(data.list, formConfig)}    
   </html>`;
 };
 

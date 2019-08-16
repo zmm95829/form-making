@@ -3,7 +3,6 @@
 import { getFormModel, generateVueMixins, getDictOptions } from "./generateScriptCode.js";
 import generateFormCode from "./generateFormCode.js";
 import { getDict } from "@/api/cofco.js";
-import { SYS_ACTION } from "@/constants/cofco.js";
 export default {
   name: "",
   props: {

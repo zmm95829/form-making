@@ -36,15 +36,25 @@ export function getDictOptions(list) {
  * 生成导入语句
  * @param {*} list 数据数组
  */
-export function generateImports(list) {
-  let re = "";
+export function generateImports(list, formConfig) {
+  let re = `
+  import { mapGetters } from "vuex";
+
+  import Sticky from "@/components/Sticky";
+  import FormButtonGroup from "@/components/FormButtonGroup";
+  `;
   if (list.map(v => v.options.remote === true).length) {
     re += `import { getDict } from "@/api/dict";
   `;
     const constants = generateConstants(list);
     if (constants.length) {
-      re += `  import { ${constants.join(", ")} } from "@/constants/dict"`;
+      re += `  import { ${constants.join(", ")} } from "@/constants/dict";
+      `;
     }
+  }
+  if (formConfig.hasFlow) {
+    re += `  import { ${formConfig.flowKey} } from "@/constants/process";
+    `
   }
   return re;
 }
@@ -58,10 +68,11 @@ export function generateConstants(list) {
 /**
  * 获取vue混入对象
  */
-export function generateVueMixins(list, getString = false) {
+export function generateVueMixins(list, formConfig, getString = false) {
   const re = {
     created() {
     },
+    computed: {},
     mounted() {
       Promise.resolve()
         .then(() => this.bindDicts())
@@ -74,11 +85,11 @@ export function generateVueMixins(list, getString = false) {
           this.page.loading = false;
         });
     },
-    methods: getMethods(list, getString)
+    methods: getMethods(list, getString, formConfig)
   }
   return re;
 }
-function getMethods(list, getString) {
+function getMethods(list, getString, formConfig) {
   let re;
   switch (getString) {
     case false:
@@ -113,48 +124,100 @@ function getMethods(list, getString) {
       };
       break;
     default:
+      const constants = generateConstants(list);
+      const dicts = getDictOptions(list);
+      const filterDictsName = [];
+      Object.keys(dicts).forEach(v => {
+        if (!dicts[v].length) {
+          filterDictsName.push(v);
+        }
+      });
+      let promises = "[";
+      constants.forEach((v, index) => {
+        promises += `
+        getDict(${v}).then(vv => {
+          this.dict["${filterDictsName[index]}"] = vv;
+        })`;
+        promises += (index !== constants.length - 1 ? "," : "");
+      });
+      promises += "]";
       re = `{
         /**
          * 加载字典数据
          */
         bindDicts: function() {
-          return Promise.all([]);
+          return Promise.all(${promises});
         },
         /**
          * 加载表单数据
          */
         bindModel: function() {
           return Promise.resolve();
-        }
+        },
+        /**
+         * 保存数据
+         */
+        submitForm: function(type, callBack) {
+          return callBack();          
+        }${formConfig.hasFlow ? `,
+        /**
+         * 在流程审核通过的时候, 更新字段
+         */
+        beforeComplete(taskUpdateData) {
+          if (this.isAuditTaskTypeStart) {
+            Object.assign(taskUpdateData, this.model);
+          }
+        }` : ""}
       }`
       break;
   }
   return re;
 }
 
-function generateScriptCode(list) {
+function generateScriptCode(list, formConfig) {
   const model = getFormModel(list);
   const dict = getDictOptions(list);
-  const mixins = generateVueMixins(list, true);
+  const mixins = generateVueMixins(list, formConfig, true);
+  let finds = /__WEBPACK_IMPORTED.*default\.a/.exec(mixins.mounted.toString());
+  finds = (finds && finds.join("|")) || null;
+  let mounted = mixins.mounted.toString();
+  mounted = finds ? mounted.replace(new RegExp("(" + finds + ")", "g"), "Promise") : mounted;
+
   const vue = `{
-            el: "#app",
+            name: "form",
+            // el: "#app",
+            components: {
+              Sticky,
+              FormButtonGroup,
+            },
             data: function() {
               return {
                 model: ${JSON.stringify(model)},
                 dict: ${JSON.stringify(dict)},
                 page: {
-                  loading: true
+                  loading: true ${formConfig.hasFlow ? "," : ""}
+                  ${formConfig.hasFlow ? formConfig.flowKey : ""}
                 }
               }
             },
-            mounted: ${mixins.mounted.toString().replace("__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default.a", "Promise")},
+            computed: {
+              /**
+              * 引用currentAccount，以便获取当前登陆账户的信息; 引入origin判断取当前环境是否是门户
+              */
+             ...mapGetters(["origin", "currentAccount"])},
+            mounted: ${mounted},
             methods: ${mixins.methods}
       }`;
+  // const re = `
+  //   <script type="text/javascript">
+  //   ${generateImports(list, formConfig)}
+  //     // new Vue(${vue})
+  //   </script>`;
   const re = `
-    <script type="text/javascript">
-    ${generateImports(list)}
-      new Vue(${vue})
-    </script>`;
+  <script type="text/javascript">
+  ${generateImports(list, formConfig)}
+  export default ${vue}
+  </script>`;
   return re;
 }
 export default generateScriptCode;

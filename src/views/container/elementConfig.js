@@ -12,11 +12,13 @@ const remoteProps = {
   label: "itemValue",
   value: "id"
 };
+const itemClass = "ctbms-form__el-form-item";
 export const basicElement = [{
   type: "input",
   label: "单行文本",
   icon: "icon-input",
   model: "",
+  class: itemClass,
   options: {
     width: "100%",
     defaultValue: "",
@@ -31,6 +33,7 @@ export const basicElement = [{
   label: "多行文本",
   icon: "icon-diy-com-textarea",
   model: "",
+  class: itemClass + " ctbms-form__el-form-item--full-line",
   options: {
     width: "100%",
     defaultValue: "",
@@ -45,6 +48,7 @@ export const basicElement = [{
   label: "单选框组",
   icon: "icon-radio-active",
   model: "",
+  class: itemClass,
   options: {
     inline: true,
     defaultValue: "值1",
@@ -76,6 +80,7 @@ export const basicElement = [{
   label: "多选框组",
   icon: "icon-check-box",
   model: "",
+  class: itemClass,
   options: {
     inline: false,
     defaultValue: "值1",
