@@ -9,10 +9,13 @@
             v-model="select.label"
           />
         </el-form-item>
+        <el-form-item>
+        <el-checkbox v-model="select.required">必填</el-checkbox>
+        </el-form-item>
         <el-form-item label="绑定字段" v-if="Object.keys(select).indexOf('model')>=0">
           <el-input v-model="select.model"></el-input>
         </el-form-item>
-        <el-form-item label="占位内容" v-if="Object.keys(select.options).indexOf('placeholder')>=0">
+        <el-form-item label="占位内容" v-if="Object.keys(select.options).indexOf('placeholder')>=0 && select.type!=='date'">
           <el-input v-model="select.options.placeholder"></el-input>
         </el-form-item>
         <el-form-item :label="'默认值'+(select.type==='checkbox'?'(英文逗号隔开)':'')" v-if="Object.keys(select.options).indexOf('defaultValue')>=0">
@@ -43,15 +46,20 @@
             />
           </el-form-item>
           <el-form-item label="数据源" v-show="!select.options.remote">
-            <el-table :data="select.options.options" border style="width: 100%">
-              <el-table-column prop="label" label="选项名称" width="130px">
+            <el-table :data="select.options.options" border>
+              <el-table-column prop="label" label="选项名称" width="100px">
                 <template slot-scope="{row}">
                   <el-input v-model="row.label"/>
                 </template>
               </el-table-column>
-              <el-table-column prop="value" label="选项值" width="130px">
+              <el-table-column prop="value" label="选项值" width="100px">
                 <template slot-scope="{row}">
                   <el-input v-model="row.value"/>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="50px">
+                <template slot-scope="{$index}">
+                  <el-button type="text" @click="handleRemoveOptions($index)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -60,6 +68,31 @@
             <el-button type="text" @click="handleAddOption">添加选项</el-button>
           </div>
         </template>
+        <template v-if="['date', 'week', 'month', 'year', 'daterange', 'monthrange'].includes(select.options.type)">
+        <el-form-item label="控件类型">
+          <el-select v-model="select.options.type" @change="dateTypeChange">
+            <el-option value="date">日期</el-option>
+            <el-option value="week">周</el-option>
+            <el-option value="month">月</el-option>
+            <el-option value="year">年</el-option>
+            <el-option value="daterange">日期范围</el-option>
+            <el-option value="monthrange">月份范围</el-option>
+          </el-select>
+          </el-form-item>
+        <el-form-item label="格式">
+          <el-input v-model="select.options.format"></el-input>
+        </el-form-item>
+        <el-form-item label="占位内容" v-if="['date', 'week', 'month', 'year'].includes(select.options.type)">
+          <el-input v-model="select.options.placeholder"></el-input>
+        </el-form-item>
+        <el-form-item label="占位内容" v-if="['daterange', 'monthrange'].includes(select.options.type)">
+          <el-input v-model="select.options.startPlaceholder" style="width:46%; float:left;"></el-input>-
+          <el-input v-model="select.options.endPlaceholder" style="width:46%;"></el-input>
+        </el-form-item>
+        </template>
+        <el-form-item label="样式名称" v-if="Object.keys(select).indexOf('class')>=0">
+          <el-input v-model="select.class"></el-input>
+        </el-form-item>
     </el-form>
     </div>
     </el-tab-pane>
@@ -121,6 +154,29 @@ export default {
     },
     handleRemoveOptions: function(index) {
       this.select.options.options.splice(index, 1);
+    },
+    dateTypeChange: function() {
+      switch(this.select.options.type){
+        case "date" : 
+          this.select.options.format = "yyyy-MM-dd"
+          break;
+        case "week" : 
+          this.select.options.format = "yyyy年第WW周"
+          break;
+        case "month" : 
+          this.select.options.format = "yyyy-MM"
+          break;
+        case "year" : 
+          this.select.options.format = "yyyy"
+          break;
+        case "daterange" : 
+          this.select.options.format = "yyyy-MM-dd HH:mm:ss"
+          break;
+        case "monthrange" : 
+          this.select.options.format = "yyyy-MM"
+          break;
+        default: break;
+      }
     }
   }
 }

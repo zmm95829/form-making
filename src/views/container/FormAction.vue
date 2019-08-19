@@ -62,7 +62,7 @@ export default {
     */
     handleEmpty: function() {
       this.data.list = [];
-      this.$emit("update:select", {});
+      this.$emit("select-empty", {});
     },
     /**
      * 生成html测试代码

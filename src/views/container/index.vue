@@ -12,7 +12,11 @@
     <section class="section">
       <el-container style="width: 100%; height: 100%;">
         <el-header height="40px">
-          <form-action :data="data.formElements" :form-config="data.formConfig" />
+          <form-action
+            :data="data.formElements"
+            :form-config="data.formConfig"
+            @select-empty="handleEmpty"
+          />
         </el-header>
         <el-main>
           <FormView
@@ -48,6 +52,11 @@ export default {
         formConfig,
         selectItem: {}
       }
+    }
+  },
+  methods: {
+    handleEmpty: function() {
+      this.selectItem = {};
     }
   }
 };

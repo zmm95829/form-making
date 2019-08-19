@@ -34,6 +34,19 @@ export function getDictOptions(list) {
   return dict;
 }
 /**
+ * 生成简单正则必填规则
+ * @param {*} list 数组数据
+ */
+export function getRules(list) {
+  const rules = {};
+  list.forEach(v => {
+    if (v.required) {
+      rules[v.model] = [{ required: true, message: "必填", trigger: "blur" }]
+    }
+  });
+  return rules;
+}
+/**
  * 生成导入语句
  * @param {*} list 数据数组
  */
@@ -159,6 +172,17 @@ function getMethods(list, getString, formConfig) {
          * 保存数据
          */
         submitForm: function(type, callBack) {
+          this.$refs["model"].validate(valid => {
+            if (valid) {
+              // ...
+            } else {
+              this.$message({
+                showClose: true,
+                type: "error",
+                message: "请将必填项填写完整"
+              });
+            }
+          });
           return callBack();          
         }${formConfig.hasFlow ? `,
         /**
@@ -185,7 +209,7 @@ function generateScriptCode(list, formConfig) {
   mounted = finds ? mounted.replace(new RegExp("(" + finds + ")", "g"), "Promise") : mounted;
 
   const vue = `{
-            name: "form",
+            // name: "form",
             // el: "#app",
             components: {
               Sticky,
@@ -196,7 +220,8 @@ function generateScriptCode(list, formConfig) {
                 model: ${JSON.stringify(model)},
                 dict: ${JSON.stringify(dict)},
                 page: {
-                  loading: true ${formConfig.hasFlow ? "," : ""}
+                  loading: true,
+                  rules: ${JSON.stringify(getRules(list))} ${formConfig.hasFlow ? "," : ""}
                   ${formConfig.hasFlow ? formConfig.flowKey : ""}
                 }
               }

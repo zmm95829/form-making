@@ -19,6 +19,7 @@ export const basicElement = [{
   icon: "icon-input",
   model: "",
   class: itemClass,
+  required: false,
   options: {
     width: "100%",
     defaultValue: "",
@@ -34,6 +35,7 @@ export const basicElement = [{
   icon: "icon-diy-com-textarea",
   model: "",
   class: itemClass + " ctbms-form__el-form-item--full-line",
+  required: false,
   options: {
     width: "100%",
     defaultValue: "",
@@ -49,6 +51,7 @@ export const basicElement = [{
   icon: "icon-radio-active",
   model: "",
   class: itemClass,
+  required: false,
   options: {
     inline: true,
     defaultValue: "值1",
@@ -66,7 +69,6 @@ export const basicElement = [{
         label: "选项3"
       }
     ],
-    required: false,
     width: "",
     remote: false,
     remoteConstant: "",
@@ -81,6 +83,7 @@ export const basicElement = [{
   icon: "icon-check-box",
   model: "",
   class: itemClass,
+  required: false,
   options: {
     inline: false,
     defaultValue: "值1",
@@ -98,7 +101,6 @@ export const basicElement = [{
         value: "值3"
       }
     ],
-    required: false,
     width: "",
     remote: false,
     remoteConstant: "",
@@ -113,6 +115,7 @@ export const basicElement = [{
   icon: "icon-select",
   model: "",
   class: itemClass,
+  required: false,
   options: {
     defaultValue: "值1",
     placeholder: "请选择",
@@ -130,12 +133,33 @@ export const basicElement = [{
         value: "值3"
       }
     ],
-    required: false,
     width: "",
     remote: false,
     remoteConstant: "",
     remoteOptions,
     remoteProps,
     disabled: false
+  }
+},
+{
+  type: "date",
+  label: "日期选择器",
+  icon: "icon-date",
+  class: itemClass,
+  model: "",
+  required: false,
+  options: {
+    // defaultValue: "",
+    readonly: false,
+    disabled: false,
+    editable: true,
+    clearable: true,
+    placeholder: "请选择",
+    startPlaceholder: "开始日期",
+    endPlaceholder: "结束日期",
+    type: "date",
+    format: "yyyy-MM-dd",
+    timestamp: false,
+    width: ""
   }
 }];

@@ -1,6 +1,6 @@
 <template>
   <!-- <div :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}"> -->
-    <el-form-item :label="item.label" :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.stop="handleSelectItem">
+    <el-form-item :label="item.label" :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
       <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
@@ -20,7 +20,7 @@
       </template>
       <template v-if="item.type == 'radio'">
         <el-radio-group
-          v-model="item.model"
+          v-model="showModel"
           :style="{width: item.options.width}"
           :disabled="item.options.disabled"
         >
@@ -38,7 +38,7 @@
 
       <template v-if="item.type == 'checkbox'">
         <el-checkbox-group
-          v-model="item.model"
+          v-model="showModel"
           :style="{width: item.options.width}"
           :disabled="item.options.disabled"
         >
@@ -62,6 +62,14 @@
             :value="itemSub.value"
           />
         </el-select>
+      </template>
+      <template v-if="item.type === 'date'">
+        <el-date-picker
+          v-model="showModel"
+          :type="item.options.type"
+          :format="item.options.format"
+          :value-format="item.options.format"
+          :placeholder="item.options.placeholder"/>
       </template>
       </div>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
