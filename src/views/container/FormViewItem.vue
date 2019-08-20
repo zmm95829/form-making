@@ -104,7 +104,9 @@ export default {
     },
     selectItem: {
       handler: function() {
-        this.$emit("update:select", this.selectItem);
+        if (this.selectItem.id !== this.select.id) {
+          this.$emit("update:select", this.selectItem);
+        }
       },
       deep: true
     }
@@ -164,9 +166,7 @@ export default {
 }
 .item-container {
   border: 1px dashed #c2c2c3;
-  /* outline-offset: 2px; */
   position: relative;
-  /* padding-bottom: 10px; */
   margin-bottom: 2px;
   background-color: #fafafa;
 }

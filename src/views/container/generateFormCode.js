@@ -71,7 +71,28 @@ function getElFormItemCode(item) {
         <el-date-picker v-model="model.${item.model}" type="${item.options.type}" format="${item.options.format}" value-format="${item.options.format}" placeholder=${item.options.placeholder} />
       </el-form-item>`;
       }
-
+      break;
+    case "grid":
+      let subItems = "";
+      item.columns.forEach((col, index) => {
+        let subItem = "";
+        // 仅一层栅格布局
+        col.list.forEach(v => {
+          subItem += `${getElFormItemCode(v)}`;
+        });
+        subItems += `<el-col :span="${col.span ? col.span : 0}">
+        ${subItem}
+        </el-col>`;
+      });
+      re = `<el-row
+        :gutter="${item.options.gutter}"
+        type="flex"
+        justify="${item.options.justify}"
+        align="${item.options.align}"
+      >
+      ${subItems}
+      </el-row>`
+      console.log(re)
       break;
     default: break;
   }

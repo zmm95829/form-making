@@ -5,10 +5,14 @@ import * as constantObj from "@/constants/cofco";
  * @param {*} list 数据数组
  */
 export function getFormModel(list) {
-  const model = {};
+  let model = {};
   list.map(v => v.model).forEach((v, index) => {
     if (list[index].type === "checkbox") {
       model[v] = list[index].options.remote ? [] : list[index].options.defaultValue.split(",");
+    } else if (list[index].type === "grid") {
+      list[index].columns.forEach(vv => {
+        model = {...model, ...getFormModel(vv.list)};
+      });
     } else {
       model[v] = list[index].options.remote ? "" : list[index].options.defaultValue
     }
@@ -20,13 +24,18 @@ export function getFormModel(list) {
  * @param {*} list 数据数组
  */
 export function getDictOptions(list) {
-  const dict = {};
+  let dict = {};
   list.forEach(v => {
     switch (v.type) {
       case "radio":
       case "checkbox":
       case "select":
         dict[v.model + "_options"] = v.options.remote ? [] : v.options.options;
+        break;
+      case "grid":
+        v.columns.forEach(vv => {
+          dict = {...dict, ...getDictOptions(vv.list)};
+        });
         break;
       default: break;
     }
@@ -38,10 +47,14 @@ export function getDictOptions(list) {
  * @param {*} list 数组数据
  */
 export function getRules(list) {
-  const rules = {};
+  let rules = {};
   list.forEach(v => {
     if (v.required) {
       rules[v.model] = [{ required: true, message: "必填", trigger: "blur" }]
+    } else if (v.type === "grid") {
+      v.columns.forEach(vv => {
+        rules = {...rules, ...getRules(vv.list)};
+      });
     }
   });
   return rules;
