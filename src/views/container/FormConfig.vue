@@ -183,6 +183,9 @@
           <el-form-item label="表单流程常量" v-if="formConfig.hasFlow">
             <el-input v-model="formConfig.flowKey" />
           </el-form-item>
+          <el-form-item label="后缀">
+            <el-input v-model="formConfig.labelSuffix" />
+          </el-form-item>
         </el-form>
       </el-tab-pane>
     </el-tabs>
