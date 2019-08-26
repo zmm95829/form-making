@@ -4,8 +4,8 @@ function getElFormItemCode(item) {
   switch (item.type) {
     case "input":
       re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
-      <el-input v-model="model.${item.model}" :disabled=${item.options.disabled} placeholder="${item.options.placeholder}"/>
-    </el-form-item>`;
+        <el-input v-model="model.${item.model}" :disabled=${item.options.disabled} placeholder="${item.options.placeholder}"/>
+      </el-form-item>`;
       break;
     case "textarea":
       re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
@@ -17,7 +17,6 @@ function getElFormItemCode(item) {
       <el-radio-group
           v-model="model.${item.model}"
           :disabled="${item.options.disabled}"
-         
         >
         <el-radio 
           style="{display: ${item.options.inline ? "inline-block" : "block"}}"
@@ -92,7 +91,30 @@ function getElFormItemCode(item) {
       >
       ${subItems}
       </el-row>`
-      console.log(re)
+      break;
+    case "dialog":
+      re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
+      <el-input
+        v-model="model.${item.model}"
+        placeholder="${item.options.placeholder}"
+        :disabled="true"
+        class="${item.subClass}"
+        />
+        <el-button
+          type="primary"
+          style="margin-left:2px"
+          icon="el-icon-more"
+          circle
+          size="mini"
+        />
+        <!-- TODO:需要替换成弹窗组件 -->
+    </el-form-item>`;
+      break;
+    case "span_readonly":
+      re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
+        <span class="${item.subClass}">{{ model.${item.model} }}</span>
+  </el-form-item>
+    `;
       break;
     default: break;
   }
@@ -104,6 +126,7 @@ export default function(data, formConfig) {
     items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
+  console.log(items)
   return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}" class="${formConfig.class}">
 ${items}
         </el-form>`

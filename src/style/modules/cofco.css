@@ -1,0 +1,31 @@
+.ctbms-form__el-input--open-dialog {
+  width: calc(100% - 35px);
+  float: left;
+}
+.ctbms-form {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  justify-content: space-between;
+
+}
+.ctbms-form__el-form-item {
+  flex: 0 0 21%; /* explanation below */
+  width: calc(100% - 24px);
+  margin: 5px 5px;
+}
+.ctbms-form__el-form-item--full-line {
+    flex: none;
+    display: block;
+  }
+.el-form-item__readonly-value {
+    height: 32px;
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #dcdfe6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }

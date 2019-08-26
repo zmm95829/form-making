@@ -1,5 +1,5 @@
 <template>
-<section>
+<section style="display: flex; flex-direction: row; flex-wrap: wrap">
   <div class="form-element-list">
     <draggable
       element="ul"
@@ -40,11 +40,31 @@
       </li>
     </draggable>
   </div>
+  <div class="form-element-list">
+    <draggable
+      element="ul"
+      v-model="customElement"
+      :sort="false"
+      :group="{name:'form', pull:'clone', put:false}"
+      @end="handleMoveEnd"
+      @start="handleMoveStart"
+      @update="handleMoveUpdate"
+    >
+      <li v-for="item in customElement" :key="item.id" class="form-element-item itemdrag">
+        <a>
+          <el-row>
+            <el-col :span="8"><i :class="['icon', 'iconfont', item.icon]"/></el-col>
+            <el-col :span="16" style="text-align:left">{{item.label}}</el-col>
+          </el-row>
+        </a>
+      </li>
+    </draggable>
+  </div>
 </section>
 </template>
 <script>
 import Draggable from "vuedraggable"
-import { basicElement, layoutElement } from "./elementConfig.js";
+import { basicElement, layoutElement, customElement } from "./elementConfig.js";
 import { cloneDeep } from "lodash";
 export default {
   name: "FormElement",
@@ -54,7 +74,8 @@ export default {
   data: function() {
     return {
       basicElement: cloneDeep(basicElement),
-      layoutElement: JSON.parse(JSON.stringify(layoutElement))
+      layoutElement: JSON.parse(JSON.stringify(layoutElement)),
+      customElement: JSON.parse(JSON.stringify(customElement)),
     }
   },
   methods: {

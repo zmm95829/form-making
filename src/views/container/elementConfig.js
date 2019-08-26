@@ -16,7 +16,7 @@ const itemClass = "ctbms-form__el-form-item";
 export const basicElement = [{
   type: "input",
   label: "单行文本",
-  icon: "icon-input",
+  icon: "icon-text",
   model: "",
   class: itemClass,
   required: false,
@@ -32,7 +32,7 @@ export const basicElement = [{
 {
   type: "textarea",
   label: "多行文本",
-  icon: "icon-diy-com-textarea",
+  icon: "icon-textarea",
   model: "",
   class: itemClass + " ctbms-form__el-form-item--full-line",
   required: false,
@@ -48,7 +48,7 @@ export const basicElement = [{
 {
   type: "radio",
   label: "单选框组",
-  icon: "icon-radio-active",
+  icon: "icon-radio",
   model: "",
   class: itemClass,
   required: false,
@@ -167,7 +167,7 @@ export const layoutElement = [
   {
     type: "grid",
     label: "栅格布局",
-    icon: "icon-grid-",
+    icon: "icon-grid",
     columns: [
       {
         span: 12,
@@ -182,6 +182,33 @@ export const layoutElement = [
       gutter: 0,
       justify: "start",
       align: "top"
+    }
+  }
+];
+export const customElement = [
+  {
+    type: "dialog",
+    label: "弹窗",
+    icon: "icon-dialog",
+    class: itemClass,
+    subClass: "ctbms-form__el-input--open-dialog",
+    options: {
+      placeholder: "",
+      defaultValue: ""
+    }
+  },
+  {
+    type: "span_readonly",
+    label: "只读文本",
+    icon: "icon-text",
+    model: "",
+    class: itemClass,
+    subClass: "el-form-item__readonly-value",
+    required: false,
+    options: {
+      width: "100%",
+      defaultValue: "",
+      required: false
     }
   }
 ]

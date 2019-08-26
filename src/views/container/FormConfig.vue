@@ -4,11 +4,14 @@
       <el-tab-pane label="字段属性" name="first">
         <div class="form-config-first">
           <el-form v-if="showItemConfig" label-position="top" style="padding: 10px">
-            <el-form-item label="标签名称" v-if="Object.keys(select).indexOf('required')>=0">
+            <el-form-item label="标签名称">
               <el-input v-model="select.label" />
             </el-form-item>
             <el-form-item v-if="Object.keys(select).indexOf('required')>=0">
               <el-checkbox v-model="select.required">必填</el-checkbox>
+            </el-form-item>
+            <el-form-item v-if="Object.keys(select.options).indexOf('disabled')>=0">
+              <el-checkbox v-model="select.options.disabled">只读</el-checkbox>
             </el-form-item>
             <el-form-item label="绑定字段" v-if="Object.keys(select).indexOf('model')>=0">
               <el-input v-model="select.model"></el-input>
@@ -153,6 +156,10 @@
             <el-form-item label="样式名称" v-if="Object.keys(select).indexOf('class')>=0">
               <el-input v-model="select.class"></el-input>
             </el-form-item>
+            <el-form-item label="输入框样式名称" v-if="Object.keys(select).indexOf('subClass')>=0">
+              <el-input v-model="select.subClass"></el-input>
+            </el-form-item>
+            
           </el-form>
         </div>
       </el-tab-pane>

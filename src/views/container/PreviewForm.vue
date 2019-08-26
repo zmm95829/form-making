@@ -42,20 +42,4 @@ export default {
 };
 </script>
 <style scoped>
-.ctbms-form {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-  justify-content: space-between;
-
-}
-.ctbms-form__el-form-item {
-  flex: 0 0 21%; /* explanation below */
-  width: calc(100% - 24px);
-  margin: 5px 5px;
-}
-.ctbms-form__el-form-item--full-line {
-    flex: none;
-    display: block;
-  }
 </style>

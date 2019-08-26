@@ -71,10 +71,28 @@
           :value-format="item.options.format"
           :placeholder="item.options.placeholder"/>
       </template>
+      <template v-if="item.type === 'dialog'">
+        <el-input
+          v-model="item.options.defaultValue"
+          :placeholder="item.options.placeholder"
+          :disabled="true"
+          :class="item.subClass"
+        />
+        <el-button
+          type="primary"
+          style="margin-left:2px"
+          icon="el-icon-more"
+          circle
+          size="mini"
+        />
+      </template>
+      <template v-if="item.type === 'span_readonly'">
+        <span :class="item.subClass">{{ item.options.defaultValue }}</span>
+      </template>
       </div>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
-      <i class="iconfont icon-icon_clone" title="复制" @click="handleClone"></i>
-      <i class="iconfont icon-trash" title="删除" @click="handleDelete"></i>
+      <i class="iconfont icon-clone" title="复制" @click="handleClone"></i>
+      <i class="iconfont icon-delete" title="删除" @click="handleDelete"></i>
     </div>
     <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-drag">
       <i class="iconfont icon-drag item-drag"></i>
@@ -159,7 +177,7 @@ export default {
 }
 
 .item-view-drag i {
-  font-size: 14px;
+  font-size: 16px;
   color: #fff;
   margin: 0 5px;
   cursor: move;
@@ -191,5 +209,7 @@ export default {
 }
 .item-view-action i {
   cursor: pointer;
+  font-size: 20px;
+  font-weight: 400px;
 }
 </style>
