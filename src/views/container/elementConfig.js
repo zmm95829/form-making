@@ -183,6 +183,18 @@ export const layoutElement = [
       justify: "start",
       align: "top"
     }
+  },
+  {
+    type: "form",
+    label: "表单",
+    options: {
+      labelPosition: "top",
+      size: "small",
+      labelWidth: "80",
+      labelSuffix: "",
+      class: "ctbms-form-wrap__el-form ctbms-form"
+    },
+    list: []
   }
 ];
 export const customElement = [
@@ -210,5 +222,11 @@ export const customElement = [
       defaultValue: "",
       required: false
     }
+  },
+  {
+    type: "placeholder",
+    label: "占位",
+    class: itemClass,
+    icon: "icon-text"
   }
 ]

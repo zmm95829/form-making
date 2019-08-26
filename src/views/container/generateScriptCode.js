@@ -7,14 +7,20 @@ import * as constantObj from "@/constants/cofco";
 export function getFormModel(list) {
   let model = {};
   list.map(v => v.model).forEach((v, index) => {
-    if (list[index].type === "checkbox") {
-      model[v] = list[index].options.remote ? [] : list[index].options.defaultValue.split(",");
-    } else if (list[index].type === "grid") {
-      list[index].columns.forEach(vv => {
-        model = {...model, ...getFormModel(vv.list)};
-      });
-    } else {
-      model[v] = list[index].options.remote ? "" : list[index].options.defaultValue
+    switch (list[index].type) {
+      case "checkbox":
+        model[v] = list[index].options && list[index].options.remote ? [] : list[index].options.defaultValue.split(",");
+        break;
+      case "grid":
+        list[index].columns.forEach(vv => {
+          model = {...model, ...getFormModel(vv.list)};
+        });
+        break;
+      case "placeholder":
+        break;
+      default:
+        model[v] = list[index].options && list[index].options.remote ? "" : list[index].options.defaultValue;
+        break;
     }
   });
   return model;
@@ -87,7 +93,7 @@ export function generateImports(list, formConfig) {
 }
 export function generateConstants(list) {
   const constants = [];
-  list.filter(v => v.options.remote).forEach(vv => {
+  list.filter(v => v.options && v.options.remote).forEach(vv => {
     constants.push(vv.options.remoteConstant);
   });
   return constants;

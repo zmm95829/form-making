@@ -10,7 +10,7 @@
 
 }
 .ctbms-form__el-form-item {
-  flex: 0 0 21%; /* explanation below */
+  flex: 0 0 21%;
   width: calc(100% - 24px);
   margin: 5px 5px;
 }

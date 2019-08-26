@@ -116,10 +116,27 @@ function getElFormItemCode(item) {
   </el-form-item>
     `;
       break;
+    case "placeholder":
+      re = `<el-form-item class="${item.class}"/>`;
+      break;
+    case "form":
+      re = getElFormCode(item);
+      break;
     default: break;
   }
   return re;
 };
+function getElFormCode(item) {
+  let items = "";
+  item.list.forEach((v, index) => {
+    items += index === item.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
+`;
+  });
+  console.log(items)
+  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.options.labelPosition}" label-width="${item.options.labelWidth}px" size="${item.options.size}" label-suffix="${item.options.labelSuffix}" class="${item.options.class}">
+${items}
+        </el-form>`
+}
 export default function(data, formConfig) {
   let items = "";
   data.list.forEach((v, index) => {

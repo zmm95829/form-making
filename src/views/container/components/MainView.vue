@@ -1,20 +1,7 @@
 <template>
-  <div class="form-view-container">
-    <div class="form-view">
-      <el-form
-        :label-position="formConfig.labelPosition"
-        :label-width="formConfig.labelWidth+'px'"
-        :size="formConfig.size"
-        :label-suffix="formConfig.labelSuffix"
-      >
-        <draggable
-          v-model="data.list"
-          @end="handleMoveEnd"
-          @add="handleMoveAdd(data.list, $event)"
-          :move="handleMove"
-          v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
-        >
-          <template v-for="(item, index) in data.list">
+  <section>
+    <form-container v-if="system_project.page==='form'" :formConfig="formConfig" :data="data">
+      <template v-for="(item, index) in data.list">
             <template v-if="item.type==='grid'">
               <el-row
                 :gutter="item.options.gutter"
@@ -103,28 +90,31 @@
                 :data="data.list"
               />
             </template>
-          </template>
-        </draggable>
-      </el-form>
-      <div v-if="data.list && data.list.length === 0" class="form-empty">从左侧拖拽来添加元素</div>
-    </div>
-  </div>
+      </template>
+    </form-container>
+  </section>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import { merge, cloneDeep } from "lodash";
 import Draggable from "vuedraggable";
-import FormViewItem from "./FormViewItem.vue";
+import FormViewItem from "./../FormViewItem.vue";
+import FormContainer from "./FormContainer.vue";
 export default {
-  name: "FormView",
+  name: "MainView",
   components: {
     Draggable,
-    FormViewItem
+    FormViewItem,
+    FormContainer
   },
   props: ["formConfig", "select", "data"],
   data: function() {
     return {
       selectItem: this.select
     }
+  },
+  computed: {
+    ...mapGetters(["system_project"])
   },
   watch: {
     select: {
@@ -153,13 +143,7 @@ export default {
       });
       this.selectItem = arr[newIndex];
     },
-    handleMoveStart: function(val) {
-    },
-    handleMoveEnd: function() {
-    },
-    handleMove: function() {
-    },
-    handleSelectItem: function(index) {
+     handleSelectItem: function(index) {
       this.selectItem = this.data.list[index];
     },
     handleDelete: function(arr, index) {
@@ -197,54 +181,5 @@ export default {
   }
 };
 </script>
-<style>
-.form-view {
-  padding: 2px;
-  border: 1px dashed #999999;
-  min-height: 500px;
-  background-color: #ffffff;
-}
-.form-view-container {
-  background-color: #fafafa;
-  position: relative;
-}
-.placeholder,
-.placeholder::after {
-  background: #f56c6c;
-  border: 2px solid #f56c6c;
-  outline-width: 0;
-  height: 3px;
-  width: 100%;
-  margin-top: -3px;
-  margin-left: 0px;
-  box-sizing: border-box;
-  font-size: 0;
-  content: "";
-  overflow: hidden;
-  padding: 0;
-}
-.grid-row {
-  padding: 4px;
-}
-.grid-col {
-  min-height: 50px;
-  background-color: #fff;
-  border: 1px dashed #c2c2c3;
-  position: relative;
-  padding: 1.5px;
-}
-/* .grid-col:hover{
-  background-color: #f3f6fc;
-  border: 1px solid #ddd7bb;
-} */
-.grid-active, .form-active {
-  outline: 2px solid #e6a23c;
-  outline-offset: -1px;
-}
-.form-view .el-form {
-  border: 1px dashed #999999;
-  /* background-color: red; */
-  min-height: 200px;
-  margin-bottom: 1px;
-}
+<style scoped lang="stylus" ref="stylesheet/stylus">
 </style>

@@ -10,12 +10,18 @@ export default new VueRouter({
     component: () => import("@/views/home/Home.vue")
   },
   {
-    path: "/form-making",
+    path: "/form-making/:name/:page",
     name: "表单制作器",
     component: () => import("@/views/container/index.vue")
   },
   {
     path: "/",
-    redirect: "/form-making"
-  }]
+    redirect: "/home"
+  },
+  {
+    path: "/404",
+    name: "页面不存在",
+    component: () => import("@/views/error/404.vue")
+  }
+  ]
 });
