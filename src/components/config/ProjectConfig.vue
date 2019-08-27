@@ -39,7 +39,8 @@ export default {
   },
   methods: {
     handleOkClick: function() {
-      this.$store.dispatch("setProjectAndPage", this.model[0], this.model[1]);
+      this.$store.commit("SET_PROJECT_PAGE", {name: this.model[0], page: this.model[1]});
+      this.$emit("click");
       this.$router.push({
         name: "表单制作器",
         params: {

@@ -1,16 +1,16 @@
 <template>
   <section>
-    <form-container v-if="system_project.page==='form'" :formConfig="formConfig" :data="data">
+    <form-container v-if="system_project.page==='form'" :formConfig="formConfig" :data="data" @add-item="handleSelectItem">
       <template v-for="(item, index) in data.list">
             <template v-if="item.type==='grid'">
               <el-row
                 :gutter="item.options.gutter"
-                :key="item.id"
-                :class="{'item-container': true, 'grid-active': select.id === item.id, 'grid-row': true}"
+                :key="String(item.id)"
+                :class="{'item-container': true, 'grid-active': system_select.id === item.id, 'grid-row': true}"
                 type="flex"
                 :justify="item.options.justify"
                 :align="item.options.align"
-                @click.native.stop="handleSelectItem(index)"
+                @click.native.stop="handleSelectItem(data.list[index])"
               >
                 <el-col
                   v-for="(col, colIndex) in item.columns"
@@ -28,77 +28,73 @@
                         :key="String(colItem.id) + String(itemIndex)"
                         v-for="(colItem, itemIndex) in col.list"
                         :item="colItem"
-                        :select.sync="selectItem"
                         :index="itemIndex"
                         :data="col.list"
                       />
                     </transition-group>
                   </draggable>
                 </el-col>
-                <div v-if="select.id === item.id" class="item-view-action">
+                <div v-if="system_select.id === item.id" class="item-view-action">
                   <i class="iconfont icon-clone" title="复制" @click="handleClone(data.list, index)"></i>
                   <i class="iconfont icon-delete" title="删除" @click="handleDelete(data.list, index)"></i>
                 </div>
-                <div v-if="select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
+                <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
                   <i class="iconfont icon-drag item-drag"></i>
                 </div>
               </el-row>
             </template>
             <template v-else-if="item.type==='form'">
-              <div :key="item.id" @click="handleSelectItem(index)">
+              <div :key="String(item.id)" class="form-item-container" @click="handleSelectItem(data.list[index])">
                 <el-form
                   :label-position="formConfig.labelPosition"
                   :label-width="formConfig.labelWidth+'px'"
                   :size="formConfig.size"
                   :label-suffix="formConfig.labelSuffix"
-                  :class="{'form-active': select.id === item.id}"
+                  :class="{'form-active': system_select.id === item.id}"
                   >
                   <draggable
                     v-model="item.list"
-                    @end="handleMoveEnd"
                     @add="handleMoveAdd(item.list, $event)"
-                    :move="handleMove"
                     v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
                   >
-                    <transition-group name="fade" tag="div" style="min-height: 50px;">
+                    <transition-group name="fade" tag="div" style="min-height: 260px;">
                     <form-view-item
                     v-for="(subItem, subIndex) in item.list"
                       :item="subItem"
-                      :key="subItem.id"
-                      :select.sync="selectItem"
+                      :key="String(subItem.id)"
                       :index="subIndex"
                       :data="item.list"
                     />
                     </transition-group>
                   </draggable>
                 </el-form>
-                <div v-if="select.id === item.id" class="item-view-action">
+                <div v-if="system_select.id === item.id" class="item-view-action">
                   <i class="iconfont icon-clone" title="复制" @click="handleClone(data.list, index)"></i>
                   <i class="iconfont icon-delete" title="删除" @click="handleDelete(data.list, index)"></i>
                 </div>
-                <div v-if="select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
+                <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
                   <i class="iconfont icon-drag item-drag"></i>
                 </div>
               </div>
             </template>
             <template v-else>
               <form-view-item
+                :key="String(item.id)"
                 :item="item"
-                :key="item.id"
-                :select.sync="selectItem"
                 :index="index"
                 :data="data.list"
               />
             </template>
       </template>
     </form-container>
+    <div v-if="data.list && data.list.length === 0" class="form-empty">从左侧拖拽来添加元素</div>
   </section>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import { merge, cloneDeep } from "lodash";
 import Draggable from "vuedraggable";
-import FormViewItem from "./../FormViewItem.vue";
+import FormViewItem from "./FormViewItem.vue";
 import FormContainer from "./FormContainer.vue";
 export default {
   name: "MainView",
@@ -107,30 +103,14 @@ export default {
     FormViewItem,
     FormContainer
   },
-  props: ["formConfig", "select", "data"],
+  props: ["formConfig", "data"],
   data: function() {
     return {
       selectItem: this.select
     }
   },
   computed: {
-    ...mapGetters(["system_project"])
-  },
-  watch: {
-    select: {
-      handler: function() {
-        this.selectItem = this.select;
-      },
-      deep: true
-    },
-    selectItem: {
-      handler: function() {
-        if (this.selectItem.id !== this.select.id) {
-          this.$emit("update:select", this.selectItem);
-        }
-      },
-      deep: true
-    }
+    ...mapGetters(["system_project", "system_select"])
   },
   methods: {
     handleMoveAdd: function(arr, val) {
@@ -141,19 +121,19 @@ export default {
         id,
         model: arr[newIndex].type + "_key_" + id
       });
-      this.selectItem = arr[newIndex];
+        this.$store.commit("SET_SELECT", arr[newIndex]);
     },
-     handleSelectItem: function(index) {
-      this.selectItem = this.data.list[index];
+     handleSelectItem: function(currentItem) {
+        this.$store.commit("SET_SELECT", currentItem);
     },
     handleDelete: function(arr, index) {
       arr.splice(index, 1);
       if (index !== 0) {
-        this.$emit("update:select", arr[index - 1]);
+        this.$store.commit("SET_SELECT", arr[index - 1]);
       } else if (arr.length > 0) {
-        this.$emit("update:select", arr[index]);
+        this.$store.commit("SET_SELECT", arr[index]);
       } else {
-        this.$emit("update:select", {});
+        this.$store.commit("SET_SELECT", {});
       }
     },
     handleClone: function(arr, index) {
@@ -163,7 +143,7 @@ export default {
           id,
           model: arr[index].type + "_key_" + id
         }));
-      this.$emit("update:select", arr[index + 1]);
+        this.$store.commit("SET_SELECT", arr[index + 1]);
     },
     handleGridColAdd: function(event, item, index) {
       console.log(item)
@@ -173,13 +153,12 @@ export default {
         id,
         model: item.columns[index].list[newIndex].type + "_key_" + id
       });
-      this.$emit("update:select", item.columns[index].list[newIndex]);
+        this.$store.commit("SET_SELECT", item.columns[index].list[newIndex]);
     },
-    handleFormClick: function() {
-      alert("sdfsfsdf");
-    }
   }
 };
 </script>
 <style scoped lang="stylus" ref="stylesheet/stylus">
+@import "~@/style/selectedItem/item.styl";
+@import "~@/style/selectedItem/container.styl";
 </style>

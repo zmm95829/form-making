@@ -20,17 +20,20 @@
             <FormView
               :form-config="data.formConfig"
               :data="data.formElements"
-              :select.sync="data.selectItem"
             />
           </el-main>
         </el-container>
       </el-main>
       <el-aside width="300px" class="layout-right">
-        <FormConfig :form-config="data.formConfig" :select="data.selectItem" />
+        <FormConfig :form-config="data.formConfig" />
       </el-aside>
     </el-container>
   </el-main>
   <el-footer>footer</el-footer>
+  <my-dialog :visible.sync="changeProject.visible">
+    <project-config @click="handleClose"/>
+     <span ></span>
+  </my-dialog>
 </el-container>
 </template>
 <script>
@@ -60,7 +63,9 @@ export default {
         formConfig,
         selectItem: {},
       },
+      changeProject: {
         visible: false
+      }
     }
   },
   computed: {
@@ -71,7 +76,13 @@ export default {
       this.selectItem = {};
     },
     handleProjectChange: function() {
-      this.visible = true;
+      this.changeProject.visible = true;
+    },
+    /**
+     * 修改好项目后关闭弹窗
+     */
+    handleClose: function() {
+      this.changeProject.visible = false;
     }
   },
   beforeRouteEnter (to, from, next) {

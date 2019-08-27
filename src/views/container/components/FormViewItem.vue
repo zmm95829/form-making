@@ -1,6 +1,5 @@
 <template>
-  <!-- <div :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}"> -->
-    <el-form-item :label="item.label" :class="{'item-container': true, 'active': selectItem && item && selectItem.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
+    <el-form-item :label="item.label" :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
       <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
@@ -90,57 +89,44 @@
         <span :class="item.subClass">{{ item.options.defaultValue }}</span>
       </template>
       </div>
-    <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-action">
+    <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click="handleClone"></i>
       <i class="iconfont icon-delete" title="删除" @click="handleDelete"></i>
     </div>
-    <div v-if="selectItem && item && selectItem.id === item.id" class="item-view-drag">
+    <div v-if="system_select && item && system_select.id === item.id" class="item-view-drag">
       <i class="iconfont icon-drag item-drag"></i>
     </div>
     </el-form-item>
 </template>
 <script>
 import { merge, cloneDeep } from "lodash";
+import { mapGetters } from "vuex";
 
 export default {
   name: "FormViewItem",
-  props: ["data", "select", "item", "index"],
+  props: ["data", "item", "index"],
   data: function() {
     return {
-      selectItem: this.select,
       showModel: ""
     }
   },
   mounted() {
   },
-  watch: {
-    select: {
-      handler: function() {
-        this.selectItem = this.select;
-      },
-      deep: true
-    },
-    selectItem: {
-      handler: function() {
-        if (this.selectItem.id !== this.select.id) {
-          this.$emit("update:select", this.selectItem);
-        }
-      },
-      deep: true
-    }
+  computed: {
+    ...mapGetters(["system_project", "system_select"])
   },
   methods: {
     handleSelectItem: function() {
-      this.selectItem = this.data[this.index];
+        this.$store.commit("SET_SELECT", this.data[this.index]);
     },
     handleDelete: function() {
       this.data.splice(this.index, 1);
       if (this.index !== 0) {
-        this.$emit("update:select", this.data[this.index - 1]);
+        this.$store.commit("SET_SELECT", this.data[this.index - 1]);
       } else if (this.data.length > 0) {
-        this.$emit("update:select", this.data[this.index]);
+        this.$store.commit("SET_SELECT", this.data[this.index]);
       } else {
-        this.$emit("update:select", {});
+        this.$store.commit("SET_SELECT", {});
       }
     },
     handleClone: function() {
@@ -150,66 +136,11 @@ export default {
           id,
           model: this.data[this.index].type + "_key_" + id
         }));
-      this.$emit("update:select", this.data[this.index + 1]);
+        this.$store.commit("SET_SELECT", this.data[this.index + 1]);
     }
   }
 };
 </script>
-<style>
-.active {
-  outline: 2px solid #409eff;
-  /* border: 2px solid #409eff; */
-  outline-offset: -1px;
-}
-.item-view{
-  padding-bottom: 18px;
-}
-.item-view div, .item-view span {
-  pointer-events: none;
-}
-.item-view-drag {
-  position: absolute;
-  left: -2px;
-  top: -42px;
-  height: 28px;
-  line-height: 28px;
-  background-color: #409eff;
-}
-
-.item-view-drag i {
-  font-size: 16px;
-  color: #fff;
-  margin: 0 5px;
-  cursor: move;
-}
-.item-container {
-  border: 1px dashed #c2c2c3;
-  position: relative;
-  margin-bottom: 2px;
-  background-color: #fafafa;
-}
-.item-container:hover {
-  background-color: #f3f6fc;
-  border: 1px solid #7cbcfe;
-}
-.item-view-action {
-  /* margin-top: 28px; */
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  background-color: #409eff;
-  width: 40px;
-  height: 25px;
-  color: #fff;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 2px;
-}
-.item-view-action i {
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: 400px;
-}
+<style lang="stylus" scoped>
+@import "~@/style/selectedItem/item.styl";
 </style>

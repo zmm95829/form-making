@@ -4,17 +4,17 @@ export default {
       name: "cofco",
       page: "form"
     },
-    page: "form"
+    select: {}
   },
   mutations: {
-    SET_PROJECT_PAGE: (state, project, page) => {
-      state.project.name = project;
-      state.project.page = page;
+    SET_PROJECT_PAGE: (state, project) => {
+      state.project.name = project.name;
+      state.project.page = project.page;
+    },
+    SET_SELECT: (state, select) => {
+      state.select = select;
     }
   },
   actions: {
-    setProjectAndPage(context, project, page) {
-      context.commit("SET_PROJECT_PAGE", project, page);
-    }
   }
 }

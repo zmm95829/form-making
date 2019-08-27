@@ -5,59 +5,59 @@
         <div class="form-config-first">
           <el-form v-if="showItemConfig" label-position="top" style="padding: 10px">
             <el-form-item label="标签名称">
-              <el-input v-model="select.label" />
+              <el-input v-model="system_select.label" />
             </el-form-item>
-            <el-form-item v-if="Object.keys(select).indexOf('required')>=0">
-              <el-checkbox v-model="select.required">必填</el-checkbox>
+            <el-form-item v-if="Object.keys(system_select).indexOf('required')>=0">
+              <el-checkbox v-model="system_select.required">必填</el-checkbox>
             </el-form-item>
-            <el-form-item v-if="Object.keys(select.options).indexOf('disabled')>=0">
-              <el-checkbox v-model="select.options.disabled">只读</el-checkbox>
+            <el-form-item v-if="Object.keys(system_select.options).indexOf('disabled')>=0">
+              <el-checkbox v-model="system_select.options.disabled">只读</el-checkbox>
             </el-form-item>
-            <el-form-item label="绑定字段" v-if="Object.keys(select).indexOf('model')>=0">
-              <el-input v-model="select.model"></el-input>
+            <el-form-item label="绑定字段" v-if="Object.keys(system_select).indexOf('model')>=0">
+              <el-input v-model="system_select.model"></el-input>
             </el-form-item>
             <el-form-item
               label="占位内容"
-              v-if="Object.keys(select.options).indexOf('placeholder')>=0 && select.type!=='date'"
+              v-if="Object.keys(system_select.options).indexOf('placeholder')>=0 && system_select.type!=='date'"
             >
-              <el-input v-model="select.options.placeholder"></el-input>
+              <el-input v-model="system_select.options.placeholder"></el-input>
             </el-form-item>
             <el-form-item
-              :label="'默认值'+(select.type==='checkbox'?'(英文逗号隔开)':'')"
-              v-if="Object.keys(select.options).indexOf('defaultValue')>=0"
+              :label="'默认值'+(system_select.type==='checkbox'?'(英文逗号隔开)':'')"
+              v-if="Object.keys(system_select.options).indexOf('defaultValue')>=0"
             >
-              <el-input v-model="select.options.defaultValue"></el-input>
+              <el-input v-model="system_select.options.defaultValue"></el-input>
             </el-form-item>
             <template
-              v-if="select.type === 'radio' || select.type === 'checkbox' || select.type === 'select'"
+              v-if="system_select.type === 'radio' || system_select.type === 'checkbox' || system_select.type === 'select'"
             >
-              <el-form-item v-if="Object.keys(select.options).indexOf('inline')!==-1">
-                <el-checkbox v-model="select.options.inline">是否行内显示</el-checkbox>
+              <el-form-item v-if="Object.keys(system_select.options).indexOf('inline')!==-1">
+                <el-checkbox v-model="system_select.options.inline">是否行内显示</el-checkbox>
               </el-form-item>
               <el-form-item>
                 <el-checkbox
-                  v-model="select.options.remote"
-                >数据来源于数据库{{ select.options.remote ? "(请输入字典项常量)" : "(请编辑数据源)" }}</el-checkbox>
+                  v-model="system_select.options.remote"
+                >数据来源于数据库{{ system_select.options.remote ? "(请输入字典项常量)" : "(请编辑数据源)" }}</el-checkbox>
                 <el-input
-                  v-model="select.options.remoteConstant"
-                  :title="select.options.remoteConstant"
-                  :disabled="!select.options.remote"
+                  v-model="system_select.options.remoteConstant"
+                  :title="system_select.options.remoteConstant"
+                  :disabled="!system_select.options.remote"
                 />
               </el-form-item>
-              <el-form-item v-if="select.options.remote" label="数据绑定key">
+              <el-form-item v-if="system_select.options.remote" label="数据绑定key">
                 <el-input
-                  v-model="select.options.remoteProps.value"
-                  :title="select.options.remoteProps.value"
+                  v-model="system_select.options.remoteProps.value"
+                  :title="system_select.options.remoteProps.value"
                 />
               </el-form-item>
-              <el-form-item v-if="select.options.remote" label="数据显示label">
+              <el-form-item v-if="system_select.options.remote" label="数据显示label">
                 <el-input
-                  v-model="select.options.remoteProps.label"
-                  :title="select.options.remoteProps.label"
+                  v-model="system_select.options.remoteProps.label"
+                  :title="system_select.options.remoteProps.label"
                 />
               </el-form-item>
-              <el-form-item label="数据源" v-show="!select.options.remote">
-                <el-table :data="select.options.options" border>
+              <el-form-item label="数据源" v-show="!system_select.options.remote">
+                <el-table :data="system_select.options.options" border>
                   <el-table-column prop="label" label="选项名称" width="100px">
                     <template slot-scope="{row}">
                       <el-input v-model="row.label" />
@@ -75,15 +75,15 @@
                   </el-table-column>
                 </el-table>
               </el-form-item>
-              <div style="margin-left: 22px;" v-show="!select.options.remote">
+              <div style="margin-left: 22px;" v-show="!system_select.options.remote">
                 <el-button type="text" @click="handleAddOption">添加选项</el-button>
               </div>
             </template>
             <template
-              v-if="['date', 'week', 'month', 'year', 'daterange', 'monthrange'].includes(select.options.type)"
+              v-if="['date', 'week', 'month', 'year', 'daterange', 'monthrange'].includes(system_select.options.type)"
             >
               <el-form-item label="控件类型">
-                <el-select v-model="select.options.type" @change="dateTypeChange">
+                <el-select v-model="system_select.options.type" @change="dateTypeChange">
                   <el-option value="date">日期</el-option>
                   <el-option value="week">周</el-option>
                   <el-option value="month">月</el-option>
@@ -93,27 +93,27 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="格式">
-                <el-input v-model="select.options.format"></el-input>
+                <el-input v-model="system_select.options.format"></el-input>
               </el-form-item>
               <el-form-item
                 label="占位内容"
-                v-if="['date', 'week', 'month', 'year'].includes(select.options.type)"
+                v-if="['date', 'week', 'month', 'year'].includes(system_select.options.type)"
               >
-                <el-input v-model="select.options.placeholder"></el-input>
+                <el-input v-model="system_select.options.placeholder"></el-input>
               </el-form-item>
               <el-form-item
                 label="占位内容"
-                v-if="['daterange', 'monthrange'].includes(select.options.type)"
+                v-if="['daterange', 'monthrange'].includes(system_select.options.type)"
               >
-                <el-input v-model="select.options.startPlaceholder" style="width:46%; float:left;"></el-input>-
-                <el-input v-model="select.options.endPlaceholder" style="width:46%;"></el-input>
+                <el-input v-model="system_select.options.startPlaceholder" style="width:46%; float:left;"></el-input>-
+                <el-input v-model="system_select.options.endPlaceholder" style="width:46%;"></el-input>
               </el-form-item>
             </template>
-            <template v-if="select.type === 'grid'">
+            <template v-if="system_select.type === 'grid'">
               <el-form-item label="列占位" style="float:left;">
                 <el-button type="text" @click="handleColAddClick">添加列</el-button>
                 <br />
-                <template v-for="(col, index) in select.columns">
+                <template v-for="(col, index) in system_select.columns">
                   <el-input-number
                     v-model="col.span"
                     :key="index + 'input'"
@@ -130,7 +130,7 @@
                 </template>
               </el-form-item>
               <el-form-item label="水平排列方式">
-                <el-select v-model="select.options.justify">
+                <el-select v-model="system_select.options.justify">
                   <el-option value="start">start</el-option>
                   <el-option value="end">end</el-option>
                   <el-option value="center">center</el-option>
@@ -139,7 +139,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="垂直排列方式">
-                <el-select v-model="select.options.align">
+                <el-select v-model="system_select.options.align">
                   <el-option value="top">top</el-option>
                   <el-option value="middle">middle</el-option>
                   <el-option value="bottom">bottom</el-option>
@@ -147,17 +147,17 @@
               </el-form-item>
               <el-form-item label="栅格间隔">
                 <el-input-number
-                    v-model="select.options.gutter"
+                    v-model="system_select.options.gutter"
                     :step="1"
                     :min="0"
                   ></el-input-number>
               </el-form-item>
             </template>
-            <el-form-item label="样式名称" v-if="Object.keys(select).indexOf('class')>=0">
-              <el-input v-model="select.class"></el-input>
+            <el-form-item label="样式名称" v-if="Object.keys(system_select).indexOf('class')>=0">
+              <el-input v-model="system_select.class"></el-input>
             </el-form-item>
-            <el-form-item label="输入框样式名称" v-if="Object.keys(select).indexOf('subClass')>=0">
-              <el-input v-model="select.subClass"></el-input>
+            <el-form-item label="输入框样式名称" v-if="Object.keys(system_select).indexOf('subClass')>=0">
+              <el-input v-model="system_select.subClass"></el-input>
             </el-form-item>
             
           </el-form>
@@ -200,62 +200,64 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  props: ["formConfig", "select"],
+  props: ["formConfig"],
   data() {
     return {
       activeName: "first"
     }
   },
   computed: {
+    ...mapGetters(["system_select"]),
     /**
      * 是否显示表单项属性编辑项
      */
     showItemConfig: function() {
-      return this.select && this.select.options;
+      return this.system_select && this.system_select.options;
     }
   },
   methods: {
     handleAddOption: function() {
-      this.select.options.options.push({
+      this.system_select.options.options.push({
         value: "",
         label: ""
       });
     },
     handleRemoveOptions: function(index) {
-      this.select.options.options.splice(index, 1);
+      this.system_select.options.options.splice(index, 1);
     },
     dateTypeChange: function() {
-      switch (this.select.options.type) {
+      switch (this.system_select.options.type) {
         case "date":
-          this.select.options.format = "yyyy-MM-dd"
+          this.system_select.options.format = "yyyy-MM-dd"
           break;
         case "week":
-          this.select.options.format = "yyyy年第WW周"
+          this.system_select.options.format = "yyyy年第WW周"
           break;
         case "month":
-          this.select.options.format = "yyyy-MM"
+          this.system_select.options.format = "yyyy-MM"
           break;
         case "year":
-          this.select.options.format = "yyyy"
+          this.system_select.options.format = "yyyy"
           break;
         case "daterange":
-          this.select.options.format = "yyyy-MM-dd HH:mm:ss"
+          this.system_select.options.format = "yyyy-MM-dd HH:mm:ss"
           break;
         case "monthrange":
-          this.select.options.format = "yyyy-MM"
+          this.system_select.options.format = "yyyy-MM"
           break;
         default: break;
       }
     },
     handleColAddClick: function() {
-      this.select.columns.push({
+      this.system_select.columns.push({
         span: 1,
         list: []
       });
     },
     handleColDeleteClick: function(index) {
-      this.select.columns.splice(index, 1);
+      this.system_select.columns.splice(index, 1);
     }
   }
 }
@@ -265,7 +267,7 @@ export default {
   position: fixed;
   right: 0;
   bottom: 81px;
-  height: calc(100% - 240px);
+  height: calc(100% - 180px);
   width: 290px;
   overflow: auto;
 }
