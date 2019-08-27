@@ -1,6 +1,8 @@
 <template>
-  <el-dialog :visible.sync="myVisible" :title="title" :append-to-body="true" :close-on-click-modal="false" width="900px">
+  <el-dialog :visible.sync="myVisible" :title="title" :append-to-body="true" :close-on-click-modal="false" :center="true" top="2vh" width="1200px">
+    <div style="height:720px; overflow-y:auto">
     <slot/>
+    </div>
     <span slot="footer" class="dialog-footer">
       <slot name="footer" />
     </span>

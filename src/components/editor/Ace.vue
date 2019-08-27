@@ -13,13 +13,21 @@ import "ace-builds/src-noconflict/mode-javascript" // 默认设置的语言模�
 
 export default {
   props: {
-    value: String
+    value: String,
+    type: {
+      type: String,
+      default: "html"
+    },
+    readOnly: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
       aceEditor: null,
       themePath: "ace/theme/tomorrow", // 不导入 webpack-resolver，该模块路径会报错
-      modePath: "ace/mode/html" // 同上
+      modePath: `ace/mode/json` // 同上
     }
   },
   mounted() {
@@ -30,7 +38,7 @@ export default {
       theme: this.themePath, // 默认设置的主题
       mode: this.modePath, // 默认设置的语言模式
       tabSize: 2, // 制表符设置为 2 个空格大小
-      readOnly: true,
+      readOnly: this.readOnly,
       showPrintMargin: false,
       showGutter: false // 是否显示左侧
       // fadeFoldWidgets: true, // 鼠标放到左侧才显示折叠

@@ -204,6 +204,7 @@ export const customElement = [
     icon: "icon-dialog",
     class: itemClass,
     subClass: "ctbms-form__el-input--open-dialog",
+    required: false,
     options: {
       placeholder: "",
       defaultValue: ""
