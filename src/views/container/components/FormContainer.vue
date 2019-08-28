@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="form-container placeholder-container">
     <el-form
       :label-position="formConfig.labelPosition"
       :label-width="formConfig.labelWidth+'px'"
@@ -11,9 +11,9 @@
         @add="handleMoveAdd(data.list, $event)"
         v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
       >
-      <transition-group name="fade" tag="div" style="min-height: 50px;">
-      <slot/>
-      </transition-group>
+        <transition-group name="fade" tag="div" style="min-height: 50px;">
+          <slot />
+        </transition-group>
       </draggable>
     </el-form>
   </div>
@@ -22,12 +22,13 @@
 import { mapGetters } from "vuex";
 import Draggable from "vuedraggable";
 import { merge, cloneDeep } from "lodash";
+import { handleMoveAdd } from "./helper.js";
 export default {
   name: "",
   props: {
     formConfig: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     data: {
       type: Object,
@@ -49,20 +50,14 @@ export default {
     ...mapGetters(["system_project", "system_select"])
   },
   methods: {
-handleMoveAdd: function(arr, val) {
-     const newIndex = val.newIndex;
-      // 为拖拽到容器的元素添加唯一id     
-      const id = Date.parse(new Date());
-      // 不删除再添加的话不能动态相应id和model，但是删除再添加会闪一下
-      arr.splice(newIndex, 1, merge(cloneDeep(arr[newIndex]), {
-        id,
-        model: arr[newIndex].type + "_key_" + id
-      }));
-        this.$store.commit("SET_SELECT", arr[newIndex]);
+    handleMoveAdd: function(arr, val) {
+      handleMoveAdd(arr, val);
     }
   }
 };
 </script>
 <style lang="stylus" scoped>
-@import "~@/style/draggable.styl";
+@import '~@/style/draggable.styl';
+.form-container
+  padding-top 5px
 </style>

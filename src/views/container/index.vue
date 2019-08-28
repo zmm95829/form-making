@@ -9,7 +9,7 @@
       <el-main class="layout-main">
         <el-container style="width: 100%; height: 100%;">
           <el-header height="40px" style="display: flex; justify-content: space-between;">
-            <el-button type="text" @click="handleProjectChange">修改项目</el-button>
+            <el-button type="text" @click="handleProjectChange">修改项目&nbsp;{{system_project.name +"/"+system_project.page}}</el-button>
             <form-action
               :data="data.formElements"
               :form-config="data.formConfig"
@@ -87,7 +87,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if (vm.system_project.name !== to.params.name || vm.system_project.page !== to.params.page) {
+      if (vm.system_project.name !== to.params.name) {
         vm.$router.replace({
           name: "页面不存在"
         });
