@@ -42,39 +42,101 @@
       </el-row>
     </template>
     <template v-else-if="item.type==='form'">
-          <div :key="String(item.id)" class="item-container form-item-container" @click="handleSelectItem(data[index])">
-            <el-form
-              :label-position="item.options.labelPosition"
-              :label-width="item.options.labelWidth+'px'"
-              :size="item.options.size"
-              :label-suffix="item.options.labelSuffix"
-              :class="{'form-active': system_select.id === item.id}"
-              >
-              <draggable
-                v-model="item.list"
-                @add="handleMoveAdd(item.list, $event)"
-                v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
-              >
-                <transition-group name="fade" tag="div" style="min-height: 260px;">
-                <my-item
+      <div
+        :key="String(item.id)"
+        class="item-container form-item-container"
+        @click.stop="handleSelectItem(data[index])"
+      >
+        <el-form
+          :label-position="item.options.labelPosition"
+          :label-width="item.options.labelWidth+'px'"
+          :size="item.options.size"
+          :label-suffix="item.options.labelSuffix"
+          :class="{'form-active': system_select.id === item.id}"
+        >
+          <draggable
+            v-model="item.list"
+            @add="handleMoveAdd(item.list, $event)"
+            v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
+          >
+            <transition-group name="fade" tag="div" style="min-height: 260px;">
+              <my-item
                 v-for="(subItem, subIndex) in item.list"
-                  :item="subItem"
-                  :key="String(subItem.id)"
+                :item="subItem"
+                :key="String(subItem.id)"
+                :index="subIndex"
+                :data="item.list"
+              />
+            </transition-group>
+          </draggable>
+        </el-form>
+        <div v-if="system_select.id === item.id" class="item-view-action">
+          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+        </div>
+        <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
+          <i class="iconfont icon-drag item-drag"></i>
+        </div>
+      </div>
+    </template>
+    <template v-else-if="item.type==='collapse'">
+      <div
+        :key="String(item.id)"
+        :class="{'item-container': true, 'collapse-item-container': true, 'collapse-active': system_select.id === item.id }"
+        @click.stop="handleSelectItem(data[index])"
+      >
+        <el-collapse v-model="showModel" :class="item.options.class">
+          <el-collapse-item
+            v-for="subItem in item.items"
+            :key="subItem.id"
+            :title="subItem.title"
+            name="1"
+          >
+            <template slot="title">
+              <div style="width:100%;height:100%;background-color:#f4f6fc">
+               <draggable
+                  v-model="subItem.top.list"
+                  @add="handleMoveAdd(subItem.top.list, $event)"
+                  v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
+                >
+                  <transition-group name="fade" tag="div" style="min-height: 260px;">
+                    <my-item
+                      v-for="(subSubItem, subIndex) in subItem.top.list"
+                      :item="subSubItem"
+                      :key="String(subSubItem.id)"
+                      :index="subIndex"
+                      :data="subItem.top.list"
+                    />
+                  </transition-group>
+               </draggable>
+               </div>
+            </template>
+            <draggable
+              v-model="subItem.list"
+              @add="handleMoveAdd(subItem.list, $event)"
+              v-bind="{group:'form', ghostClass: 'placeholder', animation: 200, handle: '.item-drag'}"
+            >
+              <transition-group name="fade" tag="div" style="min-height: 260px;">
+                <my-item
+                  v-for="(subSubItem, subIndex) in subItem.list"
+                  :item="subSubItem"
+                  :key="String(subSubItem.id)"
                   :index="subIndex"
-                  :data="item.list"
+                  :data="subItem.list"
                 />
-                </transition-group>
-              </draggable>
-            </el-form>
-            <div v-if="system_select.id === item.id" class="item-view-action">
-              <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
-              <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
-            </div>
-            <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
-              <i class="iconfont icon-drag item-drag"></i>
-            </div>
-          </div>
-        </template>
+              </transition-group>
+            </draggable>
+          </el-collapse-item>
+        </el-collapse>
+        <div v-if="system_select.id === item.id" class="item-view-action">
+          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+        </div>
+        <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
+          <i class="iconfont icon-drag item-drag"></i>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -96,18 +158,18 @@ export default {
   },
   data: function() {
     return {
-
+      showModel: ""
     }
   },
   computed: {
     ...mapGetters(["system_select"])
   },
   methods: {
-     handleGridColAdd: function(event, item, index) {
+    handleGridColAdd: function(event, item, index) {
       handleGridColAdd(event, item, index, this);
     },
     handleSelectItem: function(currentItem) {
-        this.$store.commit("SET_SELECT", currentItem);
+      this.$store.commit("SET_SELECT", currentItem);
     },
     handleMoveAdd: function(arr, val) {
       handleMoveAdd(arr, val);
@@ -122,7 +184,9 @@ export default {
 };
 </script>
 <style scoped lang="stylus">
-@import "~@/style/draggable.styl";
-@import "~@/style/selectedItem/item.styl";
-@import "~@/style/selectedItem/container.styl";
+@import '~@/style/draggable.styl';
+@import '~@/style/selectedItem/item.styl';
+@import '~@/style/selectedItem/container.styl';
+.collapse-item-container
+  padding 5px
 </style>

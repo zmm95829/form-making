@@ -1,4 +1,4 @@
-import getElFormCode from "./generateFormCode.js";
+import {getFormCode} from "./generateFormCode.js";
 import generateScriptCode from "./generateScriptCode.js";
 export default function(data, formConfig) {
   return `<!DOCTYPE html>
@@ -11,7 +11,7 @@ export default function(data, formConfig) {
     </head>
     <body>
       <div id="app">
-        ${getElFormCode(data || {list: []}, formConfig)}
+        ${getFormCode(data || {list: []}, formConfig)}
       </div>
     </body>
     ${generateScriptCode(data.list, formConfig)}    

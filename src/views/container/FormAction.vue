@@ -91,6 +91,8 @@ export default {
     },
     getProjectCode: function() {
       if (this.page.getProjectCodeVisible) {
+        console.log("this.formConfig")
+        console.log(this.formConfig)
         return generateProjectCode(this.data, this.formConfig);
       } else {
         return ""

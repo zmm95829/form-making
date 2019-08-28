@@ -46,6 +46,18 @@ export const basicElement = [{
   }
 },
 {
+  type: "button",
+  label: "按钮",
+  icon: "",
+  model: "",
+  class: itemClass,
+  subclass: "ctbms-form__el-button--search",
+  options: {
+    icon: "el-icon-search",
+    type: "primary"
+  }
+},
+{
   type: "radio",
   label: "单选框组",
   icon: "icon-radio",
@@ -195,6 +207,35 @@ export const layoutElement = [
       class: "ctbms-form-wrap__el-form ctbms-form"
     },
     list: []
+  },
+  {
+    type: "collapse",
+    label: "折叠面板",
+    options: {
+      model: "",
+      class: "ctbms-form-wrap__el-form__collapse--title",
+      accordion: true // 是否手风琴模式
+    },
+    items: [{
+      top: {
+        list: [],
+        tip: "更多查询项"
+      },
+      title: "",
+      list: [{
+        type: "form",
+        label: "表单",
+        options: {
+          labelPosition: "top",
+          size: "small",
+          labelWidth: "80",
+          labelSuffix: "",
+          class: "ctbms-form"
+        },
+        list: []
+      }],
+      name: ""
+    }]
   }
 ];
 export const customElement = [

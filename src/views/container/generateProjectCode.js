@@ -1,6 +1,7 @@
-import getElFormCode from "./generateFormCode.js";
+import { getFormCode, getListCode } from "./generateFormCode.js";
 import generateScriptCode from "./generateScriptCode.js";
-export default function(data, formConfig) {
+import store from "@/store";
+function exportCodeForm(data, formConfig) {
   const isProcess = `<FormButtonGroup
   :is-use-disabled="true"
   :is-view="action==='View'"
@@ -30,7 +31,7 @@ export default function(data, formConfig) {
       ${formConfig.hasFlow ? isProcess : isUnProcess}
     </Sticky>
     
-        ${getElFormCode(data || {list: []}, formConfig)}
+        ${getFormCode(data || { list: [] }, formConfig)}
     </section>
     </template>
     ${generateScriptCode(data.list, formConfig)}  
@@ -38,4 +39,25 @@ export default function(data, formConfig) {
 @import "@/styles/ctbms/form.scss";
 </style>  
   `;
+}
+function exportCodeList(data) {
+  return `<template>
+<section class="ctbms-form-wrap">
+${getListCode(data)}
+</section>
+</template>
+${generateScriptCode(data.list)}
+<style lang="scss">
+@import "@/styles/ctbms/form.scss";
+</style>  
+`;
+}
+export default function(data, formConfig) {
+  console.log(formConfig)
+  // console.log(store.state.system.project.page)
+  if (store.state.system.project.page.indexOf("form") !== -1) {
+    return exportCodeForm(data, formConfig);
+  } else {
+    return exportCodeList(data);
+  }
 };

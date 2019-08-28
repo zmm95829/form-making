@@ -16,6 +16,15 @@ export function getFormModel(list) {
           model = {...model, ...getFormModel(vv.list)};
         });
         break;
+      case "collapse":
+        list[index].items.forEach(vv => {
+          model = {...model, ...getFormModel(vv.list)};
+          model = {...model, ...getFormModel(vv.top.list)};
+        });
+        break;
+      case "form":
+        model = {...model, ...getFormModel(list[index].list)};
+        break;
       case "placeholder":
         break;
       default:
@@ -40,6 +49,15 @@ export function getDictOptions(list) {
         break;
       case "grid":
         v.columns.forEach(vv => {
+          dict = {...dict, ...getDictOptions(vv.list)};
+        });
+        break;
+      case "form":
+        dict = {...dict, ...getDictOptions(v.list)};
+        break;
+      case "collapse":
+        v.items.forEach(vv => {
+          dict = {...dict, ...getDictOptions(vv.top.list)};
           dict = {...dict, ...getDictOptions(vv.list)};
         });
         break;
@@ -186,7 +204,7 @@ function getMethods(list, getString, formConfig) {
          */
         bindModel: function() {
           return Promise.resolve();
-        },
+        }${JSON.stringify(formConfig) !== "{}" ? `,
         /**
          * 保存数据
          */
@@ -203,7 +221,7 @@ function getMethods(list, getString, formConfig) {
             }
           });
           return callBack();          
-        }${formConfig.hasFlow ? `,
+        }` : ""}${formConfig && formConfig.hasFlow ? `,
         /**
          * 在流程审核通过的时候, 更新字段
          */
@@ -218,7 +236,7 @@ function getMethods(list, getString, formConfig) {
   return re;
 }
 
-function generateScriptCode(list, formConfig) {
+function generateScriptCode(list, formConfig = {}) {
   const model = getFormModel(list);
   const dict = getDictOptions(list);
   const mixins = generateVueMixins(list, formConfig, true);

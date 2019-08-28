@@ -1,7 +1,7 @@
 
 <script>
 import { getFormModel, generateVueMixins, getDictOptions, getRules } from "./generateScriptCode.js";
-import generateFormCode from "./generateFormCode.js";
+import {getFormCode} from "./generateFormCode.js";
 export default {
   name: "",
   props: {
@@ -33,7 +33,7 @@ export default {
   },
   methods: {},
   created() {
-    this.$options.template = `${generateFormCode(this.data, this.formConfig)}`;
+    this.$options.template = `${getFormCode(this.data, this.formConfig)}`;
     this.page.rules = getRules(this.data.list);
     this.model = getFormModel(this.data.list);
     this.dict = getDictOptions(this.data.list);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="['form', 'grid'].includes(item.type)">
+    <template v-if="['form', 'grid', 'collapse'].includes(item.type)">
       <layout-element :item="item" :data="data" :index="index"></layout-element>
     </template>
     <template v-else>

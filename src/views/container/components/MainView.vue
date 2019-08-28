@@ -145,7 +145,7 @@ export default {
       const newIndex = val.newIndex;
       if (hasForm) {
         handleMoveAdd(arr, val);
-      } else if (!hasForm && ["grid", "form"].includes(arr[newIndex].type)) {
+      } else if (!hasForm && ["collapse", "grid", "form"].includes(arr[newIndex].type)) {
         handleMoveAdd(arr, val);
       } else {
         // 要先判断父级链条中是否有form TODO:

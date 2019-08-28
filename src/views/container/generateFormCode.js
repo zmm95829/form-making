@@ -122,6 +122,28 @@ function getElFormItemCode(item) {
     case "form":
       re = getElFormCode(item);
       break;
+    case "collapse":
+      let items = "";
+      item.items.forEach(v => {
+        if (v.top.list.length) {
+          items += "<template slot='title'>";
+          v.top.list.forEach(vv => {
+            items += getElFormItemCode(vv);
+          });
+          items += "</template>";
+        }
+        let subItems = `<el-collapse-item title="${v.title}" name="${v.name}">`;
+        v.list.forEach(vv => {
+          subItems += getElFormItemCode(vv);
+        });
+        subItems += "</el-collapse-item>";
+        items += subItems;
+      });
+      re = `<el-collapse v-model="${item.model}" class="${item.options.class}">
+      ${items}
+      </el-collapse>
+      `
+      break;
     default: break;
   }
   return re;
@@ -137,7 +159,7 @@ function getElFormCode(item) {
 ${items}
         </el-form>`
 }
-export default function(data, formConfig) {
+export function getFormCode(data, formConfig) {
   let items = "";
   data.list.forEach((v, index) => {
     items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
@@ -147,4 +169,13 @@ export default function(data, formConfig) {
   return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}" class="${formConfig.class}">
 ${items}
         </el-form>`
+};
+export function getListCode(data) {
+  let items = "";
+  data.list.forEach((v, index) => {
+    items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
+`;
+  });
+  console.log(items)
+  return items;
 };
