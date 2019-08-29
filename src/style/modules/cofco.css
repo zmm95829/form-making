@@ -29,3 +29,14 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
   }
+  .ctbms-form-wrap {
+    background:#fff;
+    padding-bottom: 10px;
+    display: block;
+  }
+  .ctbms-form-wrap__el-form__collapse--title {
+    margin: 8px 24px;
+  }
+  .ctbms-form-wrap__el-form__collapse--title .ctbms-form__el-button--search{
+    margin-left: -80px
+  }

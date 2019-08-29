@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{'view-container': true, 'container-active': system_select.id === item.id}" @click.stop="handleSelectItem(item)">
     <template v-if="item.type==='grid'">
       <el-row
         :gutter="item.options.gutter"
@@ -92,7 +92,7 @@
             :title="subItem.title"
             name="1"
           >
-            <template slot="title">
+            <template slot="title" v-show="showModel===subItem.name">
               <div style="width:100%;height:100%;background-color:#f4f6fc">
                <draggable
                   v-model="subItem.top.list"
@@ -137,6 +137,18 @@
         </div>
       </div>
     </template>
+    <template v-else-if="item.type==='list_table'">
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column v-for="(col, index) in item.columnOptions" :key="index" :prop="col.props" :label="col.label"/>
+      </el-table>
+      <div v-if="system_select.id === item.id" class="item-view-action">
+          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+        </div>
+        <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
+          <i class="iconfont icon-drag item-drag"></i>
+        </div>
+    </template>
   </div>
 </template>
 <script>
@@ -145,7 +157,6 @@ import FormViewItem from "./FormViewItem";
 const MyItem = () => import("./Item.vue");
 import Draggable from "vuedraggable";
 import { mapGetters } from "vuex";
-import { merge, cloneDeep } from "lodash";
 import { handleGridColAdd, handleMoveAdd, handleDelete, handleClone } from "./helper.js";
 
 export default {
@@ -158,7 +169,8 @@ export default {
   },
   data: function() {
     return {
-      showModel: ""
+      showModel: "",
+      tableData: []
     }
   },
   computed: {
@@ -189,4 +201,6 @@ export default {
 @import '~@/style/selectedItem/container.styl';
 .collapse-item-container
   padding 5px
+.collapse-item-container >>> .el-collapse-item__header
+  height auto
 </style>

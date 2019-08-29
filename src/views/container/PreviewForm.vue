@@ -1,7 +1,7 @@
 
 <script>
 import { getFormModel, generateVueMixins, getDictOptions, getRules } from "./generateScriptCode.js";
-import {getFormCode} from "./generateFormCode.js";
+// import {getFormCode} from "./generateFormCode.js";
 export default {
   name: "",
   props: {
@@ -32,12 +32,12 @@ export default {
   mounted() {
   },
   methods: {},
-  created() {
-    this.$options.template = `${getFormCode(this.data, this.formConfig)}`;
-    this.page.rules = getRules(this.data.list);
-    this.model = getFormModel(this.data.list);
-    this.dict = getDictOptions(this.data.list);
-  },
+  // created() {
+  //   this.$options.template = `${getFormCode(this.data, this.formConfig)}`;
+  //   this.page.rules = getRules(this.data.list);
+  //   this.model = getFormModel(this.data.list);
+  //   this.dict = getDictOptions(this.data.list);
+  // },
   template: "<span></span>"
 };
 </script>

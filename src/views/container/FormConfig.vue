@@ -7,11 +7,27 @@
             <el-form-item label="标签名称">
               <el-input v-model="system_select.label" />
             </el-form-item>
+            <el-form-item v-if="Object.keys(system_select).indexOf('generateCode') > 0">
+              <el-checkbox v-model="system_select.generateCode">生成代码</el-checkbox>
+            </el-form-item>
+
             <el-form-item v-if="Object.keys(system_select).indexOf('required')>=0">
               <el-checkbox v-model="system_select.required">必填</el-checkbox>
             </el-form-item>
             <el-form-item v-if="Object.keys(system_select.options).indexOf('disabled')>=0">
               <el-checkbox v-model="system_select.options.disabled">只读</el-checkbox>
+            </el-form-item>
+            <el-form-item
+              label="查询表单路径"
+              v-if="Object.keys(system_select.options).indexOf('property')>=0"
+            >
+              <el-input v-model="system_select.options.property" @change="handlePropertyChange"></el-input>
+              <el-select v-model="system_select.options.operator" @change="dateTypeChange">
+                <el-option value="?EQ">精确匹配</el-option>
+                <el-option value="?LK">模糊匹配</el-option>
+                <el-option value="?STR">以...开头</el-option>
+                <el-option value="?IN">在...之间</el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="绑定字段" v-if="Object.keys(system_select).indexOf('model')>=0">
               <el-input v-model="system_select.model"></el-input>
@@ -105,7 +121,10 @@
                 label="占位内容"
                 v-if="['daterange', 'monthrange'].includes(system_select.options.type)"
               >
-                <el-input v-model="system_select.options.startPlaceholder" style="width:46%; float:left;"></el-input>-
+                <el-input
+                  v-model="system_select.options.startPlaceholder"
+                  style="width:46%; float:left;"
+                ></el-input>-
                 <el-input v-model="system_select.options.endPlaceholder" style="width:46%;"></el-input>
               </el-form-item>
             </template>
@@ -146,15 +165,11 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="栅格间隔">
-                <el-input-number
-                    v-model="system_select.options.gutter"
-                    :step="1"
-                    :min="0"
-                  ></el-input-number>
+                <el-input-number v-model="system_select.options.gutter" :step="1" :min="0"></el-input-number>
               </el-form-item>
             </template>
             <template v-if="system_select.type === 'form'">
-               <el-form-item label="标签对齐方式">
+              <el-form-item label="标签对齐方式">
                 <el-radio-group v-model="system_select.options.labelPosition">
                   <el-radio-button label="left">左对齐</el-radio-button>
                   <el-radio-button label="right">右对齐</el-radio-button>
@@ -163,7 +178,12 @@
               </el-form-item>
 
               <el-form-item label="表单字段宽度">
-                <el-input-number v-model="system_select.options.labelWidth" :min="0" :max="200" :step="10"></el-input-number>
+                <el-input-number
+                  v-model="system_select.options.labelWidth"
+                  :min="0"
+                  :max="200"
+                  :step="10"
+                ></el-input-number>
               </el-form-item>
 
               <el-form-item label="组件尺寸">
@@ -173,9 +193,50 @@
                   <el-radio-button label="mini">mini</el-radio-button>
                 </el-radio-group>
               </el-form-item>
-            <el-form-item label="后缀">
-            <el-input v-model="system_select.options.labelSuffix" />
-          </el-form-item>
+              <el-form-item label="后缀">
+                <el-input v-model="system_select.options.labelSuffix" />
+              </el-form-item>
+            </template>
+            <template v-if="system_select.type === 'list_table'">
+              <el-form-item label="跳转的表单名称">
+                <el-input v-model="system_select.formName"></el-input>
+              </el-form-item>
+              <el-form-item label="固定列标题">
+                <el-input v-model="system_select.fixedLabel"></el-input>
+              </el-form-item>
+              <el-form-item label="固定列props">
+                <el-select v-model="system_select.fixedProps">
+                  <el-option v-for="(item, index) in system_select.columnOptions" :key="index" :value="item.props">{{ item.label }}</el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button icon="el-icon-more" size="mini" type="primary" @click="hanldeListTableOpen">设置列</el-button>
+              </el-form-item>
+              <my-dialog title="设置列信息" :visible.sync="visible">
+                <el-button size="mini" type="primary" @click="hanldeListTableAdd">新增</el-button>
+                <el-table :data="system_select.columnOptions" >
+                  <el-table-column label="label">
+                    <template slot-scope="{row}">
+                      <el-input v-model="row.label"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="props">
+                    <template slot-scope="{row}">
+                      <el-input v-model="row.props"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="width">
+                    <template slot-scope="{row}">
+                      <el-input v-model="row.width"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作">
+                    <template slot-scope="{$index}">
+                      <el-button type="text" @click="hanldeListTableDelete($index)">删除</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </my-dialog>
             </template>
           </el-form>
         </div>
@@ -217,12 +278,17 @@
 </template>
 
 <script>
+import { MyDialog } from "@/components/index.js";
 import { mapGetters } from "vuex";
 export default {
   props: ["formConfig"],
+  components: {
+    MyDialog
+  },
   data() {
     return {
-      activeName: "first"
+      activeName: "first",
+      visible: false
     }
   },
   computed: {
@@ -275,6 +341,25 @@ export default {
     },
     handleColDeleteClick: function(index) {
       this.system_select.columns.splice(index, 1);
+    },
+    hanldeListTableOpen: function() {
+      this.visible = true;
+    },
+    hanldeListTableAdd: function() {
+      this.system_select.columnOptions.push({
+        label: "",
+        props: "",
+        width: "100px"
+      });
+    },
+    hanldeListTableDelete: function(index) {
+      this.system_select.columnOptions.splice(index, 1);
+    },
+    /**
+     * 完整路径填写完成后，自动填充model
+     */
+    handlePropertyChange: function() {
+      this.system_select.model = this.system_select.options.property.split(".")[0] || this.system_select.model;
     }
   }
 }

@@ -79,18 +79,18 @@ function getElFormItemCode(item) {
         col.list.forEach(v => {
           subItem += `${getElFormItemCode(v)}`;
         });
-        subItems += `<el-col :span="${col.span ? col.span : 0}">
+        subItems += item.generateCode ? `<el-col :span="${col.span ? col.span : 0}">
         ${subItem}
-        </el-col>`;
+        </el-col>` : subItem;
       });
-      re = `<el-row
+      re = item.generateCode ? `<el-row
         :gutter="${item.options.gutter}"
         type="flex"
         justify="${item.options.justify}"
         align="${item.options.align}"
       >
       ${subItems}
-      </el-row>`
+      </el-row>` : subItems;
       break;
     case "dialog":
       re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
@@ -148,6 +148,25 @@ function getElFormItemCode(item) {
       re = `<el-form-item class="${item.class}">
         <el-button type="${item.options.type}" icon="${item.options.icon}">${item.label}</el-button>
   </el-form-item>`
+      break;
+    case "list_table":
+      re = `<list-table
+      :table-data="tableData"
+      :column-options="columnOptions"
+      :loading="page.loading"
+      :total="page.total"
+      :is-first-page="page.isFirstPage"
+      form-name="${item.formName}"
+      fixed-label="${item.fixedLabel}"
+      operate-width="130px"
+    >
+      <template slot-scope="scope" slot="fixedColumn">
+        <a class="ctbms-list__id-link">{{ scope.row.${item.fixedProps} }}</a>
+      </template>
+      <template slot-scope="scope" slot="operate">
+      <!-- TODO: -->
+      </template>
+    </list-table>`
       break;
     default: break;
   }

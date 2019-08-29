@@ -26,7 +26,9 @@ export const basicElement = [{
     required: false,
     dataType: "string",
     placeholder: "请输入内容",
-    disabled: false
+    disabled: false,
+    operator: "", // 查询条件下查询操作符
+    property: "" // 查询条件下完整路径
   }
 },
 {
@@ -150,7 +152,8 @@ export const basicElement = [{
     remoteConstant: "",
     remoteOptions,
     remoteProps,
-    disabled: false
+    disabled: false,
+    property: "" // 查询条件下完整路径
   }
 },
 {
@@ -172,7 +175,8 @@ export const basicElement = [{
     type: "date",
     format: "yyyy-MM-dd",
     timestamp: false,
-    width: ""
+    width: "",
+    property: "" // 查询条件下完整路径
   }
 }];
 export const layoutElement = [
@@ -190,6 +194,7 @@ export const layoutElement = [
         list: []
       }
     ],
+    generateCode: true,
     options: {
       gutter: 0,
       justify: "start",
@@ -235,7 +240,7 @@ export const layoutElement = [
         },
         list: []
       }],
-      name: "1"
+      name: "0"
     }]
   }
 ];
@@ -249,7 +254,8 @@ export const customElement = [
     required: false,
     options: {
       placeholder: "",
-      defaultValue: ""
+      defaultValue: "",
+      property: "" // 查询条件下完整路径
     }
   },
   {
@@ -271,5 +277,16 @@ export const customElement = [
     label: "占位",
     class: itemClass,
     icon: "icon-text"
+  },
+  {
+    type: "list_table",
+    icon: "",
+    label: "表格组件",
+    columnOptions: [],
+    formName: "",
+    fixedLabel: "xx编号",
+    fixedProps: "",
+    operateWidth: "130px",
+    options: []
   }
 ]

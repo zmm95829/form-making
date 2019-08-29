@@ -1,5 +1,6 @@
 import {getDict} from "@/api/cofco";
 import * as constantObj from "@/constants/cofco";
+import {getFormCode} from "./generateFormCode.js";
 /**
  * 获取model
  * @param {*} list 数据数组
@@ -48,7 +49,6 @@ export function getPageItems(list) {
       default: break;
     }
   });
-  console.log(page)
   return page;
 }
 /**
@@ -112,31 +112,59 @@ export function getRules(list) {
 export function generateImports(list, formConfig) {
   let re = `
   import { mapGetters } from "vuex";
-
-  import Sticky from "@/components/Sticky";
-  import FormButtonGroup from "@/components/FormButtonGroup";
+  ${formConfig ? `import Sticky from "@/components/Sticky";
+  import FormButtonGroup from "@/components/FormButtonGroup";` : `
+  import { canEditFun } from "@/utils/buttonAuthority";
+  import ListTable from "@/components/ShowTable/ListTable";
+`}
   `;
-  if (list.map(v => v.options.remote === true).length) {
-    re += `import { getDict } from "@/api/dict";
-  `;
-    const constants = generateConstants(list);
-    if (constants.length) {
-      re += `  import { ${constants.join(", ")} } from "@/constants/dict";
+  const constants = generateConstants(list);
+  if (constants.length) {
+    re += "import { getDict } from \"@/api/dict\";";
+    re += `
+    import { ${constants.join(", ")} } from "@/constants/dict";
       `;
-    }
   }
-  if (formConfig.hasFlow) {
+  if (formConfig && formConfig.hasFlow) {
     re += `  import { ${formConfig.flowKey} } from "@/constants/process";
     `
   }
   return re;
 }
 export function generateConstants(list) {
-  const constants = [];
-  list.filter(v => v.options && v.options.remote).forEach(vv => {
-    constants.push(vv.options.remoteConstant);
+  let constants = [];
+  list.forEach(v => {
+    switch (v.type) {
+      case "grid":
+        v.columns.forEach(vv => {
+          constants = [...constants, ...generateConstants(vv.list)];
+        });
+        break;
+      case "collapse":
+        v.items.forEach(vv => {
+          constants = [...constants, ...generateConstants(vv.list)];
+          constants = [...constants, ...generateConstants(vv.top.list)];
+        });
+        break;
+      case "form":
+        constants = [...constants, ...generateConstants(v.list)];
+        break;
+      default:
+        if (v.options && v.options.remote) {
+          constants.push(v.options.remoteConstant);
+        }
+        break;
+    }
   });
   return constants;
+}
+function getColumnOptions(list) {
+  const re = list.filter(v => v.type === "list_table").map(v => v.columnOptions);
+
+  console.log(typeof re)
+  console.log(JSON.stringify(re))
+  console.log(typeof JSON.stringify(re))
+  return list.filter(v => v.type === "list_table").map(v => v.columnOptions);
 }
 /**
  * 获取vue混入对象
@@ -144,6 +172,10 @@ export function generateConstants(list) {
 export function generateVueMixins(list, formConfig, getString = false) {
   const re = {
     created() {
+      this.$options.template = `${getFormCode(this.data, this.formConfig)}`;
+      this.page.rules = getRules(this.data.list);
+      this.model = getFormModel(this.data.list);
+      this.dict = getDictOptions(this.data.list);
     },
     computed: {},
     mounted() {
@@ -226,7 +258,7 @@ function getMethods(list, getString, formConfig) {
          */
         bindModel: function() {
           return Promise.resolve();
-        }${JSON.stringify(formConfig) !== "{}" ? `,
+        }${formConfig ? `,
         /**
          * 保存数据
          */
@@ -243,7 +275,15 @@ function getMethods(list, getString, formConfig) {
             }
           });
           return callBack();          
-        }` : ""}${formConfig && formConfig.hasFlow ? `,
+        }` : `,
+        /**
+         * 表格数据是否允许显示编辑等按钮
+         * 数据是本部门的：角色有编辑权限的显示编辑按钮
+         * 数据是下级部门的：只能有查看按钮
+         */
+        allowEdit: function(row) {
+          return row.deptCode === this.currentAccount.departments[0].oaCode && this.canEdit;
+        }`}${formConfig && formConfig.hasFlow ? `,
         /**
          * 在流程审核通过的时候, 更新字段
          */
@@ -258,7 +298,7 @@ function getMethods(list, getString, formConfig) {
   return re;
 }
 
-function generateScriptCode(list, formConfig = {}) {
+function generateScriptCode(list, formConfig) {
   const model = getFormModel(list);
   const dict = getDictOptions(list);
   const mixins = generateVueMixins(list, formConfig, true);
@@ -266,21 +306,29 @@ function generateScriptCode(list, formConfig = {}) {
   finds = (finds && finds.join("|")) || null;
   let mounted = mixins.mounted.toString();
   mounted = finds ? mounted.replace(new RegExp("(" + finds + ")", "g"), "Promise") : mounted;
-  console.log(getPageItems(list))
   const page = Object.assign({loading: true}, getPageItems(list));
   page["rules"] = getRules(list);
-  if (formConfig.hasFlow) {
+  let columnOptions = "";
+  if (formConfig && formConfig.hasFlow) {
     page[formConfig.flowKey] = formConfig.flowKey;
+  } else {
+    page["isFirstPage"] = true;
+    page["total"] = 0;
+    columnOptions = JSON.stringify(getColumnOptions(list));
   }
   const vue = `{
             // name: "form",
             // el: "#app",
             components: {
-              Sticky,
-              FormButtonGroup,
+              ${formConfig ? `Sticky,
+              FormButtonGroup` : "ListTable"}
             },
             data: function() {
               return {
+                ${formConfig ? "" : `canEdit: false,
+                tableData: [],
+                columnOptions: ${columnOptions.substr(1, columnOptions.length - 2)},
+                `}
                 model: ${JSON.stringify(model)},
                 dict: ${JSON.stringify(dict)},
                 page: ${JSON.stringify(page)},
