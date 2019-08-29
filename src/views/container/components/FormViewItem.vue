@@ -1,5 +1,5 @@
 <template>
-    <el-form-item :label="item.label" :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
+    <el-form-item :label="item.type==='button'?'' : item.label" :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
       <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
@@ -87,6 +87,9 @@
       </template>
       <template v-if="item.type === 'span_readonly'">
         <span :class="item.subClass">{{ item.options.defaultValue }}</span>
+      </template>
+      <template v-if="item.type === 'button'">
+        <el-button :type="item.options.type" :icon="item.options.icon">{{ item.label }}</el-button>
       </template>
       </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">

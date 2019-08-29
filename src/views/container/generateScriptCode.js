@@ -35,6 +35,23 @@ export function getFormModel(list) {
   return model;
 }
 /**
+ * 获取页面需要的变量
+ * @param {*} list 数据数组
+ */
+export function getPageItems(list) {
+  const page = {};
+  list.forEach(v => {
+    switch (v.type) {
+      case "collapse":
+        page[v.model] = v.options.defaultValue;
+        break;
+      default: break;
+    }
+  });
+  console.log(page)
+  return page;
+}
+/**
  * 获取dict
  * @param {*} list 数据数组
  */
@@ -75,10 +92,15 @@ export function getRules(list) {
   list.forEach(v => {
     if (v.required) {
       rules[v.model] = [{ required: true, message: "必填", trigger: "blur" }]
-    } else if (v.type === "grid") {
-      v.columns.forEach(vv => {
-        rules = {...rules, ...getRules(vv.list)};
-      });
+    } else {
+      switch (v.type) {
+        case "grid":
+          v.columns.forEach(vv => {
+            rules = {...rules, ...getRules(vv.list)};
+          });
+          break;
+        default: break;
+      }
     }
   });
   return rules;
@@ -244,7 +266,12 @@ function generateScriptCode(list, formConfig = {}) {
   finds = (finds && finds.join("|")) || null;
   let mounted = mixins.mounted.toString();
   mounted = finds ? mounted.replace(new RegExp("(" + finds + ")", "g"), "Promise") : mounted;
-
+  console.log(getPageItems(list))
+  const page = Object.assign({loading: true}, getPageItems(list));
+  page["rules"] = getRules(list);
+  if (formConfig.hasFlow) {
+    page[formConfig.flowKey] = formConfig.flowKey;
+  }
   const vue = `{
             // name: "form",
             // el: "#app",
@@ -256,11 +283,7 @@ function generateScriptCode(list, formConfig = {}) {
               return {
                 model: ${JSON.stringify(model)},
                 dict: ${JSON.stringify(dict)},
-                page: {
-                  loading: true,
-                  rules: ${JSON.stringify(getRules(list))} ${formConfig.hasFlow ? "," : ""}
-                  ${formConfig.hasFlow ? formConfig.flowKey : ""}
-                }
+                page: ${JSON.stringify(page)},
               }
             },
             computed: {

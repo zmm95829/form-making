@@ -125,24 +125,29 @@ function getElFormItemCode(item) {
     case "collapse":
       let items = "";
       item.items.forEach(v => {
-        if (v.top.list.length) {
-          items += "<template slot='title'>";
-          v.top.list.forEach(vv => {
-            items += getElFormItemCode(vv);
-          });
-          items += "</template>";
-        }
         let subItems = `<el-collapse-item title="${v.title}" name="${v.name}">`;
+        if (v.top.list.length) {
+          subItems += "<template slot='title'>";
+          v.top.list.forEach(vv => {
+            subItems += getElFormItemCode(vv);
+          });
+          subItems += "</template>";
+        }
         v.list.forEach(vv => {
           subItems += getElFormItemCode(vv);
         });
         subItems += "</el-collapse-item>";
         items += subItems;
       });
-      re = `<el-collapse v-model="${item.model}" class="${item.options.class}">
+      re = `<el-collapse v-model="page.${item.model}" class="${item.options.class}">
       ${items}
       </el-collapse>
       `
+      break;
+    case "button":
+      re = `<el-form-item class="${item.class}">
+        <el-button type="${item.options.type}" icon="${item.options.icon}">${item.label}</el-button>
+  </el-form-item>`
       break;
     default: break;
   }
@@ -155,7 +160,7 @@ function getElFormCode(item) {
 `;
   });
   console.log(items)
-  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.options.labelPosition}" label-width="${item.options.labelWidth}px" size="${item.options.size}" label-suffix="${item.options.labelSuffix}" class="${item.options.class}">
+  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.options.labelPosition}" label-width="${item.options.labelWidth}px" size="${item.options.size}" label-suffix="${item.options.labelSuffix}" class="${item.class}">
 ${items}
         </el-form>`
 }

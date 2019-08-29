@@ -199,20 +199,21 @@ export const layoutElement = [
   {
     type: "form",
     label: "表单",
+    class: "ctbms-form",
     options: {
       labelPosition: "top",
       size: "small",
       labelWidth: "80",
-      labelSuffix: "",
-      class: "ctbms-form-wrap__el-form ctbms-form"
+      labelSuffix: ""
     },
     list: []
   },
   {
     type: "collapse",
     label: "折叠面板",
+    model: "",
     options: {
-      model: "",
+      defaultValue: "1",
       class: "ctbms-form-wrap__el-form__collapse--title",
       accordion: true // 是否手风琴模式
     },
@@ -221,20 +222,20 @@ export const layoutElement = [
         list: [],
         tip: "更多查询项"
       },
-      title: "",
+      title: "查询选项",
       list: [{
         type: "form",
         label: "表单",
+        class: "ctbms-form",
         options: {
           labelPosition: "top",
           size: "small",
           labelWidth: "80",
-          labelSuffix: "",
-          class: "ctbms-form"
+          labelSuffix: ""
         },
         list: []
       }],
-      name: ""
+      name: "1"
     }]
   }
 ];
