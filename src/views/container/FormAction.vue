@@ -21,6 +21,7 @@
       <ace v-model="getHtmlCode"></ace>
     </my-dialog>
     <my-dialog title="生成项目代码" :visible.sync="page.getProjectCodeVisible">
+      <el-button size="mini" type="primary" @click="handleCopy(getProjectCode, 'getProjectCodeVisible')">复制</el-button>
       <ace v-model="getProjectCode"></ace>
     </my-dialog>
     <my-dialog title="JSON" :visible.sync="page.setJsonCodeVisible">
@@ -42,6 +43,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="handlePasteJson">粘贴</el-button>
+        <el-button type="mini" @click="handleFormat">JSON格式化</el-button>
         <el-button type="primary" size="mini" @click="handleSelectOk">确 定</el-button>
       </span>
     </my-dialog>
@@ -56,7 +58,7 @@
         v-model="page.jsonData"
       ></vue-json-pretty>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="handleCopyJson">复制</el-button>
+        <el-button size="mini" @click="handleCopy(data, 'getJsonCodeVisible')">复制</el-button>
       </span>
     </my-dialog>
     <input id="copyInput" style="opacity: 0;position: absolute;" />
@@ -74,7 +76,7 @@ import generateHtmlCode from "./generateHtmlCode.js";
 import generateProjectCode from "./generateProjectCode.js";
 import VueJsonPretty from "vue-json-pretty"
 import { mapGetters } from "vuex";
-
+import {jsonFormat} from "@/utils/helper";
 export default {
   name: "FormAction",
   components: {
@@ -91,7 +93,8 @@ export default {
         getPreviewVisible: false,
         getJsonCodeVisible: false,
         setJsonCodeVisible: false,
-        jsonData: ""
+        jsonData: "",
+        showJsonFormat: false
       },
       importData: ""
     }
@@ -123,7 +126,8 @@ export default {
       if (!this.importData) {
         return {};
       }
-      return JSON.parse(this.importData);
+      console.log(this.importData.replace(/\s/g, ""))
+      return JSON.parse(this.importData.replace(/\s/g, ""));
     }
   },
   methods: {
@@ -191,9 +195,9 @@ export default {
         });
       };
     },
-    handleCopyJson: function() {
+    handleCopy: function(data, tempVisible) {
       const input = document.getElementById("copyInput");
-      input.value = JSON.stringify(this.data);
+      input.value = typeof data === "string" ? data : JSON.stringify(data);
       input.select(); // 选择对象
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
@@ -201,7 +205,7 @@ export default {
         showClose: "true",
         message: "复制成功"
       });
-      this.page.getJsonCodeVisible = false
+      this.page[tempVisible] = false
     },
     /**
      * 导入JSON确定
@@ -221,6 +225,10 @@ export default {
           this.$alert("获取模板失败，请检查模板是否存在", "提示", { type: "error" });
           console.error("获取模板失败:" + v)
         })
+    },
+    handleFormat() {
+      this.importData = jsonFormat(this.importData);
+      console.log(this.importData)
     }
   }
 };

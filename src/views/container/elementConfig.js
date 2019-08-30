@@ -13,6 +13,10 @@ const remoteProps = {
   value: "id"
 };
 const itemClass = "ctbms-form__el-form-item";
+// 0级：el-form-item的属性
+// page：仅系统中会用到的属性
+// ...path：元素从根节点开始的路径
+// options：el-form-item里面的元素如input等的属性
 export const basicElement = [{
   type: "input",
   label: "单行文本",
@@ -20,6 +24,9 @@ export const basicElement = [{
   model: "",
   class: itemClass,
   required: false,
+  page: {
+    path: ""
+  },
   options: {
     width: "100%",
     defaultValue: "",
@@ -218,7 +225,7 @@ export const layoutElement = [
     label: "折叠面板",
     model: "",
     options: {
-      defaultValue: "1",
+      defaultValue: "0",
       class: "ctbms-form-wrap__el-form__collapse--title",
       accordion: true // 是否手风琴模式
     },
@@ -240,7 +247,7 @@ export const layoutElement = [
         },
         list: []
       }],
-      name: "0"
+      name: "1"
     }]
   }
 ];
@@ -287,6 +294,10 @@ export const customElement = [
     fixedLabel: "xx编号",
     fixedProps: "",
     operateWidth: "130px",
-    options: []
+    columns: [],
+    options: [],
+    page: {
+      swaggerJson: ""
+    }
   }
 ]

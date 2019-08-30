@@ -32,7 +32,7 @@ export default {
   },
   mounted() {
     this.aceEditor = ace.edit(this.$refs.ace, {
-      maxLines: 30, // 最大行数，超过会自动出现滚动条
+      maxLines: 38, // 最大行数，超过会自动出现滚动条
       minLines: 30, // 最小行数，还未到最大行数时，编辑器会自动伸缩大小
       fontSize: 14, // 编辑器内字体大小
       theme: this.themePath, // 默认设置的主题

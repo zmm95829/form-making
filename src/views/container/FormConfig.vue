@@ -210,32 +210,54 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button icon="el-icon-more" size="mini" type="primary" @click="hanldeListTableOpen">设置列</el-button>
+                <el-button icon="el-icon-more" size="mini" type="primary" @click="hanldeListTableOpen(true)">设置列</el-button>
               </el-form-item>
-              <my-dialog title="设置列信息" :visible.sync="visible">
-                <el-button size="mini" type="primary" @click="hanldeListTableAdd">新增</el-button>
-                <el-table :data="system_select.columnOptions" >
-                  <el-table-column label="label">
-                    <template slot-scope="{row}">
-                      <el-input v-model="row.label"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="props">
-                    <template slot-scope="{row}">
-                      <el-input v-model="row.props"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="width">
-                    <template slot-scope="{row}">
-                      <el-input v-model="row.width"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="操作">
-                    <template slot-scope="{$index}">
-                      <el-button type="text" @click="hanldeListTableDelete($index)">删除</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
+              <el-form-item>
+                <el-button icon="el-icon-more" size="mini" type="primary" @click="hanldeListTableOpen(false)">设置查询字段</el-button>
+              </el-form-item>
+              <my-dialog :title="dialogTitle" :visible.sync="visible">
+                <!-- 设置列信息 -->
+                <template v-if="dialogType">
+                  <el-button size="mini" type="primary" @click="hanldeListTableAdd">新增</el-button>
+                  <el-table :data="system_select.columnOptions" >
+                    <el-table-column label="label">
+                      <template slot-scope="{row}">
+                        <el-input v-model="row.label"></el-input>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="props">
+                      <template slot-scope="{row}">
+                        <el-select v-model="row.props">
+                          <el-option v-for="(item, index) in system_select.columns.map(v => v!=='root' && v.substr(5))" :key="index" :value="item">{{item}}</el-option>
+                        </el-select>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="width">
+                      <template slot-scope="{row}">
+                        <el-input v-model="row.width"></el-input>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="操作">
+                      <template slot-scope="{$index}">
+                        <el-button type="text" @click="hanldeListTableDelete($index)">删除</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </template>
+                <template v-else>
+                  <div style="display: flex;flex-direction: row;">
+                    <el-input v-model="system_select.page.swaggerJson" :autosize="{minRows: 3}" type="textarea" style="width: 50%;"></el-input>
+                    <vue-json-pretty
+                      v-model="system_select.columns"
+                      :data="JSON.parse(system_select.page.swaggerJson || '{}')"
+                      :highlightMouseoverNode="true"
+                      :deep="1"
+                      :showSelectController="true"
+                      selectableType="multiple"
+                      :pathSelectable="columnsSelectable"
+                    />
+                  </div>
+                </template>
               </my-dialog>
             </template>
           </el-form>
@@ -280,15 +302,18 @@
 <script>
 import { MyDialog } from "@/components/index.js";
 import { mapGetters } from "vuex";
+import VueJsonPretty from "vue-json-pretty"
 export default {
   props: ["formConfig"],
   components: {
-    MyDialog
+    MyDialog,
+    VueJsonPretty
   },
   data() {
     return {
       activeName: "first",
-      visible: false
+      visible: false,
+      dialogTitle: ""
     }
   },
   computed: {
@@ -298,6 +323,12 @@ export default {
      */
     showItemConfig: function() {
       return this.system_select && this.system_select.options;
+    },
+    /**
+     * 弹窗显示设置列信息（true）设置要查的字段（false）
+     */
+    dialogType: function() {
+      return this.dialogTitle === "设置列信息";
     }
   },
   methods: {
@@ -342,8 +373,9 @@ export default {
     handleColDeleteClick: function(index) {
       this.system_select.columns.splice(index, 1);
     },
-    hanldeListTableOpen: function() {
+    hanldeListTableOpen: function(setCol) {
       this.visible = true;
+      this.dialogTitle = setCol ? "设置列信息" : "设置查询字段";
     },
     hanldeListTableAdd: function() {
       this.system_select.columnOptions.push({
@@ -360,6 +392,13 @@ export default {
      */
     handlePropertyChange: function() {
       this.system_select.model = this.system_select.options.property.split(".")[0] || this.system_select.model;
+    },
+    columnsSelectable(itemPath, itemData) {
+      if (typeof itemData === "object") {
+        return false
+      } else {
+        return true;
+      }
     }
   }
 }

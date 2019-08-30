@@ -2,9 +2,9 @@ export const data = {
   "list": [{
     "type": "collapse",
     "label": "折叠面板",
-    "model": "collapse_key_156706265200085",
+    "model": "collapse_key_156714903200085",
     "options": {
-      "defaultValue": "1",
+      "defaultValue": "0",
       "class": "ctbms-form-wrap__el-form__collapse--title",
       "accordion": true
     },
@@ -24,21 +24,39 @@ export const data = {
             "type": "input",
             "label": "单行文本",
             "icon": "icon-text",
-            "model": "input_key_156706271800088",
+            "model": "input_key_156714904100075",
             "class": "ctbms-form__el-form-item",
             "required": false,
+            "page": {
+              "path": ""
+            },
             "options": {
               "width": "100%",
               "defaultValue": "",
               "required": false,
               "dataType": "string",
               "placeholder": "请输入内容",
-              "disabled": false
+              "disabled": false,
+              "operator": "",
+              "property": ""
             },
-            "id": "156706271800088"
-          }, { "type": "button", "label": "查询", "icon": "", "model": "button_key_156706272500019", "class": "ctbms-form__el-form-item", "subclass": "ctbms-form__el-button--search", "options": { "icon": "el-icon-search", "type": "primary" }, "id": "156706272500019" }],
-          "id": "156706270600024",
-          "model": "form_key_156706270600024"
+            "id": "156714904100075"
+          },
+          {
+            "type": "button",
+            "label": "按钮",
+            "icon": "",
+            "model": "button_key_156714904800066",
+            "class": "ctbms-form__el-form-item",
+            "subclass": "ctbms-form__el-button--search",
+            "options": {
+              "icon": "el-icon-search",
+              "type": "primary"
+            },
+            "id": "156714904800066"
+          }],
+          "id": "156714903700072",
+          "model": "form_key_156714903700072"
         }],
         "tip": "更多查询项"
       },
@@ -50,18 +68,40 @@ export const data = {
         "options": {
           "labelPosition": "top",
           "size": "small",
-          "labelWidth": 80,
+          "labelWidth": "80",
           "labelSuffix": ""
         },
         "list": [{
+          "type": "input",
+          "label": "单行文本",
+          "icon": "icon-text",
+          "model": "input_key_156714905700044",
+          "class": "ctbms-form__el-form-item",
+          "required": false,
+          "page": {
+            "path": ""
+          },
+          "options": {
+            "width": "100%",
+            "defaultValue": "",
+            "required": false,
+            "dataType": "string",
+            "placeholder": "请输入内容",
+            "disabled": false,
+            "operator": "",
+            "property": ""
+          },
+          "id": "156714905700044"
+        },
+        {
           "type": "select",
-          "label": "审批状态",
+          "label": "下拉选择框",
           "icon": "icon-select",
-          "model": "apprStatus",
+          "model": "select_key_156714906000063",
           "class": "ctbms-form__el-form-item",
           "required": false,
           "options": {
-            "defaultValue": "",
+            "defaultValue": "值1",
             "placeholder": "请选择",
             "options": [{
               "label": "选项1",
@@ -76,34 +116,32 @@ export const data = {
               "value": "值3"
             }],
             "width": "",
-            "remote": true,
-            "remoteConstant":
-              "SYS_APPRSTATUS",
-            "remoteOptions":
-              [{
-                "label": "数据库数据1",
-                "value": "值1"
-              },
-              {
-                "label": "数据库数据2",
-                "value": "值2"
-              }
-              ],
+            "remote": false,
+            "remoteConstant": "",
+            "remoteOptions": [{
+              "label": "数据库数据1",
+              "value": "值1"
+            },
+            {
+              "label": "数据库数据2",
+              "value": "值2"
+            }],
             "remoteProps": {
               "label": "itemValue",
               "value": "id"
             },
-            "disabled": false
+            "disabled": false,
+            "property": ""
           },
-          "id": "156706274500030"
+          "id": "156714906000063"
         }]
       }],
       "name": "1"
     }],
-    "id": "156706265200085"
-  }, {
-    "type":
-      "list_table",
+    "id": "156714903200085"
+  },
+  {
+    "type": "list_table",
     "icon": "",
     "label": "表格组件",
     "columnOptions": [],
@@ -111,8 +149,12 @@ export const data = {
     "fixedLabel": "xx编号",
     "fixedProps": "",
     "operateWidth": "130px",
+    "columns": [],
     "options": [],
-    "id": "156706279200077",
-    "model": "list_table_key_156706279200077"
+    "page": {
+      "swaggerJson": ""
+    },
+    "id": "156714907100085",
+    "model": "list_table_key_156714907100085"
   }]
-}
+};

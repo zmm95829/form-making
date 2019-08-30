@@ -1,6 +1,7 @@
 import {getDict} from "@/api/cofco";
 import * as constantObj from "@/constants/cofco";
 import {getFormCode} from "./generateFormCode.js";
+import { arrayToString } from "@/utils/helper.js";
 /**
  * 获取model
  * @param {*} list 数据数组
@@ -158,13 +159,28 @@ export function generateConstants(list) {
   });
   return constants;
 }
+/**
+ * 查询页面获取动态列的对象
+ * @param {*} list 数据数组
+ */
 function getColumnOptions(list) {
-  const re = list.filter(v => v.type === "list_table").map(v => v.columnOptions);
-
-  console.log(typeof re)
-  console.log(JSON.stringify(re))
-  console.log(typeof JSON.stringify(re))
   return list.filter(v => v.type === "list_table").map(v => v.columnOptions);
+}
+/**
+ * 查询页面获取查询的字段
+ * @param {*} list 数据数组
+ */
+function getColumns(list) {
+  let re = "";
+  list.forEach(v => {
+    switch (v.type) {
+      case "list_table":
+        re = v.columns.map(vv => v.substr(5));
+        break;
+      default: break;
+    }
+  });
+  return arrayToString(re);
 }
 /**
  * 获取vue混入对象
@@ -257,7 +273,9 @@ function getMethods(list, getString, formConfig) {
          * 加载表单数据
          */
         bindModel: function() {
-          return Promise.resolve();
+          return Promise.resolve()${formConfig ? "" : `
+          .then(v => this.handleSearch());
+          `}
         }${formConfig ? `,
         /**
          * 保存数据
@@ -283,6 +301,41 @@ function getMethods(list, getString, formConfig) {
          */
         allowEdit: function(row) {
           return row.deptCode === this.currentAccount.departments[0].oaCode && this.canEdit;
+        },
+        pageList: function(page) {
+          const pageInfo = page || {
+            startPage: 1,
+            pageSize: 10
+          };
+          const ba = {
+            columns: columns,
+            filters: ${getFilters(list)},
+            sortings: [
+              {
+                ascending: false,
+                orderBy: "createdDate"
+              }
+            ],
+            startPage: pageInfo.startPage - 1,
+            pageSize: pageInfo.pageSize
+          };
+          return ba;
+        },
+        /**
+         * 查询报告信息
+         */
+        handleSearch(page) {
+          if (!pagel) {
+            this.page.isFirstPage = !this.page.isFirstPage;
+          }
+          // const _this = this;
+          // _this.page.loading = true;
+          // return paginate(this.pageList(page)).then(result => {
+          //   _this.tableData = result.data;
+          //   _this.$set(_this.page, "total", result.pageInfo.totalRecords);
+          // }).then(() => {
+          //   _this.page.loading = false;
+          // });
         }`}${formConfig && formConfig.hasFlow ? `,
         /**
          * 在流程审核通过的时候, 更新字段
@@ -298,6 +351,32 @@ function getMethods(list, getString, formConfig) {
   return re;
 }
 
+function getFilters(list) {
+  let re = "{";
+  list.forEach(v => {
+    switch (v.type) {
+      case "collapse":
+        // 结构：折叠面板 第一个item top中仅有一个form 里面都是基础元素
+        let aaa = v.items[0].top.list[0].list
+          .filter(v => v.options.operator)
+          .map(vv => {
+            return {
+              "model": vv.model,
+              "operator": vv.options.operator,
+              "property": vv.options.property
+            }
+          });
+        let bbb = v.items[0].list[0].list.filter(v => v.options.operator).map(vv => { return {"model": vv.model, "operator": vv.options.operator, "property": vv.options.property} });
+        [...aaa, ...bbb].forEach(vvv => {
+          re += `"${vvv.property + vvv.operator}": this.model.${vvv.model},`;
+        });
+        re = re.slice(0, -1) + "}";
+        break;
+      default: break;
+    }
+  });
+  return re;
+}
 function generateScriptCode(list, formConfig) {
   const model = getFormModel(list);
   const dict = getDictOptions(list);
@@ -350,6 +429,8 @@ function generateScriptCode(list, formConfig) {
   const re = `
   <script type="text/javascript">
   ${generateImports(list, formConfig)}
+
+  ${formConfig ? `const columns = ${getColumns(list)};` : ""}
   export default ${vue}
   </script>`;
   return re;
