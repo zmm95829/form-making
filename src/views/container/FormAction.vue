@@ -72,8 +72,8 @@ import { MyDialog } from "@/components/index.js";
 import PreviewForm from "./PreviewForm.vue";
 import generateHtmlCode from "./generateHtmlCode.js";
 import generateProjectCode from "./generateProjectCode.js";
-import VueJsonPretty from 'vue-json-pretty'
-import { mapGetters } from 'vuex';
+import VueJsonPretty from "vue-json-pretty"
+import { mapGetters } from "vuex";
 
 export default {
   name: "FormAction",
@@ -190,7 +190,6 @@ export default {
           message: "粘贴失败,该浏览器不支持，ctrl+v或右键粘贴：" + e
         });
       };
-
     },
     handleCopyJson: function() {
       const input = document.getElementById("copyInput");
@@ -214,12 +213,12 @@ export default {
       }
     },
     handleImportTempalte: function() {
-       import(`./config/${this.system_project.name}/${this.system_project.page}.js`)
+      import(`./config/${this.system_project.name}/${this.system_project.page}.js`)
         .then(v => {
           Object.assign(this.data, JSON.parse(JSON.stringify(v.data)))
         })
         .catch(v => {
-          this.$alert("获取模板失败，请检查模板是否存在", "提示", {type: "error"});
+          this.$alert("获取模板失败，请检查模板是否存在", "提示", { type: "error" });
           console.error("获取模板失败:" + v)
         })
     }

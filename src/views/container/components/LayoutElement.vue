@@ -153,11 +153,11 @@
 </template>
 <script>
 import FormViewItem from "./FormViewItem";
-// 异步加载，同步加载循环嵌套会报错Unknown custom element
-const MyItem = () => import("./Item.vue");
 import Draggable from "vuedraggable";
 import { mapGetters } from "vuex";
 import { handleGridColAdd, handleMoveAdd, handleDelete, handleClone } from "./helper.js";
+// 异步加载，同步加载循环嵌套会报错Unknown custom element
+const MyItem = () => import("./Item.vue");
 
 export default {
   name: "LayoutElement",

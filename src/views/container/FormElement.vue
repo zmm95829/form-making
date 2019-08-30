@@ -75,7 +75,7 @@ export default {
     return {
       basicElement: cloneDeep(basicElement),
       layoutElement: JSON.parse(JSON.stringify(layoutElement)),
-      customElement: JSON.parse(JSON.stringify(customElement)),
+      customElement: JSON.parse(JSON.stringify(customElement))
     }
   },
   methods: {

@@ -61,7 +61,7 @@ export default {
           list: []
         },
         formConfig,
-        selectItem: {},
+        selectItem: {}
       },
       changeProject: {
         visible: false

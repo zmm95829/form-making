@@ -27,7 +27,7 @@ export default {
     return {
       aceEditor: null,
       themePath: "ace/theme/tomorrow", // 不导入 webpack-resolver，该模块路径会报错
-      modePath: `ace/mode/json` // 同上
+      modePath: `ace/mode/${this.type}` // 同上
     }
   },
   mounted() {

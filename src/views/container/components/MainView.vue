@@ -1,13 +1,18 @@
 <template>
   <section>
-    <form-container v-if="system_project.page==='form'" :formConfig="formConfig" :data="data" @add-item="handleSelectItem">
+    <form-container
+      v-if="system_project.page==='form'"
+      :formConfig="formConfig"
+      :data="data"
+      @add-item="handleSelectItem"
+    >
       <my-item
-            :key="String(item.id) + String(index)"
-            v-for="(item, index) in data.list"
-            :item="item"
-            :data="data.list"
-            :index="index"
-          />
+        :key="String(item.id) + String(index)"
+        v-for="(item, index) in data.list"
+        :item="item"
+        :data="data.list"
+        :index="index"
+      />
       <!-- <template v-for="(item, index) in data.list">
         <template v-if="item.type==='grid'">
           <el-row
@@ -92,7 +97,7 @@
             :data="data.list"
           />
         </template>
-      </template> -->
+      </template>-->
     </form-container>
     <div v-else class="placeholder-container">
       <draggable
@@ -100,8 +105,13 @@
         v-model="data.list"
         v-bind="{group:'form', ghostClass: 'placeholder',animation: 200, handle: '.item-drag'}"
         @add="handleMoveAdd(data.list, $event, false)"
+      >
+        <transition-group
+          name="fade"
+          tag="div"
+          class="container-transition-group"
+          style="min-height: 50px;"
         >
-        <transition-group name="fade" tag="div" class="container-transition-group" style="min-height: 50px;">
           <my-item
             :key="String(item.id) + String(index)"
             v-for="(item, index) in data.list"
@@ -117,7 +127,6 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { merge, cloneDeep } from "lodash";
 import Draggable from "vuedraggable";
 import FormViewItem from "./FormViewItem.vue";
 import FormContainer from "./FormContainer.vue";
@@ -150,11 +159,11 @@ export default {
       } else {
         // 要先判断父级链条中是否有form TODO:
         arr.splice(newIndex, 1);
-        this.$alert("请先拖拽容器元素", "提示", {type: "warning"});
+        this.$alert("请先拖拽容器元素", "提示", { type: "warning" });
       }
     },
-     handleSelectItem: function(currentItem) {
-        this.$store.commit("SET_SELECT", currentItem);
+    handleSelectItem: function(currentItem) {
+      this.$store.commit("SET_SELECT", currentItem);
     },
     handleDelete: function(arr, index) {
       handleDelete(arr, index);
@@ -164,13 +173,12 @@ export default {
     },
     handleGridColAdd: function(event, item, index) {
       handleGridColAdd(event, item, index);
-    },
+    }
   }
 };
 </script>
 <style scoped lang="stylus" ref="stylesheet/stylus">
-@import "~@/style/selectedItem/item.styl";
-@import "~@/style/selectedItem/container.styl";
-@import "~@/style/draggable.styl";
-
+@import '~@/style/selectedItem/item.styl';
+@import '~@/style/selectedItem/container.styl';
+@import '~@/style/draggable.styl';
 </style>

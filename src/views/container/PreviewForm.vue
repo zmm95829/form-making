@@ -1,6 +1,6 @@
 
 <script>
-import { getFormModel, generateVueMixins, getDictOptions, getRules } from "./generateScriptCode.js";
+import { generateVueMixins } from "./generateScriptCode.js";
 // import {getFormCode} from "./generateFormCode.js";
 export default {
   name: "",

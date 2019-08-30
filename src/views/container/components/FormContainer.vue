@@ -21,7 +21,6 @@
 <script>
 import { mapGetters } from "vuex";
 import Draggable from "vuedraggable";
-import { merge, cloneDeep } from "lodash";
 import { handleMoveAdd } from "./helper.js";
 export default {
   name: "",

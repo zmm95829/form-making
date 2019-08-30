@@ -1,6 +1,11 @@
 <template>
-    <el-form-item :label="item.type==='button'?'' : item.label" :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}" style="margin-bottom:2px;"  @click.native.stop="handleSelectItem">
-      <div class="item-view">
+  <el-form-item
+    :label="item.type==='button'?'' : item.label"
+    :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}"
+    style="margin-bottom:2px;"
+    @click.native.stop="handleSelectItem"
+  >
+    <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
           v-model="item.options.defaultValue"
@@ -53,7 +58,7 @@
         </el-checkbox-group>
       </template>
       <template v-if="item.type == 'select'">
-        <el-select v-model="showModel" :placeholder="item.options.placeholder" >
+        <el-select v-model="showModel" :placeholder="item.options.placeholder">
           <el-option
             v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
             :key="index"
@@ -68,7 +73,8 @@
           :type="item.options.type"
           :format="item.options.format"
           :value-format="item.options.format"
-          :placeholder="item.options.placeholder"/>
+          :placeholder="item.options.placeholder"
+        />
       </template>
       <template v-if="item.type === 'dialog'">
         <el-input
@@ -77,13 +83,7 @@
           :disabled="true"
           :class="item.subClass"
         />
-        <el-button
-          type="primary"
-          style="margin-left:2px"
-          icon="el-icon-more"
-          circle
-          size="mini"
-        />
+        <el-button type="primary" style="margin-left:2px" icon="el-icon-more" circle size="mini" />
       </template>
       <template v-if="item.type === 'span_readonly'">
         <span :class="item.subClass">{{ item.options.defaultValue }}</span>
@@ -91,7 +91,7 @@
       <template v-if="item.type === 'button'">
         <el-button :type="item.options.type" :icon="item.options.icon">{{ item.label }}</el-button>
       </template>
-      </div>
+    </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click="handleClone"></i>
       <i class="iconfont icon-delete" title="删除" @click="handleDelete"></i>
@@ -99,7 +99,7 @@
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-drag">
       <i class="iconfont icon-drag item-drag"></i>
     </div>
-    </el-form-item>
+  </el-form-item>
 </template>
 <script>
 import { merge, cloneDeep } from "lodash";
@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     handleSelectItem: function() {
-        this.$store.commit("SET_SELECT", this.data[this.index]);
+      this.$store.commit("SET_SELECT", this.data[this.index]);
     },
     handleDelete: function() {
       this.data.splice(this.index, 1);
@@ -139,11 +139,11 @@ export default {
           id,
           model: this.data[this.index].type + "_key_" + id
         }));
-        this.$store.commit("SET_SELECT", this.data[this.index + 1]);
+      this.$store.commit("SET_SELECT", this.data[this.index + 1]);
     }
   }
 };
 </script>
 <style lang="stylus" scoped>
-@import "~@/style/selectedItem/item.styl";
+@import '~@/style/selectedItem/item.styl';
 </style>
