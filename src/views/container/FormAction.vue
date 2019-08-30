@@ -196,8 +196,13 @@ export default {
       };
     },
     handleCopy: function(data, tempVisible) {
-      const input = document.getElementById("copyInput");
-      input.value = typeof data === "string" ? data : JSON.stringify(data);
+      let input= "";
+      if(typeof data === "string") {
+      input = document.getElementsByClassName("ace_text-input")[0];
+      } else {
+        input = document.getElementById("copyInput");
+        input.value = JSON.stringify(data);
+      }
       input.select(); // 选择对象
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
