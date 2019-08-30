@@ -71,6 +71,9 @@ export default {
   computed: {
     ...mapGetters(["system_project"])
   },
+  mounted: function() {
+    this.$store.commit("SET_DATA", this.data.formElements);
+  },
   methods: {
     handleEmpty: function() {
       this.selectItem = {};

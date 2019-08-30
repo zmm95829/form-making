@@ -12,7 +12,8 @@ const store = new Vuex.Store({
   getters: {
     cofco_token: store => store.cofco.token,
     system_project: store => store.system.project,
-    system_select: store => store.system.select
+    system_select: store => store.system.select,
+    system_data: store => store.system.data
   }
 });
 

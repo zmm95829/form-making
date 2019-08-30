@@ -21,6 +21,9 @@
               label="查询表单路径"
               v-if="Object.keys(system_select.options).indexOf('property')>=0"
             >
+              <el-select v-model="system_select.options.property" filterable @change="handlePropertyChange">
+                <el-option v-for="(item, index) in listTableSuggestArray" :key="index" :value="item">{{ item }}</el-option>
+              </el-select>
               <el-input v-model="system_select.options.property" @change="handlePropertyChange"></el-input>
               <el-select v-model="system_select.options.operator" @change="dateTypeChange">
                 <el-option value="?EQ">精确匹配</el-option>
@@ -228,7 +231,7 @@
                     <el-table-column label="props">
                       <template slot-scope="{row}">
                         <el-select v-model="row.props">
-                          <el-option v-for="(item, index) in system_select.columns.map(v => v!=='root' && v.substr(5))" :key="index" :value="item">{{item}}</el-option>
+                          <el-option v-for="(item, index) in listTableSuggestArray" :key="index" :value="item">{{item}}</el-option>
                         </el-select>
                       </template>
                     </el-table-column>
@@ -317,7 +320,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["system_project", "system_select"]),
+    ...mapGetters(["system_project", "system_select", "system_data"]),
     /**
      * 是否显示表单项属性编辑项
      */
@@ -329,6 +332,17 @@ export default {
      */
     dialogType: function() {
       return this.dialogTitle === "设置列信息";
+    },
+    listTableSuggestArray: function() {
+      let re = [];
+      if ( this.system_select.type === "list_table") {
+        re = this.system_select;
+      } else {
+        re = this.system_data.list.filter(v => v.type === "list_table");
+        re = re && re[0];
+      }
+      re = re && re.columns.map(v => v.substr(5)) || [];
+      return re;
     }
   },
   methods: {
@@ -391,6 +405,7 @@ export default {
      * 完整路径填写完成后，自动填充model
      */
     handlePropertyChange: function() {
+      console.log("aaaaaaaaaaaaS")
       this.system_select.model = this.system_select.options.property.split(".")[0] || this.system_select.model;
     },
     columnsSelectable(itemPath, itemData) {

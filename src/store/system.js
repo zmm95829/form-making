@@ -5,7 +5,8 @@ export default {
       name: "cofco",
       page: "form"
     },
-    select: {}
+    select: {},
+    data: {list: []}
   },
   mutations: {
     SET_PROJECT_PAGE: (state, project) => {
@@ -16,6 +17,9 @@ export default {
     },
     SET_SELECT: (state, select) => {
       state.select = select;
+    },
+    SET_DATA: (state, data) => {
+      state.data = data;
     }
   },
   actions: {
