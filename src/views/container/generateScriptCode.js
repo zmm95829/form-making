@@ -175,7 +175,7 @@ function getColumns(list) {
   list.forEach(v => {
     switch (v.type) {
       case "list_table":
-        re = v.columns.map(vv => v.substr(5));
+        re = v.columns.map(vv => vv.substr(5));
         break;
       default: break;
     }
@@ -325,7 +325,7 @@ function getMethods(list, getString, formConfig) {
          * 查询报告信息
          */
         handleSearch(page) {
-          if (!pagel) {
+          if (!page) {
             this.page.isFirstPage = !this.page.isFirstPage;
           }
           // const _this = this;
@@ -430,7 +430,7 @@ function generateScriptCode(list, formConfig) {
   <script type="text/javascript">
   ${generateImports(list, formConfig)}
 
-  ${formConfig ? `const columns = ${getColumns(list)};` : ""}
+  ${formConfig ? "" : `const columns = ${getColumns(list)};`}
   export default ${vue}
   </script>`;
   return re;

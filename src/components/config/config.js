@@ -9,4 +9,12 @@ export const projectOptions = [{
     value: "form",
     label: "Form.vue"
   }]
+},
+{
+  value: "common",
+  label: "通用",
+  children: [{
+    value: "html",
+    label: "html"
+  }]
 }];
