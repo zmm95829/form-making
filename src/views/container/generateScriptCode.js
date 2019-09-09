@@ -1,6 +1,6 @@
 import {getDict} from "@/api/cofco";
 import * as constantObj from "@/constants/cofco";
-import {getFormCode} from "./generateFormCode.js";
+import {getFormCode} from "./js/generateFormCode.js";
 import { arrayToString } from "@/utils/helper.js";
 /**
  * 获取model

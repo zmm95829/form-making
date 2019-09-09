@@ -287,6 +287,7 @@ export const customElement = [
   },
   {
     type: "list_table",
+    module: "cofco",
     icon: "",
     label: "表格组件",
     columnOptions: [],

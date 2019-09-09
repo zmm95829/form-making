@@ -3,80 +3,70 @@
     <el-button type="text" size="medium" icon="el-icon-delete" @click="handleEmpty">清空</el-button>
     <el-button type="text" size="medium" icon="el-icon-files" @click="handleImportTempalte">获取模板</el-button>
     <el-button type="text" size="medium" icon="el-icon-upload2" @click="handleImport">导入JSON</el-button>
-    <el-button type="text" size="medium" icon="el-icon-view" @click="handlePreview">预览</el-button>
+    <el-button v-if="system_project.name==='common'" type="text" size="medium" icon="el-icon-view" @click="handlePreview">预览</el-button>
     <el-button type="text" size="medium" icon="el-icon-tickets" @click="handleExport">生成JSON</el-button>
-    <el-button
-      type="text"
-      size="medium"
-      icon="el-icon-document"
-      @click="handleGenerateProjectCode"
-    >生成项目代码</el-button>
-    <el-button
-      type="text"
-      size="medium"
-      icon="el-icon-document"
-      @click="handleGenerateHtmlCode"
-    >生成html代码</el-button>
-    <my-dialog title="生成html代码" :visible.sync="page.getHtmlCodeVisible">
-      <ace v-model="getHtmlCode"></ace>
-    </my-dialog>
-    <my-dialog title="生成项目代码" :visible.sync="page.getProjectCodeVisible">
-      <el-button size="mini" type="primary" @click="handleCopy(getProjectCode, 'getProjectCodeVisible')">复制</el-button>
-      <ace v-model="getProjectCode"></ace>
-    </my-dialog>
-    <my-dialog title="JSON" :visible.sync="page.setJsonCodeVisible">
-      <!-- <pre>{{getJsonCode}}</pre> -->
-      <!-- <ace v-model="getJsonCode" :read-only="false" type="json"></ace> -->
-      <div style="display: flex;flex-direction: row;">
-        <el-input v-model="importData" :autosize="{minRows: 3}" type="textarea" style="width: 50%;"></el-input>
-        <div>
-          <p style="position: absolute;top: 50px;">预览</p>
-          <vue-json-pretty
-            :data="jsonOfImportData"
-            :highlightMouseoverNode="true"
-            :highlightSelectedNode="true"
-            :selectOnClickNode="true"
-            selectableType="single"
-            v-model="page.jsonData"
-          ></vue-json-pretty>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
+    <el-button v-if="system_project.name!=='common'" type="text" size="medium" icon="el-icon-document"  @click="handleGenerateProjectCode">生成项目代码</el-button>
+    <el-button v-if="system_project.name==='common'" type="text" size="medium" icon="el-icon-document" @click="handleGenerateHtmlCode">生成html代码</el-button>
+    <my-dialog :title="page.title" :visible.sync="page.visible">
+      <template v-if="['生成html代码', '生成项目代码'].includes(page.title)">
+        <el-button size="mini" type="primary" @click="handleCopy(page.aceShowContent, true)">复制</el-button>
+        <!-- 生成html代码 -->
+        <ace v-model="page.aceShowContent"></ace>
+        <!-- 生成项目代码 -->
+     </template>
+     <template v-else-if="page.title === '导入JSON'">
+        <!-- 导入JSON -->
         <el-button size="mini" @click="handlePasteJson">粘贴</el-button>
-        <el-button type="mini" @click="handleFormat">JSON格式化</el-button>
-        <el-button type="primary" size="mini" @click="handleSelectOk">确 定</el-button>
-      </span>
-    </my-dialog>
-    <my-dialog title="JSON" :visible.sync="page.getJsonCodeVisible">
-      <vue-json-pretty
-        :data="data"
-        :highlightMouseoverNode="true"
-        :highlightSelectedNode="true"
-        :selectOnClickNode="true"
-        :showDoubleQuotes="false"
-        selectableType="single"
-        v-model="page.jsonData"
-      ></vue-json-pretty>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="handleCopy(data, 'getJsonCodeVisible')">复制</el-button>
-      </span>
-    </my-dialog>
-    <input id="copyInput" style="opacity: 0;position: absolute;" />
-    <my-dialog title="预览" :visible.sync="page.getPreviewVisible">
-      <template v-if="page.getPreviewVisible">
+          <el-button type="mini" @click="handleFormat">JSON格式化</el-button>
+          <el-button type="primary" size="mini" @click="handleSelectOk">确 定</el-button>
+        <div style="display: flex;flex-direction: row;">
+          <el-input v-model="importData" :autosize="{minRows: 3}" type="textarea" style="width: 50%;"></el-input>
+          <div>
+            <p style="position: absolute;top: 50px;">预览</p>
+            <vue-json-pretty
+              :data="jsonOfImportData"
+              :highlightMouseoverNode="true"
+              :highlightSelectedNode="true"
+              :selectOnClickNode="true"
+              selectableType="single"
+              v-model="page.jsonData"
+            ></vue-json-pretty>
+          </div>
+        </div>
+      </template>
+     <template v-else-if="page.title === '导出JSON'">
+        <!-- 导出JSON -->
+        <el-button size="mini" type="primary" @click="handleCopy(data)">复制全部</el-button>
+        <el-button size="mini" type="primary" :disabled="!page.jsonData" @click="handleCopy(page.jsonData.replace('root.', ''))">复制选择节点</el-button>
+        {{ page.jsonData }}
+        <vue-json-pretty
+          :data="data"
+          :highlightMouseoverNode="true"
+          :highlightSelectedNode="true"
+          :selectOnClickNode="true"
+          :showDoubleQuotes="false"
+          selectableType="single"
+          v-model="page.jsonData"
+        ></vue-json-pretty>
+      </template>
+      <!-- 预览 -->
+      <template v-else>
         <preview-form :data="data" :form-config="formConfig" />
       </template>
-    </my-dialog>
+    </my-dialog>    
   </div>
 </template>
 <script>
-import { MyDialog } from "@/components/index.js";
-import PreviewForm from "./PreviewForm.vue";
-import generateHtmlCode from "./generateHtmlCode.js";
-import generateProjectCode from "./generateProjectCode.js";
+import { get } from "lodash";
 import VueJsonPretty from "vue-json-pretty"
 import { mapGetters } from "vuex";
+
+import { MyDialog } from "@/components/index.js";
+import PreviewForm from "./PreviewForm.vue";
+
+import generateHtmlCode from "./generateHtmlCode.js";
 import {jsonFormat} from "@/utils/helper";
+
 export default {
   name: "FormAction",
   components: {
@@ -88,45 +78,21 @@ export default {
   data: function() {
     return {
       page: {
-        getHtmlCodeVisible: false,
-        getProjectCodeVisible: false,
-        getPreviewVisible: false,
-        getJsonCodeVisible: false,
-        setJsonCodeVisible: false,
         jsonData: "",
-        showJsonFormat: false
+        showJsonFormat: false,
+        aceShowContent: "",
+        title: "",
+        visible: false
       },
       importData: ""
     }
   },
   computed: {
     ...mapGetters(["system_project"]),
-    getHtmlCode: function() {
-      if (this.page.getHtmlCodeVisible) {
-        return generateHtmlCode(this.data, this.formConfig);
-      } else {
-        return ""
-      }
-    },
-    getProjectCode: function() {
-      if (this.page.getProjectCodeVisible) {
-        return generateProjectCode(this.data, this.formConfig);
-      } else {
-        return ""
-      }
-    },
-    getJsonCode: function() {
-      if (this.page.getJsonCodeVisible) {
-        return this.data;
-      } else {
-        return "";
-      }
-    },
     jsonOfImportData: function() {
       if (!this.importData) {
         return {};
       }
-      console.log(this.importData.replace(/\s/g, ""))
       return JSON.parse(this.importData.replace(/\s/g, ""));
     }
   },
@@ -142,33 +108,47 @@ export default {
      * 生成html测试代码
      */
     handleGenerateHtmlCode: function() {
-      this.page.getHtmlCodeVisible = true;
+      this.page.aceShowContent = generateHtmlCode(this.data, this.formConfig)
+      this.page.title = "生成html代码";
+      this.page.visible = true;
     },
     /**
      * 生成项目代码
      */
     handleGenerateProjectCode: function() {
-      this.page.getProjectCodeVisible = true;
+      this.page.title = "生成项目代码";
+      this.page.visible = true;
+      import(`@/views/container/config/${this.system_project.name}/code/getCode.js`)
+      .then(myModule => {
+        let myFun = this.system_project.page +  "Fun";
+        myFun = myModule.default[myFun];
+        this.page.aceShowContent = myFun(this.data.list, this.formConfig);
+      });
     },
     /**
      * 预览
      */
     handlePreview: function() {
-      this.page.getPreviewVisible = true;
+      this.page.title = "预览";
+      this.page.visible = true;
     },
     /**
      * 导入JSON
      */
     handleImport: function() {
-      this.page.setJsonCodeVisible = true;
+      this.page.title = "导入JSON";
+      this.page.visible = true;
     },
     /**
      * 导出JSON
      */
     handleExport: function() {
-      this.importData = "";
-      this.page.getJsonCodeVisible = true;
+      this.page.title = "导出JSON";
+      this.page.visible = true;
     },
+    /**
+     * 粘贴数据
+     */
     handlePasteJson: function() {
       try {
         navigator.clipboard.readText()
@@ -195,13 +175,24 @@ export default {
         });
       };
     },
-    handleCopy: function(data, tempVisible) {
+    /**
+     * 复制数据
+     */
+    handleCopy: function(data, isAce = false) {
       let input= "";
-      if(typeof data === "string") {
+      if(isAce) {
       input = document.getElementsByClassName("ace_text-input")[0];
       } else {
-        input = document.getElementById("copyInput");
-        input.value = JSON.stringify(data);
+        if(Object.prototype.toString.call(data) !== "[object Object]") {
+          const arrObject = {
+            [data]: get(this.data, data)
+          };
+          input = document.getElementById("copyInput");
+          input.value = jsonFormat(JSON.stringify(arrObject), false);
+        } else {
+          input = document.getElementById("copyInput");
+          input.value = jsonFormat(JSON.stringify(data), false);
+        }
       }
       input.select(); // 选择对象
       document.execCommand("Copy"); // 执行浏览器复制命令
@@ -210,7 +201,7 @@ export default {
         showClose: "true",
         message: "复制成功"
       });
-      this.page[tempVisible] = false
+      this.page.visible = false
     },
     /**
      * 导入JSON确定
@@ -218,7 +209,7 @@ export default {
     handleSelectOk: function() {
       if (this.importData) {
         this.data.list = JSON.parse(this.importData).list;
-        this.page.setJsonCodeVisible = false;
+        this.page.visible = false;
       }
     },
     handleImportTempalte: function() {
@@ -233,7 +224,6 @@ export default {
     },
     handleFormat() {
       this.importData = jsonFormat(this.importData);
-      console.log(this.importData)
     }
   }
 };

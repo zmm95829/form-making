@@ -1,4 +1,4 @@
-import { getFormCode, getListCode } from "./generateFormCode.js";
+import { getFormCode, getListCode } from "./js/generateFormCode.js";
 import generateScriptCode from "./generateScriptCode.js";
 import store from "@/store";
 function exportCodeForm(data, formConfig) {
@@ -53,8 +53,6 @@ ${generateScriptCode(data.list)}
 `;
 }
 export default function(data, formConfig) {
-  console.log(formConfig)
-  // console.log(store.state.system.project.page)
   if (store.state.system.project.page.indexOf("form") !== -1) {
     return exportCodeForm(data, formConfig);
   } else {

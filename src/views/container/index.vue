@@ -42,7 +42,7 @@ import FormElement from "./FormElement";
 import FormAction from "./FormAction";
 import FormView from "./components/MainView";
 import FormConfig from "./FormConfig.vue";
-import formConfig from "./formConfig.js";
+import formConfig from "./config/formConfig.js";
 import { MyDialog, ProjectConfig } from "@/components/index.js";
 export default {
   name: "Container",

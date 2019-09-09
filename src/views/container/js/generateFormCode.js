@@ -149,25 +149,25 @@ function getElFormItemCode(item) {
         <el-button type="${item.options.type}" icon="${item.options.icon}">${item.label}</el-button>
   </el-form-item>`
       break;
-    case "list_table":
-      re = `<list-table
-      :table-data="tableData"
-      :column-options="columnOptions"
-      :loading="page.loading"
-      :total="page.total"
-      :is-first-page="page.isFirstPage"
-      form-name="${item.formName}"
-      fixed-label="${item.fixedLabel}"
-      operate-width="130px"
-    >
-      <template slot-scope="scope" slot="fixedColumn">
-        <a class="ctbms-list__id-link">{{ scope.row.${item.fixedProps} }}</a>
-      </template>
-      <template slot-scope="scope" slot="operate">
-      <!-- TODO: -->
-      </template>
-    </list-table>`
-      break;
+    // case "list_table":
+    //   re = `<list-table
+    //   :table-data="tableData"
+    //   :column-options="columnOptions"
+    //   :loading="page.loading"
+    //   :total="page.total"
+    //   :is-first-page="page.isFirstPage"
+    //   form-name="${item.formName}"
+    //   fixed-label="${item.fixedLabel}"
+    //   operate-width="130px"
+    // >
+    //   <template slot-scope="scope" slot="fixedColumn">
+    //     <a class="ctbms-list__id-link">{{ scope.row.${item.fixedProps} }}</a>
+    //   </template>
+    //   <template slot-scope="scope" slot="operate">
+    //   <!-- TODO: -->
+    //   </template>
+    // </list-table>`
+    //   break;
     default: break;
   }
   return re;
@@ -178,28 +178,25 @@ function getElFormCode(item) {
     items += index === item.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  console.log(items)
   return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.options.labelPosition}" label-width="${item.options.labelWidth}px" size="${item.options.size}" label-suffix="${item.options.labelSuffix}" class="${item.class}">
 ${items}
         </el-form>`
 }
-export function getFormCode(data, formConfig) {
+export function getFormCode(list, formConfig) {
   let items = "";
-  data.list.forEach((v, index) => {
-    items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
+  list.forEach((v, index) => {
+    items += index === list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  console.log(items)
   return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${formConfig.labelPosition}" label-width="${formConfig.labelWidth}px" size="${formConfig.size}" label-suffix="${formConfig.labelSuffix}" class="${formConfig.class}">
 ${items}
         </el-form>`
 };
-export function getListCode(data) {
+export function getListCode(list) {
   let items = "";
-  data.list.forEach((v, index) => {
-    items += index === data.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
+  list.forEach((v, index) => {
+    items += index === list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  console.log(items)
   return items;
 };

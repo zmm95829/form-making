@@ -1,4 +1,4 @@
-import {getFormCode} from "./generateFormCode.js";
+import {getFormCode} from "./js/generateFormCode.js";
 import generateScriptCode from "./generateScriptCode.js";
 export default function(data, formConfig) {
   return `<!DOCTYPE html>

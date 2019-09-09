@@ -1,7 +1,6 @@
 
 <script>
 import { generateVueMixins } from "./generateScriptCode.js";
-// import {getFormCode} from "./generateFormCode.js";
 export default {
   name: "",
   props: {

@@ -18,14 +18,11 @@ export function arrayToString(arr) {
  * @param {*} json JSON对象
  */
 export function stringToJson(json) {
-  console.log(json)
   let re = json;
   try {
-    console.log(json.replace(/\s/g, ""))
     re = JSON.parse(`${json.replace(/\s/g, "")}`)
   } catch (e) {
     alert("字符串转JSON对象失败");
-    console.log(json.replace(/\s/g, ""))
     console.error(e);
   }
   return re;
@@ -37,7 +34,7 @@ export function stringToJson(json) {
  * @param {*} space 空格
  * @param {*} isEnd 是否最后一个属性
  */
-export function jsonFormat(src, space = 0, isEnd = true, lastIsArrAndNotFirst = false) {
+export function jsonFormat(src, needQuotation = true, space = 0, isEnd = true, lastIsArrAndNotFirst = false) {
   let re = "";
   if (space === 0) {
     src = stringToJson(src);
@@ -49,7 +46,7 @@ export function jsonFormat(src, space = 0, isEnd = true, lastIsArrAndNotFirst = 
     case "[object Array]":
       re = "["
       src.forEach((v, index) => {
-        re += jsonFormat(v, space, index === src.length - 1, index !== 0);
+        re += jsonFormat(v, needQuotation, space, index === src.length - 1, index !== 0);
       })
       re += "]";
       re += isEnd ? "" : ",\n";
@@ -58,8 +55,8 @@ export function jsonFormat(src, space = 0, isEnd = true, lastIsArrAndNotFirst = 
       re = `${lastIsArrAndNotFirst ? getStringOfTimes(" ", space) : ""}{\n`;
       const keys = Object.keys(src);
       keys.forEach((key, index) => {
-        re += `${getStringOfTimes(" ", space + 2)}"${key}": `;
-        re += jsonFormat(src[key], space + 2, index === keys.length - 1);
+        re += `${getStringOfTimes(" ", space + 2)}${needQuotation ? "\"" : ""}${key}${needQuotation ? "\"" : ""}: `;
+        re += jsonFormat(src[key], needQuotation, space + 2, index === keys.length - 1);
       });
       re += `\n${getStringOfTimes(" ", space)}}`;
       re += isEnd ? "" : ",\n";

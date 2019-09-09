@@ -64,7 +64,7 @@
 </template>
 <script>
 import Draggable from "vuedraggable"
-import { basicElement, layoutElement, customElement } from "./elementConfig.js";
+import { basicElement, layoutElement, customElement } from "./config/elementConfig";
 import { cloneDeep } from "lodash";
 export default {
   name: "FormElement",

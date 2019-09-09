@@ -405,7 +405,6 @@ export default {
      * 完整路径填写完成后，自动填充model
      */
     handlePropertyChange: function() {
-      console.log("aaaaaaaaaaaaS")
       this.system_select.model = this.system_select.options.property.split(".")[0] || this.system_select.model;
     },
     columnsSelectable(itemPath, itemData) {

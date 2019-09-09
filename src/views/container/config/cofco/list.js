@@ -1,3 +1,4 @@
+// 中粮业务管理平台查询页面制作数据模板
 export const data = {
   "list": [{
     "type": "collapse",
