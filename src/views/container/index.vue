@@ -39,7 +39,7 @@
 <script>
 import {mapGetters} from "vuex";
 import FormElement from "./FormElement";
-import FormAction from "./FormAction";
+import FormAction from "./components/FormAction.vue";
 import FormView from "./components/MainView";
 import FormConfig from "./FormConfig.vue";
 import formConfig from "./config/formConfig.js";

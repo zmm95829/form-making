@@ -14,7 +14,7 @@ export const projectOptions = [{
   value: "common",
   label: "通用",
   children: [{
-    value: "html",
-    label: "html"
+    value: "form",
+    label: "form"
   }]
 }];

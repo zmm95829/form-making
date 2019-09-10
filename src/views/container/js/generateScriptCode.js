@@ -1,3 +1,5 @@
+import { getFormCode } from "@/views/container/js/generateFormCode.js";
+
 /**
  * 获取model
  * @param {*} list 数据数组
@@ -138,4 +140,32 @@ export function getRules(list) {
     }
   });
   return rules;
+}
+
+/**
+ * 获取vue混入对象
+ */
+export function generateVueMixins(list, formConfig, getString = false) {
+  const re = {
+    created() {
+      this.$options.template = `${getFormCode(this.data, this.formConfig)}`;
+      this.page.rules = getRules(this.data.list);
+      this.model = getModel(this.data.list);
+      this.dict = getDictOptions(this.data.list);
+    },
+    computed: {},
+    mounted() {
+      Promise.resolve()
+        .then(() => this.bindDicts())
+        .then(() => this.bindModel())
+        .catch(e => {
+          this.$alert("加载数据出现错误：" + e, "错误", { type: "error" });
+          console.error("加载过程中出现错误:", e);
+        })
+        .then(() => {
+          this.page.loading = false;
+        });
+    }
+  }
+  return re;
 }

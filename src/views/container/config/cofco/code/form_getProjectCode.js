@@ -15,7 +15,7 @@ import { jsonFormat } from "@/utils/helper.js";
 // ];
 export default function(list, formConfig) {
   let re = content;
-  re = re.replace("$placeholder_txnKey", formConfig.flowKey)
+  re = re.replace(/\$placeholder_txnKey/g, formConfig.flowKey)
   re = re.replace("$placeholder_html", getFormCode(list, formConfig));
 
   const constants = generateConstants(list);
@@ -23,7 +23,7 @@ export default function(list, formConfig) {
 
   re = re.replace("$placeholder_model", jsonFormat(JSON.stringify(getModel(list)), false));
   const dicts = getDictOptions(list);
-  re = re.replace("$placeholder_dict", jsonFormat(JSON.stringify(dicts)), false);
+  re = re.replace("$placeholder_dict", jsonFormat(JSON.stringify(dicts), false));
   re = re.replace("$placeholder_page", "");
 
   const filterDictsName = [];
@@ -40,7 +40,7 @@ export default function(list, formConfig) {
     })`;
     getDictItems += (index !== constants.length - 1 ? "," : "");
   });
-  re = re.replace("$placeholder_rule", jsonFormat(JSON.stringify(getRules(list))), false);
+  re = re.replace("$placeholder_rule", jsonFormat(JSON.stringify(getRules(list)), false));
   re = re.replace("$placeholder_getDicts", getDictItems);
   return re;
 };

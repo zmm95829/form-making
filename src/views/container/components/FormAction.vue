@@ -3,24 +3,55 @@
     <el-button type="text" size="medium" icon="el-icon-delete" @click="handleEmpty">清空</el-button>
     <el-button type="text" size="medium" icon="el-icon-files" @click="handleImportTempalte">获取模板</el-button>
     <el-button type="text" size="medium" icon="el-icon-upload2" @click="handleImport">导入JSON</el-button>
-    <el-button v-if="system_project.name==='common'" type="text" size="medium" icon="el-icon-view" @click="handlePreview">预览</el-button>
+    <el-button
+      v-if="system_project.name==='common'"
+      type="text"
+      size="medium"
+      icon="el-icon-view"
+      @click="handlePreview"
+    >预览</el-button>
     <el-button type="text" size="medium" icon="el-icon-tickets" @click="handleExport">生成JSON</el-button>
-    <el-button v-if="system_project.name!=='common'" type="text" size="medium" icon="el-icon-document"  @click="handleGenerateProjectCode">生成项目代码</el-button>
-    <el-button v-if="system_project.name==='common'" type="text" size="medium" icon="el-icon-document" @click="handleGenerateHtmlCode">生成html代码</el-button>
+    <el-button
+      v-if="system_project.name!=='common'"
+      type="text"
+      size="medium"
+      icon="el-icon-document"
+      @click="handleGenerateProjectCode"
+    >生成项目代码</el-button>
+    <el-button
+      v-if="system_project.name==='common'"
+      type="text"
+      size="medium"
+      icon="el-icon-document"
+      @click="handleGenerateHtmlCode"
+    >生成html代码</el-button>
     <my-dialog :title="page.title" :visible.sync="page.visible">
       <template v-if="['生成html代码', '生成项目代码'].includes(page.title)">
         <el-button size="mini" type="primary" @click="handleCopy(page.aceShowContent, true)">复制</el-button>
         <!-- 生成html代码 -->
         <ace v-model="page.aceShowContent"></ace>
         <!-- 生成项目代码 -->
-     </template>
-     <template v-else-if="page.title === '导入JSON'">
+      </template>
+      <template v-else-if="page.title === '导入JSON'">
         <!-- 导入JSON -->
-        <el-button size="mini" @click="handlePasteJson">粘贴</el-button>
-          <el-button type="mini" @click="handleFormat">JSON格式化</el-button>
-          <el-button type="primary" size="mini" @click="handleSelectOk">确 定</el-button>
         <div style="display: flex;flex-direction: row;">
-          <el-input v-model="importData" :autosize="{minRows: 3}" type="textarea" style="width: 50%;"></el-input>
+          <div style="width: 50%;">
+            <div style="display: flex;flex-direction: row;">
+              <el-button size="mini" @click="handlePasteJson">粘贴</el-button>
+              <el-button type="mini" @click="handleFormat">JSON格式化</el-button>
+              <el-upload
+                ref="upload"
+                action
+                :show-file-list="false"
+                :before-upload="beforeUpLoad"
+                style="margin: auto 8px;"
+              >
+                <el-button size="small" type="primary">选取文件</el-button>
+              </el-upload>
+              <el-button type="primary" size="mini" @click="handleSelectOk">确 定</el-button>
+            </div>
+            <el-input v-model="importData" :autosize="{minRows: 3}" type="textarea"></el-input>
+          </div>
           <div>
             <p style="position: absolute;top: 50px;">预览</p>
             <vue-json-pretty
@@ -34,10 +65,16 @@
           </div>
         </div>
       </template>
-     <template v-else-if="page.title === '导出JSON'">
+      <template v-else-if="page.title === '导出JSON'">
         <!-- 导出JSON -->
+        <el-button size="mini" type="primary" @click="saveAs(data)">下载</el-button>
         <el-button size="mini" type="primary" @click="handleCopy(data)">复制全部</el-button>
-        <el-button size="mini" type="primary" :disabled="!page.jsonData" @click="handleCopy(page.jsonData.replace('root.', ''))">复制选择节点</el-button>
+        <el-button
+          size="mini"
+          type="primary"
+          :disabled="!page.jsonData"
+          @click="handleCopy(page.jsonData.replace('root.', ''))"
+        >复制选择节点</el-button>
         {{ page.jsonData }}
         <vue-json-pretty
           :data="data"
@@ -53,7 +90,7 @@
       <template v-else>
         <preview-form :data="data" :form-config="formConfig" />
       </template>
-    </my-dialog>    
+    </my-dialog>
   </div>
 </template>
 <script>
@@ -62,10 +99,11 @@ import VueJsonPretty from "vue-json-pretty"
 import { mapGetters } from "vuex";
 
 import { MyDialog } from "@/components/index.js";
-import PreviewForm from "./PreviewForm.vue";
+import PreviewForm from "@/views/container/components/PreviewForm.vue";
 
-import generateHtmlCode from "./generateHtmlCode.js";
-import {jsonFormat} from "@/utils/helper";
+import generateHtmlCode from "@/views/container/config/common/generateHtmlCode.js";
+import { jsonFormat } from "@/utils/helper";
+import { downFile } from "@/utils/file";
 
 export default {
   name: "FormAction",
@@ -119,11 +157,11 @@ export default {
       this.page.title = "生成项目代码";
       this.page.visible = true;
       import(`@/views/container/config/${this.system_project.name}/code/getCode.js`)
-      .then(myModule => {
-        let myFun = this.system_project.page +  "Fun";
-        myFun = myModule.default[myFun];
-        this.page.aceShowContent = myFun(this.data.list, this.formConfig);
-      });
+        .then(myModule => {
+          let myFun = this.system_project.page + "Fun";
+          myFun = myModule.default[myFun];
+          this.page.aceShowContent = myFun(this.data.list, this.formConfig);
+        });
     },
     /**
      * 预览
@@ -145,6 +183,12 @@ export default {
     handleExport: function() {
       this.page.title = "导出JSON";
       this.page.visible = true;
+    },
+    /**
+     * 下载文件
+     */
+    saveAs: function() {
+      downFile(jsonFormat(JSON.stringify(this.data), false), "text/javascript", "hello.js");
     },
     /**
      * 粘贴数据
@@ -179,11 +223,11 @@ export default {
      * 复制数据
      */
     handleCopy: function(data, isAce = false) {
-      let input= "";
-      if(isAce) {
-      input = document.getElementsByClassName("ace_text-input")[0];
+      let input = "";
+      if (isAce) {
+        input = document.getElementsByClassName("ace_text-input")[0];
       } else {
-        if(Object.prototype.toString.call(data) !== "[object Object]") {
+        if (Object.prototype.toString.call(data) !== "[object Object]") {
           const arrObject = {
             [data]: get(this.data, data)
           };
@@ -212,8 +256,11 @@ export default {
         this.page.visible = false;
       }
     },
+    /**
+     * 获取json模板
+     */
     handleImportTempalte: function() {
-      import(`./config/${this.system_project.name}/${this.system_project.page}.js`)
+      import(`./../config/${this.system_project.name}/${this.system_project.page}.js`)
         .then(v => {
           Object.assign(this.data, JSON.parse(JSON.stringify(v.data)))
         })
@@ -222,8 +269,22 @@ export default {
           console.error("获取模板失败:" + v)
         })
     },
+    /**
+     * json格式化
+     */
     handleFormat() {
       this.importData = jsonFormat(this.importData);
+    },
+    /**
+     * 读取上传数据json
+     */
+    beforeUpLoad: function(file) {
+      const reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = () => {
+        this.importData = JSON.stringify(eval("(" + reader.result + ")"));
+      }
+      return false;
     }
   }
 };

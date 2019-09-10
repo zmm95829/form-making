@@ -1,6 +1,6 @@
 
 <script>
-import { generateVueMixins } from "./generateScriptCode.js";
+import { generateVueMixins } from "./../js/generateScriptCode.js";
 export default {
   name: "",
   props: {

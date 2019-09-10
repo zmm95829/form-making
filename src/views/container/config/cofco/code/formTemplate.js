@@ -11,7 +11,7 @@ export default `
         :is-use-disabled="true"
         :is-view="page.action==='View'"
         :is-audit="page.action==='Audit'"
-        :txn-key="$placeholder_txnKey"
+        :txn-key="page.$placeholder_txnKey"
         @save="submitForm('save', $event)"
         @submit="submitForm('submit', $event)"
       >
@@ -37,6 +37,7 @@ import { saveIgnoreNull, findById } from "@/api/结算管理/开票管理/开票
 import { deleteNullAttribute } from "@/utils/objectOperate";
 import { SUBMIT_TIPS, SUCCESS_TIPS } from "@/constants/page";
 import { getValidateFormResult } from "@/utils/validate";
+import { $placeholder_txnKey } from "@/constants/process";
 $placeholder_import
 
 export default {
@@ -56,6 +57,7 @@ export default {
         action: "",
         loading: true,
         rules: $placeholder_rule,
+        $placeholder_txnKey
       }
     };
   },
@@ -76,11 +78,11 @@ export default {
     Promise.resolve()
       .then(() => this.bindDicts())
       .then(() => this.bindModel())
-      .catch(function(e) {
+      .catch(e => {
         this.$alert("加载数据出现错误：" + e, "错误", { type: "error" });
         console.error("加载过程中出现错误:", e);
       })
-      .then(function() {
+      .then(() => {
         this.page.loading = false;
       });
   },

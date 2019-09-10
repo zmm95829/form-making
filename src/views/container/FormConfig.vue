@@ -335,13 +335,13 @@ export default {
     },
     listTableSuggestArray: function() {
       let re = [];
-      if ( this.system_select.type === "list_table") {
+      if (this.system_select.type === "list_table") {
         re = this.system_select;
       } else {
         re = this.system_data.list.filter(v => v.type === "list_table");
         re = re && re[0];
       }
-      re = re && re.columns.map(v => v.substr(5)) || [];
+      re = (re && re.columns.map(v => v.substr(5))) || [];
       return re;
     }
   },
