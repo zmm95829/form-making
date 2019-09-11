@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     handleMoveAdd: function(arr, val) {
-      handleMoveAdd(arr, val);
+      handleMoveAdd(arr, val, "form");
     }
   }
 };

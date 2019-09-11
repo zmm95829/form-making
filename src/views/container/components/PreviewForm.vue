@@ -21,22 +21,12 @@ export default {
     return {
       model: {},
       dict: {},
-      page: {
-        loading: false,
-        rules: {}
-      }
+      page: {}
     }
   },
   mixins: [generateVueMixins()],
-  mounted() {
-  },
+  mounted() {},
   methods: {},
-  // created() {
-  //   this.$options.template = `${getFormCode(this.data, this.formConfig)}`;
-  //   this.page.rules = getRules(this.data.list);
-  //   this.model = getFormModel(this.data.list);
-  //   this.dict = getDictOptions(this.data.list);
-  // },
   template: "<span></span>"
 };
 </script>

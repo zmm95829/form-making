@@ -1,7 +1,7 @@
 import { merge, cloneDeep } from "lodash";
 import store from "@/store";
 
-export function handleGridColAdd(event, oldItem, index, _this) {
+export function handleGridColAdd(event, oldItem, index) {
   const item = JSON.parse(JSON.stringify(oldItem));
   const newIndex = event.newIndex;
   const id = getId();
@@ -9,11 +9,13 @@ export function handleGridColAdd(event, oldItem, index, _this) {
     id,
     model: item.columns[index].list[newIndex].type + "_key_" + id
   });
+  const position = item.page.position;
+  newItem.page.position = position ? position + "." + newItem.type : newItem.type;
   item.columns[index].list.splice(newIndex, 1, newItem);
   oldItem.columns[index] = merge({}, JSON.parse(JSON.stringify(item.columns[index])));
   store.commit("SET_SELECT", oldItem.columns[index].list[newIndex]);
 };
-export function handleMoveAdd(arr, val) {
+export function handleMoveAdd(arr, val, position) {
   const newIndex = val.newIndex;
   // 为拖拽到容器的元素添加唯一id
   const id = getId();
@@ -21,6 +23,7 @@ export function handleMoveAdd(arr, val) {
     id,
     model: arr[newIndex].type + "_key_" + id
   });
+  newItem.page.position = position ? position + "." + newItem.type : newItem.type;
   arr.splice(newIndex, 1, newItem);
   store.commit("SET_SELECT", arr[newIndex]);
 };

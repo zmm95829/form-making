@@ -15,7 +15,9 @@ const remoteProps = {
 const itemClass = "ctbms-form__el-form-item";
 // 0级：el-form-item的属性
 // page：仅系统中会用到的属性
-// ...path：元素从根节点开始的路径
+// ...position：元素从根节点开始的路径
+// ...type：元素的大分类
+// ...needForm：该元素是否需要在form中
 // options：el-form-item里面的元素如input等的属性
 export const basicElement = [{
   type: "input",
@@ -25,7 +27,8 @@ export const basicElement = [{
   class: itemClass,
   required: false,
   page: {
-    path: ""
+    position: "",
+    type: "basic"
   },
   options: {
     width: "100%",
@@ -45,6 +48,10 @@ export const basicElement = [{
   model: "",
   class: itemClass + " ctbms-form__el-form-item--full-line",
   required: false,
+  page: {
+    position: "",
+    type: "basic"
+  },
   options: {
     width: "100%",
     defaultValue: "",
@@ -61,6 +68,10 @@ export const basicElement = [{
   model: "",
   class: itemClass,
   subclass: "ctbms-form__el-button--search",
+  page: {
+    position: "",
+    type: "basic"
+  },
   options: {
     icon: "el-icon-search",
     type: "primary"
@@ -73,6 +84,10 @@ export const basicElement = [{
   model: "",
   class: itemClass,
   required: false,
+  page: {
+    position: "",
+    type: "basic"
+  },
   options: {
     inline: true,
     defaultValue: "值1",
@@ -105,6 +120,10 @@ export const basicElement = [{
   model: "",
   class: itemClass,
   required: false,
+  page: {
+    position: "",
+    type: "basic"
+  },
   options: {
     inline: false,
     defaultValue: "值1",
@@ -137,6 +156,10 @@ export const basicElement = [{
   model: "",
   class: itemClass,
   required: false,
+  page: {
+    position: "",
+    type: "basic"
+  },
   options: {
     defaultValue: "值1",
     placeholder: "请选择",
@@ -170,6 +193,10 @@ export const basicElement = [{
   class: itemClass,
   model: "",
   required: false,
+  page: {
+    position: "",
+    type: "basic"
+  },
   options: {
     // defaultValue: "",
     readonly: false,
@@ -191,6 +218,9 @@ export const layoutElement = [
     type: "grid",
     label: "栅格布局",
     icon: "icon-grid",
+    page: {
+      position: ""
+    },
     columns: [
       {
         span: 12,
@@ -212,6 +242,9 @@ export const layoutElement = [
     type: "form",
     label: "表单",
     class: "ctbms-form",
+    page: {
+      position: ""
+    },
     options: {
       labelPosition: "top",
       size: "small",
@@ -223,6 +256,9 @@ export const layoutElement = [
   {
     type: "collapse",
     label: "折叠面板",
+    page: {
+      position: ""
+    },
     model: "",
     options: {
       defaultValue: "0",
@@ -259,6 +295,10 @@ export const customElement = [
     class: itemClass,
     subClass: "ctbms-form__el-input--open-dialog",
     required: false,
+    page: {
+      position: "",
+      needForm: true
+    },
     options: {
       placeholder: "",
       defaultValue: "",
@@ -273,6 +313,10 @@ export const customElement = [
     class: itemClass,
     subClass: "el-form-item__readonly-value",
     required: false,
+    page: {
+      position: "",
+      needForm: true
+    },
     options: {
       width: "100%",
       defaultValue: "",
@@ -283,6 +327,10 @@ export const customElement = [
     type: "placeholder",
     label: "占位",
     class: itemClass,
+    page: {
+      position: "",
+      needForm: true
+    },
     icon: "icon-text"
   },
   {
@@ -298,6 +346,7 @@ export const customElement = [
     columns: [],
     options: [],
     page: {
+      position: "",
       swaggerJson: ""
     }
   }
