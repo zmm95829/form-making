@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button type="text" size="medium" icon="el-icon-delete" @click="test">测试</el-button>
     <el-button type="text" size="medium" icon="el-icon-delete" @click="handleEmpty">清空</el-button>
     <el-button type="text" size="medium" icon="el-icon-files" @click="handleImportTempalte">获取模板</el-button>
     <el-button type="text" size="medium" icon="el-icon-upload2" @click="handleImport">导入JSON</el-button>
@@ -94,7 +95,7 @@
   </div>
 </template>
 <script>
-import { get } from "lodash";
+import { get, flattenDeep } from "lodash";
 import VueJsonPretty from "vue-json-pretty"
 import { mapGetters } from "vuex";
 
@@ -102,7 +103,7 @@ import { MyDialog } from "@/components/index.js";
 import PreviewForm from "@/views/container/components/PreviewForm.vue";
 
 import generateHtmlCode from "@/views/container/config/common/generateHtmlCode.js";
-import { jsonFormat } from "@/utils/helper";
+import { jsonFormat, getPath } from "@/utils/helper";
 import { downFile } from "@/utils/file";
 
 export default {
@@ -285,6 +286,9 @@ export default {
         this.importData = JSON.stringify(eval("(" + reader.result + ")"));
       }
       return false;
+    },
+    test: function() {
+      console.log(getPath(this.data.list))
     }
   }
 };

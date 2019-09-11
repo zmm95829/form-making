@@ -349,5 +349,12 @@ export const customElement = [
       position: "",
       swaggerJson: ""
     }
+  },
+  {
+    type: "kpmg_file",
+    module: "cofco",
+    icon: "",
+    label: "上传附件",
+    class: itemClass + " ctbms-form__el-form-item--full-line"
   }
 ]

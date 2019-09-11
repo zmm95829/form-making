@@ -46,7 +46,7 @@ import Draggable from "vuedraggable";
 import FormViewItem from "./FormViewItem.vue";
 import FormContainer from "./FormContainer.vue";
 import MyItem from "./Item";
-import { handleGridColAdd, handleMoveAdd, handleClone, handleDelete } from "./helper.js";
+import { handleMoveAdd, handleClone, handleDelete } from "./helper.js";
 export default {
   name: "MainView",
   components: {
@@ -67,7 +67,7 @@ export default {
   methods: {
     handleMoveAdd: function(arr, val, hasForm) {
       const newIndex = val.newIndex;
-      if ((arr[newIndex].page.needForm || arr[newIndex].page.type === "basic") && arr[newIndex].page.position.indexOf("form") === -1)  {
+      if ((arr[newIndex].page.needForm || arr[newIndex].page.type === "basic") && arr[newIndex].page.position.indexOf("form") === -1) {
         arr.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
       } else {
@@ -82,9 +82,6 @@ export default {
     },
     handleClone: function(arr, index) {
       handleClone(arr, index);
-    },
-    handleGridColAdd: function(event, item, index) {
-      handleGridColAdd(event, item, index);
     }
   }
 };

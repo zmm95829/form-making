@@ -12,6 +12,7 @@ import { jsonFormat } from "@/utils/helper.js";
 //   "$placeholder_page",
 //   "$placeholder_rule"
 //   "$placeholder_getDicts",
+//   "$placeholder_methods"
 // ];
 export default function(list, formConfig) {
   let re = content;
@@ -44,3 +45,8 @@ export default function(list, formConfig) {
   re = re.replace("$placeholder_getDicts", getDictItems);
   return re;
 };
+
+// function getMethods(list) {
+//   Object.keys(getPath(list))
+//   getPath(list).filter(v => v)
+// }

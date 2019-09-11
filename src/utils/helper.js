@@ -81,3 +81,50 @@ function getStringOfTimes(str, times) {
   }
   return re;
 }
+
+/**
+ * 每一个基础元素id获取一个路径，返回一个对象
+ * @param {*} list 数据数组
+ * @param {*} path 当前路径
+ */
+export function getPath(list, path = "") {
+  let re = {};
+  list.forEach((item, index) => {
+    re = {...re, ...getPathSub(item, `${path ? path + "." : ""}list[${index}]`)};
+  })
+  return re;
+};
+/**
+ * 给某一个元素获取路径
+ * @param {*} item 元素
+ * @param {*} path 元素路径
+ */
+function getPathSub(item, path) {
+  let re = {};
+  switch (item.type) {
+    case "grid":
+      item.columns.forEach((v, index) => {
+        re = {...re, ...getPath(v.list, `${path}.columns[${index}]`)};
+      });
+      break;
+    case "form":
+      re = {...re, ...getPath(item.list, path)};
+      break;
+    case "collapse":
+      item.items.forEach((v, index) => {
+        re = {...re, ...getPath(v.top.list, `${path}.items[${index}].top`)};
+        re = {...re, ...getPath(v.list, `${path}.items[${index}]`)};
+      });
+      break;
+    default:
+      re[item.id] = path + "=" + item.type;
+      break;
+  }
+  return re;
+}
+// /**
+//  * 对一个对象进行过滤操作
+//  * @param {*} object
+//  */
+// export function objectFilter(object) {
+// }
