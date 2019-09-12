@@ -91,6 +91,9 @@
       <template v-if="item.type === 'button'">
         <el-button :type="item.options.type" :icon="item.options.icon">{{ item.label }}</el-button>
       </template>
+      <template v-if="item.type === 'kpmg_file'">
+        <el-button type="primary">点击上传</el-button>
+      </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click="handleClone"></i>

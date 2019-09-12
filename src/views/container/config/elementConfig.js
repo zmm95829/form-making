@@ -355,6 +355,14 @@ export const customElement = [
     module: "cofco",
     icon: "",
     label: "上传附件",
-    class: itemClass + " ctbms-form__el-form-item--full-line"
+    model: "",
+    options: {
+
+    },
+    class: itemClass + " ctbms-form__el-form-item--full-line",
+    page: {
+      position: "",
+      needForm: true
+    }
   }
 ]

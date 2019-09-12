@@ -1,8 +1,8 @@
-
 import { getFormCode } from "../../../js/generateFormCode.js";
 import { getModel, getDictOptions, generateConstants, generateImports, getRules } from "../../../js/generateScriptCode.js";
 import content from "./formTemplate";
-import { jsonFormat } from "@/utils/helper.js";
+import { jsonFormat, getPath } from "@/utils/helper.js";
+import { objectFilter } from "../../../../../utils/helper.js";
 // const placeholderArr = [
 //   "$placeholder_txnKey",
 //   "$placeholder_html",
@@ -43,10 +43,26 @@ export default function(list, formConfig) {
   });
   re = re.replace("$placeholder_rule", jsonFormat(JSON.stringify(getRules(list)), false));
   re = re.replace("$placeholder_getDicts", getDictItems);
+  re = re.replace("$placeholder_methods", getMethods(list));
   return re;
 };
 
-// function getMethods(list) {
-//   Object.keys(getPath(list))
-//   getPath(list).filter(v => v)
-// }
+/**
+ * 方法
+ * @param {*} list 数据
+ */
+export function getMethods(list) {
+  // 有上传附件时
+  const kpmgFiles = objectFilter(getPath(list), (v) => v.includes("kpmg_file"));
+  let re = "";
+  if (kpmgFiles.length > 0) {
+    re += `
+    /**
+     * 上传组件
+     */
+    attachAssigned(type, interactionId) {
+      this.model[type] = interactionId;
+    },`;
+  }
+  return re;
+}

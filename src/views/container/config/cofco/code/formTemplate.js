@@ -129,8 +129,7 @@ export default {
       }).catch(_ => {
         callBack();
       });
-    },
-    $placeholder_methods
+    },$placeholder_methods
     /**
      * 在流程审核通过的时候, 更新字段
      */

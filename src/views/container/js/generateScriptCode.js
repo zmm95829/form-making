@@ -28,7 +28,7 @@ export function getModel(list) {
       case "placeholder":
         break;
       default:
-        model[v] = list[index].options && list[index].options.remote ? "" : list[index].options.defaultValue;
+        model[v] = list[index].options && list[index].options.remote ? "" : (list[index].options && list[index].options.defaultValue) || "";
         break;
     }
   });

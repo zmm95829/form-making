@@ -122,9 +122,23 @@ function getPathSub(item, path) {
   }
   return re;
 }
-// /**
-//  * 对一个对象进行过滤操作
-//  * @param {*} object
-//  */
-// export function objectFilter(object) {
-// }
+/**
+ * 对一个对象进行过滤操作
+ * @param {*} object 操作对象
+ */
+export function objectFilter(object, func) {
+  console.log(objectFilter)
+  const re = { length: 0 };
+  try {
+    Object.keys(object).forEach(key => {
+      if (func(object[key])) {
+        re[key] = object[key];
+        re.length += 1;
+      }
+    });
+    return re;
+  } catch (e) {
+    alert("utils.hepler.objectFilter:", e);
+    return { length: 0 };
+  }
+}

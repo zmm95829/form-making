@@ -41,7 +41,7 @@ export function getFormHtmlCofco(item, require) {
         :multiple="true"
         :view-only="viewOnly"
         :interaction-id="model.${item.model}"
-        @interaction-id-assigned="${item.model}Assigned"
+        @interaction-id-assigned="attachAssigned('${item.model}', $event)"
       />
     </el-form-item>`
     default: break;
