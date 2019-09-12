@@ -1,40 +1,38 @@
 <template>
-  <el-form-item
-    :label="item.type==='button'?'' : item.label"
-    :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}"
-    style="margin-bottom:2px;"
-    @click.native.stop="handleSelectItem"
-  >
+    <div 
+      :class="{'item-container': !item.elItem.exist, 'item-active': system_select && item && system_select.id === item.id && !item.elItem.exist}"
+      style="margin-bottom:2px;"
+      @click.stop="handleSelectItem(item)"
+      >
     <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
-          v-model="item.options.defaultValue"
-          :placeholder="item.options.placeholder"
-          :disabled="item.options.disabled"
+          v-model="item.self.defaultValue"
+          :placeholder="item.self.placeholder"
+          :disabled="item.self.disabled"
         />
       </template>
       <template v-else-if="item.type === 'textarea'">
         <el-input
-          v-model="item.options.defaultValue"
-          :placeholder="item.options.placeholder"
-          :disabled="item.options.disabled"
-          :autosize="{ minRows: item.options.minRows }"
+          v-model="item.self.defaultValue"
+          :placeholder="item.self.placeholder"
+          :disabled="item.self.disabled"
+          :autosize="{ minRows: item.self.minRows }"
           type="textarea"
         />
       </template>
       <template v-if="item.type == 'radio'">
         <el-radio-group
           v-model="showModel"
-          :style="{width: item.options.width}"
-          :disabled="item.options.disabled"
+          :disabled="item.self.disabled"
         >
           <el-radio
-            :style="{display: item.options.inline ? 'inline-block' : 'block'}"
+            :style="{display: item.self.inline ? 'inline-block' : 'block'}"
             :label="itemSub.value"
-            v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            v-for="(itemSub, index) in (item.self.remote ? item.self.remoteOptions : item.self.options)"
             :key="index"
           >
-            <template v-if="item.options.remote">{{itemSub.label}}</template>
+            <template v-if="item.self.remote">{{itemSub.label}}</template>
             <template v-else>{{ itemSub.label }}</template>
           </el-radio>
         </el-radio-group>
@@ -43,24 +41,23 @@
       <template v-if="item.type == 'checkbox'">
         <el-checkbox-group
           v-model="showModel"
-          :style="{width: item.options.width}"
-          :disabled="item.options.disabled"
+          :disabled="item.self.disabled"
         >
           <el-checkbox
-            :style="{display: item.options.inline ? 'inline-block' : 'block'}"
+            :style="{display: item.self.inline ? 'inline-block' : 'block'}"
             :label="itemSub.value"
-            v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            v-for="(itemSub, index) in (item.self.remote ? item.self.remoteOptions : item.self.options)"
             :key="index"
           >
-            <template v-if="item.options.remote">{{itemSub.label}}</template>
+            <template v-if="item.self.remote">{{itemSub.label}}</template>
             <template v-else>{{ itemSub.label }}</template>
           </el-checkbox>
         </el-checkbox-group>
       </template>
       <template v-if="item.type == 'select'">
-        <el-select v-model="showModel" :placeholder="item.options.placeholder">
+        <el-select v-model="showModel" :placeholder="item.self.placeholder">
           <el-option
-            v-for="(itemSub, index) in (item.options.remote ? item.options.remoteOptions : item.options.options)"
+            v-for="(itemSub, index) in (item.self.remote ? item.self.remoteOptions : item.self.options)"
             :key="index"
             :label="itemSub.label"
             :value="itemSub.value"
@@ -70,29 +67,39 @@
       <template v-if="item.type === 'date'">
         <el-date-picker
           v-model="showModel"
-          :type="item.options.type"
-          :format="item.options.format"
-          :value-format="item.options.format"
-          :placeholder="item.options.placeholder"
+          :type="item.self.type"
+          :format="item.self.format"
+          :value-format="item.self.format"
+          :placeholder="item.self.placeholder"
         />
       </template>
       <template v-if="item.type === 'dialog'">
         <el-input
-          v-model="item.options.defaultValue"
-          :placeholder="item.options.placeholder"
+          v-model="item.self.defaultValue"
+          :placeholder="item.self.placeholder"
           :disabled="true"
-          :class="item.subClass"
+          :class="item.self.class"
         />
         <el-button type="primary" style="margin-left:2px" icon="el-icon-more" circle size="mini" />
       </template>
       <template v-if="item.type === 'span_readonly'">
-        <span :class="item.subClass">{{ item.options.defaultValue }}</span>
+        <span :class="item.elItem.class">{{ item.self.defaultValue }}</span>
       </template>
       <template v-if="item.type === 'button'">
-        <el-button :type="item.options.type" :icon="item.options.icon">{{ item.label }}</el-button>
+        <el-button :type="item.self.type" :icon="item.self.icon">{{ item.label }}</el-button>
       </template>
       <template v-if="item.type === 'kpmg_file'">
         <el-button type="primary">点击上传</el-button>
+      </template>
+      <template v-if="item.type === 'upload'">
+        <el-upload
+          :action="item.self.action"
+          :multiple="item.multiple"
+          :file-list="fileList"
+          >
+          <el-button size="small" type="primary">{{ item.self.slot.btnTitle }}</el-button>
+          <div slot="tip" class="el-upload__tip">{{ item.self.slot.tip }}</div>
+        </el-upload>
       </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
@@ -102,47 +109,34 @@
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-drag">
       <i class="iconfont icon-drag item-drag"></i>
     </div>
-  </el-form-item>
+  </div>
 </template>
 <script>
-import { merge, cloneDeep } from "lodash";
 import { mapGetters } from "vuex";
-
+import { handleClone, handleDelete } from "./helper";
 export default {
   name: "FormViewItem",
   props: ["data", "item", "index"],
   data: function() {
     return {
-      showModel: ""
+      showModel: "",
+      fileList: []
     }
   },
   mounted() {
   },
   computed: {
-    ...mapGetters(["system_project", "system_select"])
+    ...mapGetters(["system_select"])
   },
   methods: {
-    handleSelectItem: function() {
-      this.$store.commit("SET_SELECT", this.data[this.index]);
+    handleSelectItem: function(item) {
+      this.$store.commit("SET_SELECT", item || this.data[this.index]);
     },
     handleDelete: function() {
-      this.data.splice(this.index, 1);
-      if (this.index !== 0) {
-        this.$store.commit("SET_SELECT", this.data[this.index - 1]);
-      } else if (this.data.length > 0) {
-        this.$store.commit("SET_SELECT", this.data[this.index]);
-      } else {
-        this.$store.commit("SET_SELECT", {});
-      }
+      handleDelete(this.data, this.index);
     },
     handleClone: function() {
-      const id = Date.parse(new Date());
-      this.data.splice(this.index + 1, 0,
-        merge(cloneDeep(this.data[this.index]), {
-          id,
-          model: this.data[this.index].type + "_key_" + id
-        }));
-      this.$store.commit("SET_SELECT", this.data[this.index + 1]);
+      handleClone(this.data, this.index);
     }
   }
 };

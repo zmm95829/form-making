@@ -4,79 +4,78 @@
       <el-tab-pane label="字段属性" name="first">
         <div class="form-config-first">
           <el-form v-if="showItemConfig" label-position="top" style="padding: 10px">
-            <el-form-item label="标签名称">
-              <el-input v-model="system_select.label" />
-            </el-form-item>
             <el-form-item v-if="Object.keys(system_select).indexOf('generateCode') > 0">
               <el-checkbox v-model="system_select.generateCode">生成代码</el-checkbox>
             </el-form-item>
-
-            <el-form-item v-if="Object.keys(system_select).indexOf('required')>=0">
-              <el-checkbox v-model="system_select.required">必填</el-checkbox>
-            </el-form-item>
-            <el-form-item v-if="Object.keys(system_select.options).indexOf('disabled')>=0">
-              <el-checkbox v-model="system_select.options.disabled">只读</el-checkbox>
-            </el-form-item>
-            <el-form-item
-              label="查询表单路径"
-              v-if="Object.keys(system_select.options).indexOf('property')>=0"
-            >
-              <el-select v-model="system_select.options.property" filterable @change="handlePropertyChange">
-                <el-option v-for="(item, index) in listTableSuggestArray" :key="index" :value="item">{{ item }}</el-option>
-              </el-select>
-              <el-input v-model="system_select.options.property" @change="handlePropertyChange"></el-input>
-              <el-select v-model="system_select.options.operator" @change="dateTypeChange">
-                <el-option value="?EQ">精确匹配</el-option>
-                <el-option value="?LK">模糊匹配</el-option>
-                <el-option value="?STR">以...开头</el-option>
-                <el-option value="?IN">在...之间</el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="绑定字段" v-if="Object.keys(system_select).indexOf('model')>=0">
-              <el-input v-model="system_select.model"></el-input>
-            </el-form-item>
+            <!-- -------------------------------cofco项目---------------------------- -->
+            <template v-if="system_project.name === 'cofco'">
+              <el-form-item
+                label="查询表单路径"
+                v-if="Object.keys(system_select.self).indexOf('property')>=0"
+              >
+                <el-select
+                  v-model="system_select.self.property"
+                  filterable
+                  @change="handlePropertyChange"
+                >
+                  <el-option
+                    v-for="(item, index) in listTableSuggestArray"
+                    :key="index"
+                    :value="item"
+                  >{{ item }}</el-option>
+                </el-select>
+                <el-input v-model="system_select.self.property" @change="handlePropertyChange"></el-input>
+                <el-select v-model="system_select.self.operator" @change="dateTypeChange">
+                  <el-option value="?EQ">精确匹配</el-option>
+                  <el-option value="?LK">模糊匹配</el-option>
+                  <el-option value="?STR">以...开头</el-option>
+                  <el-option value="?IN">在...之间</el-option>
+                </el-select>
+              </el-form-item>>
+            </template>
+            <!-- -------------------------------cofco项目---------------------------- -->
             <el-form-item
               label="占位内容"
-              v-if="Object.keys(system_select.options).indexOf('placeholder')>=0 && system_select.type!=='date'"
+              v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"
             >
-              <el-input v-model="system_select.options.placeholder"></el-input>
+              <el-input v-model="system_select.self.placeholder"></el-input>
             </el-form-item>
             <el-form-item
               :label="'默认值'+(system_select.type==='checkbox'?'(英文逗号隔开)':'')"
-              v-if="Object.keys(system_select.options).indexOf('defaultValue')>=0"
+              v-if="Object.keys(system_select.self).indexOf('defaultValue')>=0"
             >
-              <el-input v-model="system_select.options.defaultValue"></el-input>
+              <el-input v-model="system_select.self.defaultValue"></el-input>
             </el-form-item>
             <template
               v-if="system_select.type === 'radio' || system_select.type === 'checkbox' || system_select.type === 'select'"
             >
-              <el-form-item v-if="Object.keys(system_select.options).indexOf('inline')!==-1">
-                <el-checkbox v-model="system_select.options.inline">是否行内显示</el-checkbox>
+              <el-form-item v-if="Object.keys(system_select.self).indexOf('inline')!==-1">
+                <el-checkbox v-model="system_select.self.inline">是否行内显示</el-checkbox>
               </el-form-item>
               <el-form-item>
                 <el-checkbox
-                  v-model="system_select.options.remote"
-                >数据来源于数据库{{ system_select.options.remote ? "(请输入字典项常量)" : "(请编辑数据源)" }}</el-checkbox>
+                  v-model="system_select.self.remote"
+                >数据来源于数据库{{ system_select.self.remote ? "(请输入字典项常量)" : "(请编辑数据源)" }}</el-checkbox>
                 <el-input
-                  v-model="system_select.options.remoteConstant"
-                  :title="system_select.options.remoteConstant"
-                  :disabled="!system_select.options.remote"
+                  v-model="system_select.self.remoteConstant"
+                  :title="system_select.self.remoteConstant"
+                  :disabled="!system_select.self.remote"
                 />
               </el-form-item>
-              <el-form-item v-if="system_select.options.remote" label="数据绑定key">
+              <el-form-item v-if="system_select.self.remote" label="数据绑定key">
                 <el-input
-                  v-model="system_select.options.remoteProps.value"
-                  :title="system_select.options.remoteProps.value"
+                  v-model="system_select.self.remoteProps.value"
+                  :title="system_select.self.remoteProps.value"
                 />
               </el-form-item>
-              <el-form-item v-if="system_select.options.remote" label="数据显示label">
+              <el-form-item v-if="system_select.self.remote" label="数据显示label">
                 <el-input
-                  v-model="system_select.options.remoteProps.label"
-                  :title="system_select.options.remoteProps.label"
+                  v-model="system_select.self.remoteProps.label"
+                  :title="system_select.self.remoteProps.label"
                 />
               </el-form-item>
-              <el-form-item label="数据源" v-show="!system_select.options.remote">
-                <el-table :data="system_select.options.options" border>
+              <el-form-item label="数据源" v-show="!system_select.self.remote">
+                <el-table :data="system_select.self.options" border>
                   <el-table-column prop="label" label="选项名称" width="100px">
                     <template slot-scope="{row}">
                       <el-input v-model="row.label" />
@@ -94,15 +93,15 @@
                   </el-table-column>
                 </el-table>
               </el-form-item>
-              <div style="margin-left: 22px;" v-show="!system_select.options.remote">
+              <div style="margin-left: 22px;" v-show="!system_select.self.remote">
                 <el-button type="text" @click="handleAddOption">添加选项</el-button>
               </div>
             </template>
             <template
-              v-if="['date', 'week', 'month', 'year', 'daterange', 'monthrange'].includes(system_select.options.type)"
+              v-if="['date', 'week', 'month', 'year', 'daterange', 'monthrange'].includes(system_select.self.type)"
             >
               <el-form-item label="控件类型">
-                <el-select v-model="system_select.options.type" @change="dateTypeChange">
+                <el-select v-model="system_select.self.type" @change="dateTypeChange">
                   <el-option value="date">日期</el-option>
                   <el-option value="week">周</el-option>
                   <el-option value="month">月</el-option>
@@ -112,23 +111,23 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="格式">
-                <el-input v-model="system_select.options.format"></el-input>
+                <el-input v-model="system_select.self.format"></el-input>
               </el-form-item>
               <el-form-item
                 label="占位内容"
-                v-if="['date', 'week', 'month', 'year'].includes(system_select.options.type)"
+                v-if="['date', 'week', 'month', 'year'].includes(system_select.self.type)"
               >
-                <el-input v-model="system_select.options.placeholder"></el-input>
+                <el-input v-model="system_select.self.placeholder"></el-input>
               </el-form-item>
               <el-form-item
                 label="占位内容"
-                v-if="['daterange', 'monthrange'].includes(system_select.options.type)"
+                v-if="['daterange', 'monthrange'].includes(system_select.self.type)"
               >
                 <el-input
-                  v-model="system_select.options.startPlaceholder"
+                  v-model="system_select.self.startPlaceholder"
                   style="width:46%; float:left;"
                 ></el-input>-
-                <el-input v-model="system_select.options.endPlaceholder" style="width:46%;"></el-input>
+                <el-input v-model="system_select.self.endPlaceholder" style="width:46%;"></el-input>
               </el-form-item>
             </template>
             <template v-if="system_select.type === 'grid'">
@@ -152,7 +151,7 @@
                 </template>
               </el-form-item>
               <el-form-item label="水平排列方式">
-                <el-select v-model="system_select.options.justify">
+                <el-select v-model="system_select.self.justify">
                   <el-option value="start">start</el-option>
                   <el-option value="end">end</el-option>
                   <el-option value="center">center</el-option>
@@ -161,19 +160,19 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="垂直排列方式">
-                <el-select v-model="system_select.options.align">
+                <el-select v-model="system_select.self.align">
                   <el-option value="top">top</el-option>
                   <el-option value="middle">middle</el-option>
                   <el-option value="bottom">bottom</el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="栅格间隔">
-                <el-input-number v-model="system_select.options.gutter" :step="1" :min="0"></el-input-number>
+                <el-input-number v-model="system_select.self.gutter" :step="1" :min="0"></el-input-number>
               </el-form-item>
             </template>
             <template v-if="system_select.type === 'form'">
               <el-form-item label="标签对齐方式">
-                <el-radio-group v-model="system_select.options.labelPosition">
+                <el-radio-group v-model="system_select.self.labelPosition">
                   <el-radio-button label="left">左对齐</el-radio-button>
                   <el-radio-button label="right">右对齐</el-radio-button>
                   <el-radio-button label="top">顶部对齐</el-radio-button>
@@ -182,7 +181,7 @@
 
               <el-form-item label="表单字段宽度">
                 <el-input-number
-                  v-model="system_select.options.labelWidth"
+                  v-model="system_select.self.labelWidth"
                   :min="0"
                   :max="200"
                   :step="10"
@@ -190,14 +189,14 @@
               </el-form-item>
 
               <el-form-item label="组件尺寸">
-                <el-radio-group v-model="system_select.options.size">
+                <el-radio-group v-model="system_select.self.size">
                   <el-radio-button label="medium">medium</el-radio-button>
                   <el-radio-button label="small">small</el-radio-button>
                   <el-radio-button label="mini">mini</el-radio-button>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="后缀">
-                <el-input v-model="system_select.options.labelSuffix" />
+                <el-input v-model="system_select.self.labelSuffix" />
               </el-form-item>
             </template>
             <template v-if="system_select.type === 'list_table'">
@@ -209,20 +208,34 @@
               </el-form-item>
               <el-form-item label="固定列props">
                 <el-select v-model="system_select.fixedProps">
-                  <el-option v-for="(item, index) in system_select.columnOptions" :key="index" :value="item.props">{{ item.label }}</el-option>
+                  <el-option
+                    v-for="(item, index) in system_select.columnOptions"
+                    :key="index"
+                    :value="item.props"
+                  >{{ item.label }}</el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button icon="el-icon-more" size="mini" type="primary" @click="hanldeListTableOpen(true)">设置列</el-button>
+                <el-button
+                  icon="el-icon-more"
+                  size="mini"
+                  type="primary"
+                  @click="hanldeListTableOpen(true)"
+                >设置列</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button icon="el-icon-more" size="mini" type="primary" @click="hanldeListTableOpen(false)">设置查询字段</el-button>
+                <el-button
+                  icon="el-icon-more"
+                  size="mini"
+                  type="primary"
+                  @click="hanldeListTableOpen(false)"
+                >设置查询字段</el-button>
               </el-form-item>
               <my-dialog :title="dialogTitle" :visible.sync="visible">
                 <!-- 设置列信息 -->
                 <template v-if="dialogType">
                   <el-button size="mini" type="primary" @click="hanldeListTableAdd">新增</el-button>
-                  <el-table :data="system_select.columnOptions" >
+                  <el-table :data="system_select.columnOptions">
                     <el-table-column label="label">
                       <template slot-scope="{row}">
                         <el-input v-model="row.label"></el-input>
@@ -231,7 +244,11 @@
                     <el-table-column label="props">
                       <template slot-scope="{row}">
                         <el-select v-model="row.props">
-                          <el-option v-for="(item, index) in listTableSuggestArray" :key="index" :value="item">{{item}}</el-option>
+                          <el-option
+                            v-for="(item, index) in listTableSuggestArray"
+                            :key="index"
+                            :value="item"
+                          >{{item}}</el-option>
                         </el-select>
                       </template>
                     </el-table-column>
@@ -249,7 +266,12 @@
                 </template>
                 <template v-else>
                   <div style="display: flex;flex-direction: row;">
-                    <el-input v-model="system_select.page.swaggerJson" :autosize="{minRows: 3}" type="textarea" style="width: 50%;"></el-input>
+                    <el-input
+                      v-model="system_select.page.swaggerJson"
+                      :autosize="{minRows: 3}"
+                      type="textarea"
+                      style="width: 50%;"
+                    ></el-input>
                     <vue-json-pretty
                       v-model="system_select.columns"
                       :data="JSON.parse(system_select.page.swaggerJson || '{}')"
@@ -263,10 +285,65 @@
                 </template>
               </my-dialog>
             </template>
+            <!-- ---------------------------------------------表单子项设置----------------------------------------- -->
+
+            <!-- ---------------------------------------------表单子项设置----------------------------------------- -->
+            <!-- ---------------------------------------------组件自身设置----------------------------------------- -->
+            <template v-if="system_select.self">
+              <el-form-item label="绑定字段">
+                <el-input v-model="system_select.self.model" />
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="system_select.self.disabled">只读</el-checkbox>
+              </el-form-item>
+              <template v-if="system_select.type === 'upload'">
+                <el-form-item label="action">
+                  <el-input v-model="system_select.self.action" />
+                </el-form-item>
+                <el-form-item>
+                  <el-checkbox v-model="system_select.self.multiple">支持多选文件</el-checkbox>
+                </el-form-item>
+                <el-form-item label="上传按钮显示文本">
+                  <el-input v-model="system_select.self.slot.btnTitle" />
+                </el-form-item>
+                <el-form-item label="提示文本">
+                  <el-input v-model="system_select.self.slot.tip" />
+                </el-form-item>
+              </template>
+              <el-form-item label="css样式名称">
+                <el-input v-model="system_select.self.class" />
+              </el-form-item>
+              <el-form-item label="css样式">
+                <el-input
+                  v-model="system_select.self.style"
+                  :autosize="{minRows: 3}"
+                  type="textarea"
+                />
+              </el-form-item>
+            </template>
+            <!-- ---------------------------------------------组件自身设置----------------------------------------- -->
           </el-form>
         </div>
       </el-tab-pane>
-      <el-tab-pane v-if="system_project.page.indexOf('form')!==-1" label="表单属性" name="second">
+      <el-tab-pane v-if="system_select.elItem" label="表单项属性" name="second">
+        <el-form label-position="top" style="padding: 10px">
+          <el-form-item>
+            <el-checkbox v-model="system_select.elItem.exist">是表单项(由el-form-item包裹)</el-checkbox>
+          </el-form-item>
+          <template v-if="system_select.elItem.exist">
+            <el-form-item>
+              <el-checkbox v-model="system_select.elItem.required">必填</el-checkbox>
+            </el-form-item>
+            <el-form-item label="标签名称">
+              <el-input v-model="system_select.elItem.label" />
+            </el-form-item>
+            <el-form-item label="css样式名称">
+              <el-input v-model="system_select.elItem.class" />
+            </el-form-item>
+          </template>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane v-if="system_project.page.indexOf('form')!==-1" label="表单属性" name="third">
         <el-form label-position="top" style="padding: 10px">
           <el-form-item label="标签对齐方式">
             <el-radio-group v-model="formConfig.labelPosition">
@@ -325,7 +402,7 @@ export default {
      * 是否显示表单项属性编辑项
      */
     showItemConfig: function() {
-      return this.system_select && this.system_select.options;
+      return this.system_select && this.system_select.self;
     },
     /**
      * 弹窗显示设置列信息（true）设置要查的字段（false）
@@ -347,33 +424,33 @@ export default {
   },
   methods: {
     handleAddOption: function() {
-      this.system_select.options.options.push({
+      this.system_select.self.options.push({
         value: "",
         label: ""
       });
     },
     handleRemoveOptions: function(index) {
-      this.system_select.options.options.splice(index, 1);
+      this.system_select.self.options.splice(index, 1);
     },
     dateTypeChange: function() {
-      switch (this.system_select.options.type) {
+      switch (this.system_select.self.type) {
         case "date":
-          this.system_select.options.format = "yyyy-MM-dd"
+          this.system_select.self.format = "yyyy-MM-dd"
           break;
         case "week":
-          this.system_select.options.format = "yyyy年第WW周"
+          this.system_select.self.format = "yyyy年第WW周"
           break;
         case "month":
-          this.system_select.options.format = "yyyy-MM"
+          this.system_select.self.format = "yyyy-MM"
           break;
         case "year":
-          this.system_select.options.format = "yyyy"
+          this.system_select.self.format = "yyyy"
           break;
         case "daterange":
-          this.system_select.options.format = "yyyy-MM-dd HH:mm:ss"
+          this.system_select.self.format = "yyyy-MM-dd HH:mm:ss"
           break;
         case "monthrange":
-          this.system_select.options.format = "yyyy-MM"
+          this.system_select.self.format = "yyyy-MM"
           break;
         default: break;
       }
@@ -405,7 +482,7 @@ export default {
      * 完整路径填写完成后，自动填充model
      */
     handlePropertyChange: function() {
-      this.system_select.model = this.system_select.options.property.split(".")[0] || this.system_select.model;
+      this.system_select.model = this.system_select.self.property.split(".")[0] || this.system_select.model;
     },
     columnsSelectable(itemPath, itemData) {
       if (typeof itemData === "object") {

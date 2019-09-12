@@ -95,7 +95,7 @@
   </div>
 </template>
 <script>
-import { get, flattenDeep } from "lodash";
+import { get } from "lodash";
 import VueJsonPretty from "vue-json-pretty"
 import { mapGetters } from "vuex";
 
@@ -290,7 +290,7 @@ export default {
     },
     test: function() {
       getMethods(this.data.list)
-      // console.log(getPath(this.data.list))
+      console.log(getPath(this.data.list))
     }
   }
 };

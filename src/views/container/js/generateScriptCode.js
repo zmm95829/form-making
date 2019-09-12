@@ -6,10 +6,10 @@ import { getFormCode } from "@/views/container/js/generateFormCode.js";
  */
 export function getModel(list) {
   let model = {};
-  list.map(v => v.model).forEach((v, index) => {
+  list.map(v => v.self.model).forEach((v, index) => {
     switch (list[index].type) {
       case "checkbox":
-        model[v] = list[index].options && list[index].options.remote ? [] : list[index].options.defaultValue.split(",");
+        model[v] = list[index].self.options && list[index].self.remote ? [] : list[index].self.defaultValue.split(",");
         break;
       case "grid":
         list[index].columns.forEach(vv => {
@@ -27,8 +27,11 @@ export function getModel(list) {
         break;
       case "placeholder":
         break;
+      case "upload":
+        model[v] = [];
+        break;
       default:
-        model[v] = list[index].options && list[index].options.remote ? "" : (list[index].options && list[index].options.defaultValue) || "";
+        model[v] = list[index].self.options && list[index].self.remote ? "" : (list[index].self.options && list[index].self.defaultValue) || "";
         break;
     }
   });
@@ -46,7 +49,7 @@ export function getDictOptions(list) {
       case "radio":
       case "checkbox":
       case "select":
-        dict[v.model + "_options"] = v.options.remote ? [] : v.options.options;
+        dict[v.self.model + "_options"] = v.self.remote ? [] : v.self.options;
         break;
       case "grid":
         v.columns.forEach(vv => {
@@ -110,8 +113,8 @@ export function generateConstants(list) {
         constants = [...constants, ...generateConstants(v.list)];
         break;
       default:
-        if (v.options && v.options.remote) {
-          constants.push(v.options.remoteConstant);
+        if (v.options && v.self.remote) {
+          constants.push(v.self.remoteConstant);
         }
         break;
     }
@@ -126,8 +129,8 @@ export function generateConstants(list) {
 export function getRules(list) {
   let rules = {};
   list.forEach(v => {
-    if (v.required) {
-      rules[v.model] = [{ required: true, message: "必填", trigger: "blur" }]
+    if (v.elItem && v.elItem.required) {
+      rules[v.self.model] = [{ required: true, message: "必填", trigger: "blur" }]
     } else {
       switch (v.type) {
         case "grid":

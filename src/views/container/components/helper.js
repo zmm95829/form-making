@@ -6,8 +6,11 @@ export function handleGridColAdd(event, oldItem, index) {
   const newIndex = event.newIndex;
   const id = getId();
   const newItem = merge(cloneDeep(item.columns[index].list[newIndex]), {
-    id,
-    model: item.columns[index].list[newIndex].type + "_key_" + id
+    id
+  }, {
+    self: {
+      model: item.columns[index].list[newIndex].type + "_key_" + id
+    }
   });
   const position = item.page.position;
   newItem.page.position = position ? position + "." + newItem.type : newItem.type;
@@ -20,8 +23,11 @@ export function handleMoveAdd(arr, val, position) {
   // 为拖拽到容器的元素添加唯一id
   const id = getId();
   const newItem = merge(cloneDeep(arr[newIndex]), {
-    id,
-    model: arr[newIndex].type + "_key_" + id
+    id
+  }, {
+    self: {
+      model: arr[newIndex].type + "_key_" + id
+    }
   });
   newItem.page.position = position ? position + "." + newItem.type : newItem.type;
   arr.splice(newIndex, 1, newItem);
@@ -41,8 +47,12 @@ export function handleClone(arr, index) {
   const id = Date.parse(new Date());
   arr.splice(index + 1, 0,
     merge(cloneDeep(arr[index]), {
-      id,
-      model: arr[index].type + "_key_" + id
+      id
+    },
+    {
+      self: {
+        model: arr[index].type + "_key_" + id
+      }
     }));
   store.commit("SET_SELECT", arr[index + 1]);
 }

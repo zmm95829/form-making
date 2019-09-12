@@ -127,7 +127,6 @@ function getPathSub(item, path) {
  * @param {*} object 操作对象
  */
 export function objectFilter(object, func) {
-  console.log(objectFilter)
   const re = { length: 0 };
   try {
     Object.keys(object).forEach(key => {

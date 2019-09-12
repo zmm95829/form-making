@@ -2,12 +2,12 @@
   <div :class="{'view-container': true, 'container-active': system_select.id === item.id}" @click.stop="handleSelectItem(item)">
     <template v-if="item.type==='grid'">
       <el-row
-        :gutter="item.options.gutter"
+        :gutter="item.self.gutter"
         :key="String(item.id)"
         :class="{'item-container': true,'item-grid-container': true,  'grid-active': system_select.id === item.id, 'grid-row': true}"
         type="flex"
-        :justify="item.options.justify"
-        :align="item.options.align"
+        :justify="item.self.justify"
+        :align="item.self.align"
         @click.native.stop="handleSelectItem(data[index])"
       >
         <el-col
@@ -48,10 +48,10 @@
         @click.stop="handleSelectItem(data[index])"
       >
         <el-form
-          :label-position="item.options.labelPosition"
-          :label-width="item.options.labelWidth+'px'"
-          :size="item.options.size"
-          :label-suffix="item.options.labelSuffix"
+          :label-position="item.self.labelPosition"
+          :label-width="item.self.labelWidth+'px'"
+          :size="item.self.size"
+          :label-suffix="item.self.labelSuffix"
           :class="{'form-active': system_select.id === item.id}"
         >
           <draggable
@@ -85,7 +85,7 @@
         :class="{'item-container': true, 'collapse-item-container': true, 'collapse-active': system_select.id === item.id }"
         @click.stop="handleSelectItem(data[index])"
       >
-        <el-collapse v-model="showModel" :class="item.options.class">
+        <el-collapse v-model="showModel" :class="item.elItem.class">
           <el-collapse-item
             v-for="subItem in item.items"
             :key="subItem.id"

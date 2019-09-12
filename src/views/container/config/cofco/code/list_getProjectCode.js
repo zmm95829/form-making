@@ -98,8 +98,8 @@ function generateConstants(list) {
         constants = [...constants, ...generateConstants(v.list)];
         break;
       default:
-        if (v.options && v.options.remote) {
-          constants.push(v.options.remoteConstant);
+        if (v.self.options && v.self.remote) {
+          constants.push(v.self.remoteConstant);
         }
         break;
     }
@@ -117,15 +117,15 @@ function getFilters(list) {
       case "collapse":
         // 结构：折叠面板 第一个item top中仅有一个form 里面都是基础元素
         let aaa = v.items[0].top.list[0].list
-          .filter(v => v.options.operator)
+          .filter(v => v.self.operator)
           .map(vv => {
             return {
               "model": vv.model,
-              "operator": vv.options.operator,
-              "property": vv.options.property
+              "operator": vv.self.operator,
+              "property": vv.self.property
             }
           });
-        let bbb = v.items[0].list[0].list.filter(v => v.options.operator).map(vv => { return {"model": vv.model, "operator": vv.options.operator, "property": vv.options.property} });
+        let bbb = v.items[0].list[0].list.filter(v => v.self.operator).map(vv => { return {"model": vv.model, "operator": vv.self.operator, "property": vv.self.property} });
         [...aaa, ...bbb].forEach(vvv => {
           re += `"${vvv.property + vvv.operator}": this.model.${vvv.model},`;
         });

@@ -13,30 +13,36 @@ const remoteProps = {
   value: "id"
 };
 const itemClass = "ctbms-form__el-form-item";
-// 0级：el-form-item的属性
-// page：仅系统中会用到的属性
+// 0级：系统要显示的相关属性
+// page：系统中会用到但不显示的属性
 // ...position：元素从根节点开始的路径
 // ...type：元素的大分类
 // ...needForm：该元素是否需要在form中
-// options：el-form-item里面的元素如input等的属性
+// self: 自己元素的属性
+// elItem: el-form-item的属性
 export const basicElement = [{
   type: "input",
   label: "单行文本",
   icon: "icon-text",
-  model: "",
-  class: itemClass,
-  required: false,
+  elItem: {
+    exist: true,
+    required: false,
+    label: "单行文本",
+    class: itemClass
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    placeholder: "请输入内容",
+    defaultValue: ""
+  },
   page: {
     position: "",
     type: "basic"
   },
   options: {
-    width: "100%",
-    defaultValue: "",
-    required: false,
-    dataType: "string",
-    placeholder: "请输入内容",
-    disabled: false,
     operator: "", // 查询条件下查询操作符
     property: "" // 查询条件下完整路径
   }
@@ -45,52 +51,66 @@ export const basicElement = [{
   type: "textarea",
   label: "多行文本",
   icon: "icon-textarea",
-  model: "",
-  class: itemClass + " ctbms-form__el-form-item--full-line",
-  required: false,
+  elItem: {
+    exist: true,
+    required: false,
+    label: "多行文本",
+    class: itemClass + " ctbms-form__el-form-item--full-line"
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    placeholder: "请输入内容",
+    defaultValue: "",
+    minRows: 3
+  },
   page: {
     position: "",
     type: "basic"
-  },
-  options: {
-    width: "100%",
-    defaultValue: "",
-    required: false,
-    disabled: false,
-    placeholder: "请输入内容",
-    minRows: 3
   }
 },
 {
   type: "button",
   label: "按钮",
   icon: "",
-  model: "",
-  class: itemClass,
-  subclass: "ctbms-form__el-button--search",
+  elItem: {
+    exist: true,
+    required: false,
+    label: "",
+    class: itemClass
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "ctbms-form__el-button--search",
+    icon: "el-icon-search",
+    type: "primary"
+  },
   page: {
     position: "",
     type: "basic"
-  },
-  options: {
-    icon: "el-icon-search",
-    type: "primary"
   }
 },
 {
   type: "radio",
   label: "单选框组",
   icon: "icon-radio",
-  model: "",
-  class: itemClass,
-  required: false,
-  page: {
-    position: "",
-    type: "basic"
+  elItem: {
+    exist: true,
+    required: false,
+    label: "单选框组",
+    class: itemClass
   },
-  options: {
-    inline: true,
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
     defaultValue: "值1",
+    inline: true,
     options: [
       {
         value: "值1",
@@ -105,85 +125,97 @@ export const basicElement = [{
         label: "选项3"
       }
     ],
-    width: "",
     remote: false,
     remoteConstant: "",
     remoteOptions,
-    remoteProps,
-    disabled: false
+    remoteProps
+  },
+  page: {
+    position: "",
+    type: "basic"
   }
 },
 {
   type: "checkbox",
   label: "多选框组",
   icon: "icon-check-box",
-  model: "",
-  class: itemClass,
-  required: false,
-  page: {
-    position: "",
-    type: "basic"
+  elItem: {
+    exist: true,
+    required: false,
+    label: "多选框组",
+    class: itemClass
   },
-  options: {
-    inline: false,
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
     defaultValue: "值1",
+    inline: true,
     options: [
       {
-        label: "选项1",
-        value: "值1"
+        value: "值1",
+        label: "选项1"
       },
       {
-        label: "选项2",
-        value: "值2"
+        value: "值2",
+        label: "选项2"
       },
       {
-        label: "选项3",
-        value: "值3"
+        value: "值3",
+        label: "选项3"
       }
     ],
-    width: "",
     remote: false,
     remoteConstant: "",
     remoteOptions,
-    remoteProps,
-    disabled: false
+    remoteProps
+  },
+  page: {
+    position: "",
+    type: "basic"
   }
 },
 {
   type: "select",
   label: "下拉选择框",
   icon: "icon-select",
-  model: "",
-  class: itemClass,
-  required: false,
-  page: {
-    position: "",
-    type: "basic"
+  elItem: {
+    exist: true,
+    required: false,
+    label: "下拉选择框",
+    class: itemClass
   },
-  options: {
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
     defaultValue: "值1",
-    placeholder: "请选择",
+    inline: true,
     options: [
       {
-        label: "选项1",
-        value: "值1"
+        value: "值1",
+        label: "选项1"
       },
       {
-        label: "选项2",
-        value: "值2"
+        value: "值2",
+        label: "选项2"
       },
       {
-        label: "选项3",
-        value: "值3"
+        value: "值3",
+        label: "选项3"
       }
     ],
-    width: "",
     remote: false,
     remoteConstant: "",
     remoteOptions,
     remoteProps,
-    disabled: false,
     property: "" // 查询条件下完整路径
+  },
+  page: {
+    position: "",
+    type: "basic"
   }
 },
 {
@@ -191,33 +223,73 @@ export const basicElement = [{
   label: "日期选择器",
   icon: "icon-date",
   class: itemClass,
-  model: "",
+  elItem: {
+    exist: true,
+    required: false,
+    label: "日期选择器",
+    class: itemClass
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    defaultValue: "",
+    property: "", // 查询条件下完整路径
+    startPlaceholder: "开始日期",
+    endPlaceholder: "结束日期",
+    type: "date",
+    format: "yyyy-MM-dd"
+  },
   required: false,
   page: {
     position: "",
     type: "basic"
   },
   options: {
-    // defaultValue: "",
-    readonly: false,
-    disabled: false,
-    editable: true,
-    clearable: true,
-    placeholder: "请选择",
-    startPlaceholder: "开始日期",
-    endPlaceholder: "结束日期",
-    type: "date",
-    format: "yyyy-MM-dd",
-    timestamp: false,
     width: "",
     property: "" // 查询条件下完整路径
   }
-}];
+},
+{
+  type: "upload",
+  label: "上传",
+  icon: "",
+  elItem: {
+    exist: true, // 是在el-form-item包裹下
+    required: false, // 该项必填
+    label: "上传", // el-form-item显示的标签
+    class: "" // el-form-item的样式
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    action: "",
+    multiple: true, // 可以上传多个
+    slot: {
+      btnTitle: "点击上传", // 按钮的文字
+      tip: "" // 提示文字, 为空时不生成div
+    }
+  },
+  options: {},
+  page: {
+    position: ""
+  }
+}
+];
 export const layoutElement = [
   {
     type: "grid",
     label: "栅格布局",
     icon: "icon-grid",
+    elItem: {
+      exist: false,
+      required: false,
+      label: "栅格布局",
+      class: ""
+    },
     page: {
       position: ""
     },
@@ -232,7 +304,7 @@ export const layoutElement = [
       }
     ],
     generateCode: true,
-    options: {
+    self: {
       gutter: 0,
       justify: "start",
       align: "top"
@@ -245,8 +317,8 @@ export const layoutElement = [
     page: {
       position: ""
     },
-    options: {
-      labelPosition: "top",
+    self: {
+      align: "top",
       size: "small",
       labelWidth: "80",
       labelSuffix: ""
@@ -259,8 +331,13 @@ export const layoutElement = [
     page: {
       position: ""
     },
-    model: "",
-    options: {
+    elItem: {
+      exist: false,
+      required: false,
+      label: "折叠面板",
+      class: ""
+    },
+    self: {
       defaultValue: "0",
       class: "ctbms-form-wrap__el-form__collapse--title",
       accordion: true // 是否手风琴模式
@@ -271,12 +348,15 @@ export const layoutElement = [
         tip: "更多查询项"
       },
       title: "查询选项",
-      list: [{
+      list: [ {
         type: "form",
         label: "表单",
         class: "ctbms-form",
-        options: {
-          labelPosition: "top",
+        page: {
+          position: ""
+        },
+        self: {
+          align: "top",
           size: "small",
           labelWidth: "80",
           labelSuffix: ""
@@ -293,40 +373,59 @@ export const customElement = [
     label: "弹窗",
     icon: "icon-dialog",
     class: itemClass,
-    subClass: "ctbms-form__el-input--open-dialog",
-    required: false,
+    elItem: {
+      exist: true,
+      required: false,
+      label: "弹窗",
+      class: itemClass
+    },
+    self: {
+      model: "",
+      disabled: false,
+      style: "",
+      class: "ctbms-form__el-input--open-dialog",
+      placeholder: "请输入内容",
+      defaultValue: "",
+      property: "" // 查询条件下完整路径
+    },
     page: {
       position: "",
       needForm: true
-    },
-    options: {
-      placeholder: "",
-      defaultValue: "",
-      property: "" // 查询条件下完整路径
     }
   },
   {
     type: "span_readonly",
     label: "只读文本",
     icon: "icon-text",
-    model: "",
-    class: itemClass,
-    subClass: "el-form-item__readonly-value",
-    required: false,
+    elItem: {
+      exist: true,
+      required: false,
+      label: "只读文本",
+      class: itemClass
+    },
+    self: {
+      model: "",
+      disabled: false,
+      style: "",
+      class: "el-form-item__readonly-value",
+      placeholder: "请输入内容",
+      defaultValue: "",
+      property: "" // 查询条件下完整路径
+    },
     page: {
       position: "",
       needForm: true
-    },
-    options: {
-      width: "100%",
-      defaultValue: "",
-      required: false
     }
   },
   {
     type: "placeholder",
     label: "占位",
-    class: itemClass,
+    elItem: {
+      exist: true,
+      required: false,
+      label: "占位",
+      class: itemClass
+    },
     page: {
       position: "",
       needForm: true
@@ -355,11 +454,12 @@ export const customElement = [
     module: "cofco",
     icon: "",
     label: "上传附件",
-    model: "",
-    options: {
-
+    elItem: {
+      exist: true,
+      required: false,
+      label: "上传附件",
+      class: itemClass + " ctbms-form__el-form-item--full-line"
     },
-    class: itemClass + " ctbms-form__el-form-item--full-line",
     page: {
       position: "",
       needForm: true

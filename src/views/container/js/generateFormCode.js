@@ -1,7 +1,7 @@
 import { getFormHtmlCofco } from "./generateFormCodeSpecial.js";
 function getElFormItemCode(item) {
   let re = "";
-  const require = item.required ? "prop=\"" + item.model + "\"" : "";
+  const require = item.elItem && item.elItem.required ? "prop=\"" + item.self.model + "\"" : "";
   if (item.module) {
     switch (item.module) {
       case "cofco":
@@ -12,71 +12,71 @@ function getElFormItemCode(item) {
   } else {
     switch (item.type) {
       case "input":
-        re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
-          <el-input v-model="model.${item.model}" :disabled=${item.options.disabled} placeholder="${item.options.placeholder}"/>
+        re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
+          <el-input v-model="model.${item.self.model}" :disabled=${item.self.disabled} placeholder="${item.self.placeholder}"/>
         </el-form-item>`;
         break;
       case "textarea":
-        re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
-        <el-input v-model="model.${item.model}" :disabled=${item.options.disabled} :autosize="{ minRows: ${item.options.minRows} }" placeholder="${item.options.placeholder}" type="textarea"/>
+        re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
+        <el-input v-model="model.${item.self.model}" :disabled=${item.self.disabled} :autosize="{ minRows: ${item.self.minRows} }" placeholder="${item.self.placeholder}" type="textarea"/>
       </el-form-item>`;
         break;
       case "radio":
-        re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
+        re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
         <el-radio-group
-            v-model="model.${item.model}"
-            :disabled="${item.options.disabled}"
+            v-model="model.${item.self.model}"
+            :disabled="${item.self.disabled}"
           >
           <el-radio 
-            style="{display: ${item.options.inline ? "inline-block" : "block"}}"
-            :label="itemSub.${item.options.remote ? item.options.remoteProps.value : "value"}"
-            v-for="(itemSub, index) in dict.${item.model}_options"
+            style="{display: ${item.self.inline ? "inline-block" : "block"}}"
+            :label="itemSub.${item.self.remote ? item.self.remoteProps.value : "value"}"
+            v-for="(itemSub, index) in dict.${item.self.model}_options"
             :key="index"
           >
-            {{ itemSub.${item.options.remote ? item.options.remoteProps.label : "label"} }}
+            {{ itemSub.${item.self.remote ? item.self.remoteProps.elItem.label : "label"} }}
           </el-radio>
         </el-radio-group>
       </el-form-item>`;
         break;
       case "checkbox":
-        re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
+        re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
         <el-checkbox-group
-            v-model="model.${item.model}"
-            :disabled="${item.options.disabled}"
+            v-model="model.${item.self.model}"
+            :disabled="${item.self.disabled}"
            
           >
           <el-checkbox 
-            style="{display: ${item.options.inline ? "inline-block" : "block"}}"
-            :label="itemSub.${item.options.remote ? item.options.remoteProps.value : "value"}"
-            v-for="(itemSub, index) in dict.${item.model}_options"
+            style="{display: ${item.self.inline ? "inline-block" : "block"}}"
+            :label="itemSub.${item.self.remote ? item.self.remoteProps.value : "value"}"
+            v-for="(itemSub, index) in dict.${item.self.model}_options"
             :key="index"
           >
-            {{ itemSub.${item.options.remote ? item.options.remoteProps.label : "label"} }}
+            {{ itemSub.${item.self.remote ? item.self.remoteProps.elItem.label : "label"} }}
           </el-checkbox>
         </el-checkbox-group>
       </el-form-item>`;
         break;
       case "select":
-        re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
-        <el-select v-model="model.${item.model}"        >
+        re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
+        <el-select v-model="model.${item.self.model}"        >
           <el-option
-            v-for="(itemSub, index) in dict.${item.model}_options"
+            v-for="(itemSub, index) in dict.${item.self.model}_options"
             :key="index"
-            :label="itemSub.${item.options.remote ? item.options.remoteProps.label : "label"}"
-            :value="itemSub.${item.options.remote ? item.options.remoteProps.value : "value"}"
+            :label="itemSub.${item.self.remote ? item.self.remoteProps.elItem.label : "label"}"
+            :value="itemSub.${item.self.remote ? item.self.remoteProps.value : "value"}"
           />
         </el-select>
       </el-form-item>`;
         break;
       case "date":
-        if (item.options.type.indexOf("range") !== -1) {
-          const defaultTime = item.options.type === "daterange" ? ":default-time=\"['00:00:00', '23:59:59']\"" : "";
-          re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
-          <el-date-picker v-model="model.${item.model}" type="${item.options.type}" ${defaultTime} format="${item.options.format}" value-format="${item.options.format}" start-placeholder="${item.options.startPlaceholder}" end-placeholder="${item.options.endPlaceholder}" />
+        if (item.self.type.indexOf("range") !== -1) {
+          const defaultTime = item.self.type === "daterange" ? ":default-time=\"['00:00:00', '23:59:59']\"" : "";
+          re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
+          <el-date-picker v-model="model.${item.self.model}" type="${item.self.type}" ${defaultTime} format="${item.self.format}" value-format="${item.self.format}" start-placeholder="${item.self.startPlaceholder}" end-placeholder="${item.self.endPlaceholder}" />
         </el-form-item>`;
         } else {
-          re = `          <el-form-item label="${item.label}" class="${item.class}" ${require}>
-          <el-date-picker v-model="model.${item.model}" type="${item.options.type}" format="${item.options.format}" value-format="${item.options.format}" placeholder=${item.options.placeholder} />
+          re = `          <el-form-item label="${item.elItem.label}" class="${item.elItem.class}" ${require}>
+          <el-date-picker v-model="model.${item.self.model}" type="${item.self.type}" format="${item.self.format}" value-format="${item.self.format}" placeholder=${item.self.placeholder} />
         </el-form-item>`;
         }
         break;
@@ -93,10 +93,10 @@ function getElFormItemCode(item) {
           </el-col>` : subItem;
         });
         re = item.generateCode ? `<el-row
-          :gutter="${item.options.gutter}"
+          :gutter="${item.self.gutter}"
           type="flex"
-          justify="${item.options.justify}"
-          align="${item.options.align}"
+          justify="${item.self.justify}"
+          align="${item.self.align}"
         >
         ${subItems}
         </el-row>` : subItems;
@@ -121,35 +121,28 @@ function getElFormItemCode(item) {
           subItems += "</el-collapse-item>";
           items += subItems;
         });
-        re = `<el-collapse v-model="page.${item.model}" class="${item.options.class}">
+        re = `<el-collapse v-model="page.${item.self.model}" class="${item.elItem.class}">
         ${items}
         </el-collapse>
         `
         break;
       case "button":
-        re = `<el-form-item class="${item.class}">
-          <el-button type="${item.options.type}" icon="${item.options.icon}">${item.label}</el-button>
+        re = `<el-form-item class="${item.elItem.class}">
+          <el-button type="${item.self.type}" icon="${item.self.icon}">${item.elItem.label}</el-button>
     </el-form-item>`
         break;
-      // case "list_table":
-      //   re = `<list-table
-      //   :table-data="tableData"
-      //   :column-options="columnOptions"
-      //   :loading="page.loading"
-      //   :total="page.total"
-      //   :is-first-page="page.isFirstPage"
-      //   form-name="${item.formName}"
-      //   fixed-label="${item.fixedLabel}"
-      //   operate-width="130px"
-      // >
-      //   <template slot-scope="scope" slot="fixedColumn">
-      //     <a class="ctbms-list__id-link">{{ scope.row.${item.fixedProps} }}</a>
-      //   </template>
-      //   <template slot-scope="scope" slot="operate">
-      //   <!-- TODO: -->
-      //   </template>
-      // </list-table>`
-      //   break;
+      case "upload":
+        re = `<el-form-item class="${item.elItem.class}" label="${item.elItem.label}">
+        <el-upload
+          action="${item.self.action}"
+          :multiple=${item.self.multiple}
+          :file-list="model.${item.self.model}"
+          >
+          <el-button size="small" type="primary">${item.self.slot.btnTitle}</el-button>
+          <div slot="tip" class="el-upload__tip">${item.self.slot.tip}</div>
+        </el-upload>
+  </el-form-item>`;
+        break;
       default: break;
     }
   }
@@ -161,7 +154,7 @@ function getElFormCode(item) {
     items += index === item.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.options.labelPosition}" label-width="${item.options.labelWidth}px" size="${item.options.size}" label-suffix="${item.options.labelSuffix}" class="${item.class}">
+  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.self.labelPosition}" label-width="${item.self.labelWidth}px" size="${item.self.size}" label-suffix="${item.self.labelSuffix}" class="${item.elItem.class}">
 ${items}
         </el-form>`
 }
