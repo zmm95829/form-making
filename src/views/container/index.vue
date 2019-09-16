@@ -25,14 +25,13 @@
         </el-container>
       </el-main>
       <el-aside width="300px" class="layout-right">
-        <FormConfig :form-config="data.formConfig" />
+        <FormConfig :form-config="data.formConfig" :swagger="data.formElements.swaggerJson"/>
       </el-aside>
     </el-container>
   </el-main>
   <el-footer>footer</el-footer>
   <my-dialog :visible.sync="changeProject.visible">
     <project-config @click="handleClose"/>
-     <span ></span>
   </my-dialog>
 </el-container>
 </template>
@@ -58,7 +57,8 @@ export default {
     return {
       data: {
         formElements: {
-          list: []
+          list: [],
+          swaggerJson: ""
         },
         formConfig,
         selectItem: {}

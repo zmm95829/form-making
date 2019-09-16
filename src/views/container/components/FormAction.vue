@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-button type="text" size="medium" icon="el-icon-delete" @click="test">测试</el-button>
+    <el-button type="text" size="medium" icon="el-icon-delete" @click="setSwaggerJson">预设swaggerJson</el-button>
     <el-button type="text" size="medium" icon="el-icon-delete" @click="handleEmpty">清空</el-button>
     <el-button type="text" size="medium" icon="el-icon-files" @click="handleImportTempalte">获取模板</el-button>
     <el-button type="text" size="medium" icon="el-icon-upload2" @click="handleImport">导入JSON</el-button>
@@ -86,6 +87,13 @@
           selectableType="single"
           v-model="page.jsonData"
         ></vue-json-pretty>
+      </template>
+      <template v-else-if="page.title === 'swaggerJson'">
+        <el-input
+          v-model="data.swaggerJson"
+          :autosize="{minRows: 8}"
+          type="textarea"
+        ></el-input>
       </template>
       <!-- 预览 -->
       <template v-else>
@@ -255,6 +263,7 @@ export default {
     handleSelectOk: function() {
       if (this.importData) {
         this.data.list = JSON.parse(this.importData).list;
+        this.data.swaggerJson = JSON.parse(this.importData).swaggerJson;
         this.page.visible = false;
       }
     },
@@ -291,6 +300,13 @@ export default {
     test: function() {
       getMethods(this.data.list)
       console.log(getPath(this.data.list))
+    },
+    /**
+     * 预设SwaggerJson
+     */
+    setSwaggerJson: function() {
+      this.page.title = "swaggerJson";
+      this.page.visible = true;
     }
   }
 };

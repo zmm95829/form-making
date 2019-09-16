@@ -265,16 +265,10 @@
                   </el-table>
                 </template>
                 <template v-else>
-                  <div style="display: flex;flex-direction: row;">
-                    <el-input
-                      v-model="system_select.page.swaggerJson"
-                      :autosize="{minRows: 3}"
-                      type="textarea"
-                      style="width: 50%;"
-                    ></el-input>
+                  <div>
                     <vue-json-pretty
                       v-model="system_select.columns"
-                      :data="JSON.parse(system_select.page.swaggerJson || '{}')"
+                      :data="JSON.parse(swagger || '{}')"
                       :highlightMouseoverNode="true"
                       :deep="1"
                       :showSelectController="true"
@@ -384,7 +378,7 @@ import { MyDialog } from "@/components/index.js";
 import { mapGetters } from "vuex";
 import VueJsonPretty from "vue-json-pretty"
 export default {
-  props: ["formConfig"],
+  props: ["formConfig", "swagger"],
   components: {
     MyDialog,
     VueJsonPretty

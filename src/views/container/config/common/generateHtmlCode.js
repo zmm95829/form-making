@@ -23,7 +23,7 @@ export default function(data, formConfig) {
               model: ${jsonFormat(JSON.stringify(getModel(data.list)), false)},
               dict: ${jsonFormat(JSON.stringify(getDictOptions(data.list)), false)},
               page: {
-                rules: ${jsonFormat(JSON.stringify(getRules(data.list)), false)};
+                rules: ${jsonFormat(JSON.stringify(getRules(data.list)), false)}
               }
             }
           },
