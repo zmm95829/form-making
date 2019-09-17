@@ -25,7 +25,7 @@
         </el-container>
       </el-main>
       <el-aside width="300px" class="layout-right">
-        <FormConfig :form-config="data.formConfig" :swagger="data.formElements.swaggerJson"/>
+        <FormConfig :form-config="data.formConfig" :swagger="data.formElements.swaggerArray"/>
       </el-aside>
     </el-container>
   </el-main>
@@ -58,7 +58,7 @@ export default {
       data: {
         formElements: {
           list: [],
-          swaggerJson: ""
+          swaggerArray: []
         },
         formConfig,
         selectItem: {}

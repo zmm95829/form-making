@@ -3,8 +3,8 @@
     <template v-if="['form', 'grid', 'collapse', 'list_table'].includes(item.type)">
       <layout-element :item="item" :data="data" :index="index"></layout-element>
     </template>
-    <template v-if="item.elItem && item.elItem.exist">
-      <el-form-item :label="item.type==='button'?'' : item.elItem.label" 
+    <template v-else-if="item.elItem && item.elItem.exist">
+      <el-form-item :label="item.type==='button' ? '' : item.elItem.label"
         :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}"
         style="margin-bottom:2px;"
         @click.native.stop="handleSelectItem">

@@ -1,6 +1,6 @@
 <template>
-    <div 
-      :class="{'item-container': !item.elItem.exist, 'item-active': system_select && item && system_select.id === item.id && !item.elItem.exist}"
+    <div
+      :class="{'item-container': !item.elItem || !item.elItem.exist, 'item-active': system_select && item && system_select.id === item.id && (!item.elItem || !item.elItem.exist)}"
       style="margin-bottom:2px;"
       @click.stop="handleSelectItem(item)"
       >

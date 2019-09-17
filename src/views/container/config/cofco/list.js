@@ -153,7 +153,7 @@ export const data = {
     "columns": [],
     "options": [],
     "page": {
-      "swaggerJson": ""
+      "swaggerArray": ""
     },
     "id": "156714907100085",
     "model": "list_table_key_156714907100085"

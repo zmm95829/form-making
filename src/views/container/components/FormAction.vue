@@ -88,12 +88,30 @@
           v-model="page.jsonData"
         ></vue-json-pretty>
       </template>
-      <template v-else-if="page.title === 'swaggerJson'">
-        <el-input
-          v-model="data.swaggerJson"
-          :autosize="{minRows: 8}"
-          type="textarea"
-        ></el-input>
+      <template v-else-if="page.title === 'swaggerArray'">
+        <div style="display: flex; flex-direction: row;">
+          <div style="width: 50%;">
+            <el-input
+              v-model="swagger"
+              :autosize="{minRows: 8}"
+              type="textarea"
+            ></el-input>
+          </div>
+          <div>
+            <span v-show="system_project.name === 'cofco' && system_project.page === 'list'">提示：请注意将id与deptCode选上</span>
+            <vue-json-pretty
+              v-model="data.swaggerArray"
+              :data="JSON.parse(swagger || '{}')"
+              :highlightMouseoverNode="true"
+              :deep="1"
+              :showSelectController="true"
+              selectableType="multiple"
+              :pathSelectable="columnsSelectable"
+            />
+            <!-- <el-button @click="hangdleSwaggerArrayEmpty">清空</el-button> -->
+            <el-button type="primary" @click="hangdleSwaggerArray">保存</el-button>
+          </div>
+        </div>
       </template>
       <!-- 预览 -->
       <template v-else>
@@ -132,6 +150,7 @@ export default {
         title: "",
         visible: false
       },
+      swagger: "",
       importData: ""
     }
   },
@@ -263,7 +282,7 @@ export default {
     handleSelectOk: function() {
       if (this.importData) {
         this.data.list = JSON.parse(this.importData).list;
-        this.data.swaggerJson = JSON.parse(this.importData).swaggerJson;
+        this.data.swaggerArray = JSON.parse(this.importData).swaggerArray;
         this.page.visible = false;
       }
     },
@@ -305,9 +324,33 @@ export default {
      * 预设SwaggerJson
      */
     setSwaggerJson: function() {
-      this.page.title = "swaggerJson";
+      this.data.swaggerArray = this.data.swaggerArray.map(v => "root." + v);
+      this.page.title = "swaggerArray";
       this.page.visible = true;
+    },
+    /**
+     * 叶子节点才能选中
+     */
+    columnsSelectable(itemPath, itemData) {
+      if (typeof itemData === "object") {
+        return false
+      } else {
+        return true;
+      }
+    },
+    /**
+     * 去掉root.
+     */
+    hangdleSwaggerArray: function() {
+      this.data.swaggerArray = this.data.swaggerArray.map(v => v.substr(5));
+      this.page.visible = false;
     }
+    // /**
+    //  * 清空swaggerArray
+    //  */
+    // hangdleSwaggerArrayEmpty: function() {
+    //   this.data.swaggerArray = [];
+    // }
   }
 };
 </script>

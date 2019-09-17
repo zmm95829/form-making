@@ -318,7 +318,7 @@ export const layoutElement = [
       position: ""
     },
     self: {
-      align: "top",
+      labelPosition: "top",
       size: "small",
       labelWidth: "80",
       labelSuffix: ""
@@ -446,7 +446,7 @@ export const customElement = [
     options: [],
     page: {
       position: "",
-      swaggerJson: ""
+      swaggerArray: ""
     }
   },
   {
