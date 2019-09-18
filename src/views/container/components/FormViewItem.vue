@@ -4,6 +4,9 @@
       style="margin-bottom:2px;"
       @click.stop="handleSelectItem(item)"
       >
+    <div v-if="system_select && item && system_select.id === item.id && (!item.elItem || !item.elItem.exist)" :class="{'item-view-drag': true}">
+      <i class="iconfont icon-drag item-drag"></i>
+    </div>
     <div class="item-view">
       <template v-if="item.type === 'input'">
         <el-input
@@ -86,7 +89,7 @@
         <span :class="item.elItem.class">{{ item.self.defaultValue }}</span>
       </template>
       <template v-if="item.type === 'button'">
-        <el-button :type="item.self.type" :icon="item.self.icon">{{ item.label }}</el-button>
+        <el-button :type="item.self.type" :icon="item.self.icon">{{ item.self.label }}</el-button>
       </template>
       <template v-if="item.type === 'kpmg_file'">
         <el-button type="primary">点击上传</el-button>
@@ -103,17 +106,14 @@
       </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
-      <i class="iconfont icon-clone" title="复制" @click="handleClone"></i>
-      <i class="iconfont icon-delete" title="删除" @click="handleDelete"></i>
-    </div>
-    <div v-if="system_select && item && system_select.id === item.id" class="item-view-drag">
-      <i class="iconfont icon-drag item-drag"></i>
+      <i class="iconfont icon-clone" title="复制" @click.stop="handleClone"></i>
+      <i class="iconfont icon-delete" title="删除" @click.stop="handleDelete"></i>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { handleClone, handleDelete } from "./helper";
+import { handleClone, handleDelete, handleSelectItem } from "./helper";
 export default {
   name: "FormViewItem",
   props: ["data", "item", "index"],
@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     handleSelectItem: function(item) {
-      this.$store.commit("SET_SELECT", item || this.data[this.index]);
+      handleSelectItem(item || this.data[this.index]);
     },
     handleDelete: function() {
       handleDelete(this.data, this.index);

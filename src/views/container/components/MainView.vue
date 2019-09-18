@@ -46,7 +46,7 @@ import Draggable from "vuedraggable";
 import FormViewItem from "./FormViewItem.vue";
 import FormContainer from "./FormContainer.vue";
 import MyItem from "./Item";
-import { handleMoveAdd, handleClone, handleDelete } from "./helper.js";
+import { handleMoveAdd, handleClone, handleDelete, handleSelectItem } from "./helper.js";
 export default {
   name: "MainView",
   components: {
@@ -75,7 +75,7 @@ export default {
       }
     },
     handleSelectItem: function(currentItem) {
-      this.$store.commit("SET_SELECT", currentItem);
+      handleSelectItem(currentItem);
     },
     handleDelete: function(arr, index) {
       handleDelete(arr, index);

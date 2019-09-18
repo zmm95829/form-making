@@ -34,6 +34,23 @@
               </el-form-item>
             </template>
             <!-- -------------------------------cofco项目---------------------------- -->
+            <el-form-item v-if="system_select.self.label" label="按钮名称">
+              <el-input
+                v-model="system_select.self.label"
+              />
+            </el-form-item>
+             <el-form-item v-if="system_select.self.icon" label="图标">
+              <el-select v-model="system_select.self.icon" placeholder="请选择" filterable clearable>
+                <el-option
+                  v-for="(item, index) in elementIcon"
+                  :key="index"
+                  :label="item"
+                  :value="item">
+                  <i :class="item"/>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item }}</span>
+                </el-option>
+            </el-select>
+            </el-form-item>
             <el-form-item
               label="占位内容"
               v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"
@@ -287,14 +304,13 @@
             <!-- ---------------------------------------------组件自身设置----------------------------------------- -->
             <template v-if="system_select.self">
               <el-form-item label="绑定字段">
-                <el-select v-if="swagger" v-model="system_select.self.model" filterable clearable>
+                <el-select v-model="system_select.self.model" style="width: 100%;" filterable clearable allow-create>
                   <el-option
                     v-for="(item, index) in swagger"
                     :key="index"
                     :value="item"
                   >{{item}}</el-option>
                 </el-select>
-                <el-input v-model="system_select.self.model" />
               </el-form-item>
               <el-form-item>
                 <el-checkbox v-model="system_select.self.disabled">只读</el-checkbox>
@@ -386,6 +402,7 @@
 import { MyDialog } from "@/components/index.js";
 import { mapGetters } from "vuex";
 import VueJsonPretty from "vue-json-pretty"
+import elementIcon from "@/utils/elementIcon";
 export default {
   props: ["formConfig", "swagger"],
   components: {
@@ -396,7 +413,8 @@ export default {
     return {
       activeName: "first",
       visible: false,
-      dialogTitle: ""
+      dialogTitle: "",
+      elementIcon
     }
   },
   computed: {

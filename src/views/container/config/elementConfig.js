@@ -40,7 +40,8 @@ export const basicElement = [{
   },
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   },
   options: {
     operator: "", // 查询条件下查询操作符
@@ -68,7 +69,8 @@ export const basicElement = [{
   },
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   }
 },
 {
@@ -76,9 +78,9 @@ export const basicElement = [{
   label: "按钮",
   icon: "",
   elItem: {
-    exist: true,
+    exist: false,
     required: false,
-    label: "",
+    label: "按钮",
     class: itemClass
   },
   self: {
@@ -87,11 +89,13 @@ export const basicElement = [{
     style: "",
     class: "ctbms-form__el-button--search",
     icon: "el-icon-search",
-    type: "primary"
+    type: "primary",
+    label: "按钮"
   },
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   }
 },
 {
@@ -132,7 +136,8 @@ export const basicElement = [{
   },
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   }
 },
 {
@@ -173,7 +178,8 @@ export const basicElement = [{
   },
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   }
 },
 {
@@ -215,7 +221,8 @@ export const basicElement = [{
   },
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   }
 },
 {
@@ -244,7 +251,8 @@ export const basicElement = [{
   required: false,
   page: {
     position: "",
-    type: "basic"
+    type: "basic",
+    pid: ""
   },
   options: {
     width: "",
@@ -275,7 +283,8 @@ export const basicElement = [{
   },
   options: {},
   page: {
-    position: ""
+    position: "",
+    pid: ""
   }
 }
 ];
@@ -291,7 +300,8 @@ export const layoutElement = [
       class: ""
     },
     page: {
-      position: ""
+      position: "",
+      pid: ""
     },
     columns: [
       {
@@ -315,7 +325,8 @@ export const layoutElement = [
     label: "表单",
     class: "ctbms-form",
     page: {
-      position: ""
+      position: "",
+      pid: ""
     },
     self: {
       labelPosition: "top",
@@ -329,7 +340,8 @@ export const layoutElement = [
     type: "collapse",
     label: "折叠面板",
     page: {
-      position: ""
+      position: "",
+      pid: ""
     },
     elItem: {
       exist: false,
@@ -353,7 +365,8 @@ export const layoutElement = [
         label: "表单",
         class: "ctbms-form",
         page: {
-          position: ""
+          position: "",
+          pid: ""
         },
         self: {
           align: "top",
@@ -390,7 +403,8 @@ export const customElement = [
     },
     page: {
       position: "",
-      needForm: true
+      needForm: true,
+      pid: ""
     }
   },
   {
@@ -414,7 +428,8 @@ export const customElement = [
     },
     page: {
       position: "",
-      needForm: true
+      needForm: true,
+      pid: ""
     }
   },
   {
@@ -428,7 +443,8 @@ export const customElement = [
     },
     page: {
       position: "",
-      needForm: true
+      needForm: true,
+      pid: ""
     },
     icon: "icon-text"
   },
@@ -446,7 +462,7 @@ export const customElement = [
     options: [],
     page: {
       position: "",
-      swaggerArray: ""
+      pid: ""
     }
   },
   {
@@ -462,7 +478,8 @@ export const customElement = [
     },
     page: {
       position: "",
-      needForm: true
+      needForm: true,
+      pid: ""
     }
   }
 ]

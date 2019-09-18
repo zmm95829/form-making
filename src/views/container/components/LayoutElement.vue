@@ -33,8 +33,8 @@
           </draggable>
         </el-col>
         <div v-if="system_select.id === item.id" class="item-view-action">
-          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
-          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+          <i class="iconfont icon-clone" title="复制" @click.stop="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click.stop="handleDelete(data, index)"></i>
         </div>
         <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
           <i class="iconfont icon-drag item-drag"></i>
@@ -71,8 +71,8 @@
           </draggable>
         </el-form>
         <div v-if="system_select.id === item.id" class="item-view-action">
-          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
-          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+          <i class="iconfont icon-clone" title="复制" @click.stop="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click.stop="handleDelete(data, index)"></i>
         </div>
         <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
           <i class="iconfont icon-drag item-drag"></i>
@@ -129,8 +129,8 @@
           </el-collapse-item>
         </el-collapse>
         <div v-if="system_select.id === item.id" class="item-view-action">
-          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
-          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+          <i class="iconfont icon-clone" title="复制" @click.stop="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click.stop="handleDelete(data, index)"></i>
         </div>
         <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
           <i class="iconfont icon-drag item-drag"></i>
@@ -142,8 +142,8 @@
         <el-table-column v-for="(col, index) in item.columnOptions" :key="index" :prop="col.props" :label="col.label"/>
       </el-table>
       <div v-if="system_select.id === item.id" class="item-view-action">
-          <i class="iconfont icon-clone" title="复制" @click="handleClone(data, index)"></i>
-          <i class="iconfont icon-delete" title="删除" @click="handleDelete(data, index)"></i>
+          <i class="iconfont icon-clone" title="复制" @click.stop="handleClone(data, index)"></i>
+          <i class="iconfont icon-delete" title="删除" @click.stop="handleDelete(data, index)"></i>
         </div>
         <div v-if="system_select.id === item.id" class="item-view-drag" style="left: 0;top: 0;">
           <i class="iconfont icon-drag item-drag"></i>
@@ -155,7 +155,7 @@
 import FormViewItem from "./FormViewItem";
 import Draggable from "vuedraggable";
 import { mapGetters } from "vuex";
-import { handleGridColAdd, handleMoveAdd, handleDelete, handleClone } from "./helper.js";
+import { handleGridColAdd, handleMoveAdd, handleDelete, handleClone, handleSelectItem } from "./helper.js";
 // 异步加载，同步加载循环嵌套会报错Unknown custom element
 const MyItem = () => import("./Item.vue");
 
@@ -189,7 +189,7 @@ export default {
       }
     },
     handleSelectItem: function(currentItem) {
-      this.$store.commit("SET_SELECT", currentItem);
+      handleSelectItem(currentItem);
     },
     handleMoveAdd: function(arr, val) {
       const newIndex = val.newIndex;
@@ -197,7 +197,7 @@ export default {
         arr.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
       } else {
-        handleMoveAdd(arr, val, this.item.page.position);
+        handleMoveAdd(arr, val, this.item.page.position, this.item.id);
       }
     },
     handleClone(arr, index) {

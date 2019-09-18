@@ -4,7 +4,8 @@
       <layout-element :item="item" :data="data" :index="index"></layout-element>
     </template>
     <template v-else-if="item.elItem && item.elItem.exist">
-      <el-form-item :label="item.type==='button' ? '' : item.elItem.label"
+      <div style="position: relative;">
+      <el-form-item :label="item.elItem.label"
         :class="{'item-container': true, 'item-active': system_select && item && system_select.id === item.id}"
         style="margin-bottom:2px;"
         @click.native.stop="handleSelectItem">
@@ -14,6 +15,10 @@
         :data="data"
       />
       </el-form-item>
+      <div v-if="system_select && item && system_select.id === item.id && item.elItem && item.elItem.exist" :class="{'item-view-drag': true}">
+        <i class="iconfont icon-drag item-drag"></i>
+      </div>
+      </div>
     </template>
     <template v-else>
       <form-view-item
@@ -28,6 +33,7 @@
 import { mapGetters } from "vuex";
 import LayoutElement from "./LayoutElement";
 import FormViewItem from "./FormViewItem";
+import { handleSelectItem } from "./helper";
 export default {
   name: "MyItem",
   props: ["item", "data", "index"],
@@ -45,7 +51,7 @@ export default {
   },
   methods: {
     handleSelectItem: function() {
-      this.$store.commit("SET_SELECT", this.item);
+      handleSelectItem(this.item);
     }
   }
 };

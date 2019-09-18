@@ -86,11 +86,12 @@ function getStringOfTimes(str, times) {
  * 每一个基础元素id获取一个路径，返回一个对象
  * @param {*} list 数据数组
  * @param {*} path 当前路径
+ * @param {*} isNotOnlyLeaf 不只是叶子节点
  */
-export function getPath(list, path = "") {
+export function getPath(list, path = "", isNotOnlyLeaf = false) {
   let re = {};
   list.forEach((item, index) => {
-    re = {...re, ...getPathSub(item, `${path ? path + "." : ""}list[${index}]`)};
+    re = {...re, ...getPathSub(item, `${path ? path + "." : ""}list[${index}]`, isNotOnlyLeaf)};
   })
   return re;
 };
@@ -98,19 +99,29 @@ export function getPath(list, path = "") {
  * 给某一个元素获取路径
  * @param {*} item 元素
  * @param {*} path 元素路径
+ * @param {*} isNotOnlyLeaf 不只是叶子节点
  */
-function getPathSub(item, path) {
+function getPathSub(item, path, isNotOnlyLeaf) {
   let re = {};
   switch (item.type) {
     case "grid":
+      if (isNotOnlyLeaf) {
+        re[item.id] = path + "=" + item.type;
+      }
       item.columns.forEach((v, index) => {
         re = {...re, ...getPath(v.list, `${path}.columns[${index}]`)};
       });
       break;
     case "form":
+      if (isNotOnlyLeaf) {
+        re[item.id] = path + "=" + item.type;
+      }
       re = {...re, ...getPath(item.list, path)};
       break;
     case "collapse":
+      if (isNotOnlyLeaf) {
+        re[item.id] = path + "=" + item.type;
+      }
       item.items.forEach((v, index) => {
         re = {...re, ...getPath(v.top.list, `${path}.items[${index}].top`)};
         re = {...re, ...getPath(v.list, `${path}.items[${index}]`)};
@@ -140,4 +151,80 @@ export function objectFilter(object, func) {
     alert("utils.hepler.objectFilter:", e);
     return { length: 0 };
   }
+}
+/**
+ * 根据id获取对象
+ * @param {*} list 数据
+ * @param {*} id id
+ */
+export function getItemById(list, id) {
+  let re = {};
+  for (let index in list) {
+    const item = list[index];
+    if (re[id]) {
+      break;
+    }
+    switch (item.type) {
+      case "grid":
+        if (item.id === id) {
+          re[item.id] = item;
+        } else {
+          for (let vIndex in item.columns) {
+            const v = item.columns[vIndex];
+            if (!re[id]) {
+              re = {...re, ...getItemById(v.list, id)};
+            } else {
+              break;
+            }
+          }
+        }
+        break;
+      case "form":
+        if (item.id === id) {
+          re[item.id] = item;
+        } else {
+          re = {...re, ...getItemById(item.list, id)};
+        }
+        break;
+      case "collapse":
+        if (item.id === id) {
+          re[item.id] = item;
+        } else {
+          for (let vIndex in item.items) {
+            const v = item.columns[vIndex];
+            if (!re[id]) {
+              re = {...re, ...getItemById(v.top.list, id)};
+              if (!re[id]) {
+                re = {...re, ...getItemById(v.list, id)};
+              } else {
+                break;
+              }
+            } else {
+              break;
+            }
+          }
+        }
+        break;
+      default:
+        if (!re[id] && item.id === id) {
+          re[item.id] = item;
+        }
+        break;
+    }
+  }
+  return re;
+}
+
+/**
+ * 根据id查询最近的oneType类型的元素
+ * @param {*} list 数据
+ * @param {*} id id
+ * @param {*} oneType 类型
+ */
+export function getOneItemById(list, id, oneType = "form") {
+  let item = getItemById(list, id);
+  while (item[id] && (item[id].type !== oneType)) {
+    item = getItemById(list, item[id].page.pid);
+  }
+  return item;
 }
