@@ -78,7 +78,7 @@ export const basicElement = [{
   label: "按钮",
   icon: "",
   elItem: {
-    exist: false,
+    exist: true,
     required: false,
     label: "按钮",
     class: itemClass
@@ -281,9 +281,9 @@ export const basicElement = [{
       tip: "" // 提示文字, 为空时不生成div
     }
   },
-  options: {},
   page: {
     position: "",
+    type: "basic",
     pid: ""
   }
 }
@@ -332,7 +332,8 @@ export const layoutElement = [
       labelPosition: "top",
       size: "small",
       labelWidth: "80",
-      labelSuffix: ""
+      labelSuffix: "",
+      class: ""
     },
     list: []
   },

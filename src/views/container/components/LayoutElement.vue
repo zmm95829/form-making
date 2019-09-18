@@ -181,7 +181,7 @@ export default {
       const newIndex = event.newIndex;
       const myItem = item.columns[index].list[newIndex];
       console.log(item)
-      if ((myItem.page.needForm || myItem.page.type === "basic") && item.page.position.indexOf("form") === -1) {
+      if ((myItem.page.needForm || myItem.page.type.indexOf("basic") !== -1) && item.page.position.indexOf("form") === -1) {
         item.columns[index].list.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
       } else {
@@ -193,7 +193,8 @@ export default {
     },
     handleMoveAdd: function(arr, val) {
       const newIndex = val.newIndex;
-      if ((arr[newIndex].page.needForm || arr[newIndex].page.type === "basic") && this.item.page.position.indexOf("form") === -1) {
+      console.log(arr[newIndex])
+      if ((arr[newIndex].page.needForm || arr[newIndex].page.type.indexOf("basic") !== -1) && this.item.page.position.indexOf("form") === -1) {
         arr.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
       } else {

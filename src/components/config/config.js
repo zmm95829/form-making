@@ -16,5 +16,9 @@ export const projectOptions = [{
   children: [{
     value: "form",
     label: "form"
+  },
+  {
+    value: "list",
+    label: "list"
   }]
 }];

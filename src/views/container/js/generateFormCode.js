@@ -139,7 +139,7 @@ function getElFormCode(item) {
     items += index === item.list.length - 1 ? `${getElFormItemCode(v)}` : `${getElFormItemCode(v)}
 `;
   });
-  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.self.labelPosition}" label-width="${item.self.labelWidth}px" size="${item.self.size}"${getPropValue("label-suffix", item.self.labelSuffix)}${getPropValue("class", item.elItem.class)}>
+  return `<el-form ref="model" :model="model" :rules="page.rules" label-position="${item.self.labelPosition}" label-width="${item.self.labelWidth}px" size="${item.self.size}"${getPropValue("label-suffix", item.self.labelSuffix)}${getPropValue("class", item.self.class)}>
 ${items}
         </el-form>`
 }

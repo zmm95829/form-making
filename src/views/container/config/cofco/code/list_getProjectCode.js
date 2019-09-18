@@ -27,8 +27,8 @@ export default function(list) {
 
   const constants = generateConstants(list);
   re = re.replace("$placeholder_import", generateImports(list, null, constants));
-  re = re.replace("$placeholder_columns", "[" + ((listTableItem && arrayToString(listTableItem.columns)).replace(/,/g, `,
-  `) || "") + "]");
+  re = re.replace("$placeholder_columns", "[" + ((listTableItem && arrayToString(listTableItem.columns).replace(/,/g, `,
+  `)) || "") + "]");
   re = re.replace("$placeholder_components", "");
   re = re.replace("$placeholder_columnOptions", listTableItem && JSON.stringify(listTableItem.columnOptions).replace(/},/g, `},
   `));

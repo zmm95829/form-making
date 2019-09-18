@@ -1,5 +1,6 @@
 <template>
 <section style="display: flex; flex-direction: row; flex-wrap: wrap">
+  <el-button size="mini"><i class="el-icon-setting"/>设置</el-button>
   <div class="form-element-list">
     <draggable
       element="ul"
@@ -11,7 +12,7 @@
       @update="handleMoveUpdate"
     >
       <li v-for="item in basicElement" :key="item.id" class="form-element-item itemdrag">
-        <a>
+        <a @dblclick="handleElementDblclick">
           <el-row>
             <el-col :span="8"><i :class="['icon', 'iconfont', item.icon]"/></el-col>
             <el-col :span="16" style="text-align:left">{{item.label}}</el-col>
@@ -84,6 +85,9 @@ export default {
     handleMoveStart: function(a, b, c) {
     },
     handleMoveUpdate() {
+    },
+    handleElementDblclick: function() {
+      alert("adfas")
     }
   }
 };
