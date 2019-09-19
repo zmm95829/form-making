@@ -1,6 +1,6 @@
 import { getFormCode } from "@/views/container/js/generateFormCode.js";
 import { jsonFormat } from "@/utils/helper.js";
-import { getModel, getDictOptions, getRules } from "@/views/container/js/generateScriptCode.js";
+import { getModel, getDictOptions, getRules, getMethods, getPage } from "@/views/container/js/generateScriptCode.js";
 export default function(data, formConfig) {
   return `<!DOCTYPE html>
   <html>
@@ -23,6 +23,7 @@ export default function(data, formConfig) {
               model: ${jsonFormat(JSON.stringify(getModel(data.list)), false)},
               dict: ${jsonFormat(JSON.stringify(getDictOptions(data.list)), false)},
               page: {
+                ${getPage(data.list)}
                 rules: ${jsonFormat(JSON.stringify(getRules(data.list)), false)}
               }
             }
@@ -37,7 +38,8 @@ export default function(data, formConfig) {
                   return false;
                 }
               });
-            }
+            },
+            ${getMethods(data.list)}
           }
       })
     </script> 

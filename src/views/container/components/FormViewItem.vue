@@ -121,6 +121,21 @@
           :inactive-color="item.self['inactive-color']">
         </el-switch>
       </template>
+      <template v-if="item.type === 'tag'">
+        <el-tag
+          :key="index"
+          v-for="(sub, index) in item.self.options"
+          :closable="item.self.closable"
+          :type="item.self.elType"
+          :size="item.self.size"
+          :effect="item.self.effect"
+          >
+          {{ sub }}
+        </el-tag>
+        <template v-if="item.self.canAddNew">
+          <el-button class="button-new-tag" size="small">{{ item.self.canAddNewTitle }}</el-button>
+        </template>
+      </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click.stop="handleClone"></i>

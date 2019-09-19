@@ -129,7 +129,6 @@ import { MyDialog } from "@/components/index.js";
 import PreviewForm from "@/views/container/components/PreviewForm.vue";
 
 import generateHtmlCode from "@/views/container/config/common/generateHtmlCode.js";
-import {getMethods} from "@/views/container/config/cofco/code/form_getProjectCode.js";
 import { jsonFormat, getPath } from "@/utils/helper";
 import { downFile } from "@/utils/file";
 
@@ -317,7 +316,6 @@ export default {
       return false;
     },
     test: function() {
-      getMethods(this.data.list)
       console.log(getPath(this.data.list))
     },
     /**

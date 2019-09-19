@@ -373,6 +373,34 @@ export const basicElement = [{
     type: "basic",
     pid: ""
   }
+},
+{
+  type: "tag",
+  label: "tag标签",
+  icon: "",
+  elItem: {
+    exist: false,
+    required: false,
+    label: "tag标签",
+    class: ""
+  },
+  self: {
+    model: "",
+    style: "",
+    class: "",
+    elType: "",
+    closable: true,
+    canAddNew: true,
+    canAddNewTitle: "+ New Tag",
+    size: "",
+    effect: "light",
+    options: ["标签一", "标签二", "标签三"]
+  },
+  page: {
+    position: "",
+    type: "basic",
+    pid: ""
+  }
 }
 ];
 export const layoutElement = [

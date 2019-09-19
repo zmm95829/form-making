@@ -1,6 +1,6 @@
 
 import { getListCode } from "../../../js/generateFormCode.js";
-import { getModel, getDictOptions } from "../../../js/generateScriptCode.js";
+import { getModel, getDictOptions, getPage } from "../../../js/generateScriptCode.js";
 import content from "./listTemplate";
 import { arrayToString, jsonFormat } from "@/utils/helper.js";
 // const placeholderArr = [
@@ -36,7 +36,7 @@ export default function(list) {
 
   const dicts = getDictOptions(list);
   re = re.replace("$placeholder_dict", jsonFormat(JSON.stringify(dicts)), false);
-  re = re.replace("$placeholder_page", "");
+  re = re.replace("$placeholder_page", getPage(list));
 
   const filterDictsName = [];
   Object.keys(dicts).forEach(v => {

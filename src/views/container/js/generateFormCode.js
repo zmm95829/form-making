@@ -135,9 +135,31 @@ function getElFormItemCode(item) {
       case "switch":
         re = `<el-switch v-model="model.${item.self.model}"${getValue("disabled", item.self.disabled)}${getPropValue(":width", [40, "40"].includes(item.self.width) ? "" : item.self.width)}${getPropValue("active-text", item.self["active-text"])}${getPropValue("inactive-text", item.self["inactive-text"])}${getPropValue("active-value", item.self["active-value"])}${getPropValue("inactive-value", item.self["inactive-value"])}${getPropValue("active-color", item.self["active-color"])}${getPropValue("inactive-color", item.self["inactive-color"])}/>`
         break;
+      case "tag":
+        re = `<el-tag
+          :key="index"
+          v-for="(subTag, index) in dict.${item.self.model}_options"
+        ${getValue("closable", item.self.closable)}
+        ${getPropValue("size", item.self.size)}
+          @close="handleTagClose(dict.${item.self.model}_options, index)"
+          >
+          {{ subTag }}
+        </el-tag>
+        <el-input
+          v-if="page.inputVisible"
+          v-model="page.inputValue"
+          ref="saveTagInput"
+          size="small"
+          @keyup.enter.native="handleInputConfirm(dict.${item.self.model}_options)"
+          @blur="handleInputConfirm(dict.${item.self.model}_options)"
+        >
+        </el-input>
+        <el-button v-else size="small" @click="showInput">新增</el-button>`
+        break;
       default: break;
     }
   }
+  console.log(re)
   return item.elItem && item.elItem.exist ? `<el-form-item${getPropValue("label", item.elItem && item.elItem.label)}${getPropValue("class", item.elItem && item.elItem.class)} ${require}>
   ${re}
   </el-form-item>

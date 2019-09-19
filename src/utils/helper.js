@@ -242,3 +242,41 @@ export function validateForm(item, pItemPosition, elItemExist) {
     return true;
   }
 }
+
+/**
+ * 将数据数据拉平
+ * @param {*} list 数据
+ * @param {*} array 结果数组
+ */
+export function flattenList(list, array) {
+  const re = array || [];
+  list.forEach(v => {
+    flattenListSub(v, re)
+  });
+  return re;
+}
+/**
+ * 将数据数据拉平
+ * @param {*} list 数据
+ * @param {*} array 结果数组
+ */
+export function flattenListSub(item, array) {
+  array.push(item);
+  switch (item.type) {
+    case "grid":
+      item.columns.forEach((v, index) => {
+        flattenList(v.list, array);
+      });
+      break;
+    case "form":
+      flattenList(item.list, array);
+      break;
+    case "collapse":
+      item.items.forEach((v, index) => {
+        flattenList(v.top.list, array);
+      });
+      break;
+    default:
+      break;
+  }
+}

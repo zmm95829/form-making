@@ -1,8 +1,7 @@
 import { getFormCode } from "../../../js/generateFormCode.js";
-import { getModel, getDictOptions, generateConstants, generateImports, getRules } from "../../../js/generateScriptCode.js";
+import { getModel, getDictOptions, generateConstants, generateImports, getRules, getMethods, getPage } from "../../../js/generateScriptCode.js";
 import content from "./formTemplate";
-import { jsonFormat, getPath } from "@/utils/helper.js";
-import { objectFilter } from "../../../../../utils/helper.js";
+import { jsonFormat } from "@/utils/helper.js";
 // const placeholderArr = [
 //   "$placeholder_txnKey",
 //   "$placeholder_html",
@@ -25,7 +24,7 @@ export default function(list, formConfig) {
   re = re.replace("$placeholder_model", jsonFormat(JSON.stringify(getModel(list)), false));
   const dicts = getDictOptions(list);
   re = re.replace("$placeholder_dict", jsonFormat(JSON.stringify(dicts), false));
-  re = re.replace("$placeholder_page", "");
+  re = re.replace("$placeholder_page", getPage(list));
 
   const filterDictsName = [];
   Object.keys(dicts).forEach(v => {
@@ -46,23 +45,3 @@ export default function(list, formConfig) {
   re = re.replace("$placeholder_methods", getMethods(list));
   return re;
 };
-
-/**
- * 方法
- * @param {*} list 数据
- */
-export function getMethods(list) {
-  // 有上传附件时
-  const kpmgFiles = objectFilter(getPath(list), (v) => v.includes("kpmg_file"));
-  let re = "";
-  if (kpmgFiles.length > 0) {
-    re += `
-    /**
-     * 上传组件
-     */
-    attachAssigned(type, interactionId) {
-      this.model[type] = interactionId;
-    },`;
-  }
-  return re;
-}

@@ -7,7 +7,7 @@ import ace from "ace-builds";
 import componentsInstall from "./components/install";
 import store from "./store";
 
-import "@/style/modules/cofco.css";
+// import "@/style/modules/cofco.css";
 
 Vue.use(Element);
 Vue.use(ace);

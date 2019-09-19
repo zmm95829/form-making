@@ -116,6 +116,48 @@
               </el-form-item>
             </template>
             <!-- ----------------------------------------switch------------------------------- -->
+            <!-- ----------------------------------------tag------------------------------- -->
+            <template v-if="system_select.type === 'tag'">
+              <el-form-item label="主题">
+                <el-radio-group v-model="system_select.self.effect" size="small">
+                  <el-radio-button label="light">light</el-radio-button>
+                  <el-radio-button label="dark">dark</el-radio-button>
+                  <el-radio-button label="plain">plain</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="system_select.self.closable">是否可以关闭</el-checkbox>
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="system_select.self.canAddNew">是否可以新增</el-checkbox>
+              </el-form-item>
+              <el-form-item v-if="system_select.self.canAddNew" label="新增按钮的标题">
+                <el-input v-model="system_select.self.canAddNewTitle"/>
+              </el-form-item>
+              <el-form-item label="tag数据">
+                <el-tag
+                  :key="index"
+                  v-for="(sub, index) in system_select.self.options"
+                  closable
+                  :size="mini"
+                  @close="handleTagClose(index)"
+                  >
+                  {{ sub }}
+                </el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="tag.inputVisible"
+                  v-model="tag.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">新增</el-button>
+              </el-form-item>
+            </template>
+            <!-- ----------------------------------------tag------------------------------- -->
             <el-form-item
               label="占位内容"
               v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"
@@ -252,8 +294,6 @@
                 <el-input-number v-model="system_select.self.gutter" :step="1" :min="0"></el-input-number>
               </el-form-item>
             </template>
-            
-
             <el-form-item label="组件尺寸" v-if="Object.keys(system_select.self).includes('size')">
               <el-radio-group v-model="system_select.self.size" size="small">
                 <el-radio-button label="medium">medium</el-radio-button>
@@ -378,7 +418,7 @@
                   >{{item}}</el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item>
+              <el-form-item v-if="Object.keys(system_select.self).includes('disabled')">
                 <el-checkbox v-model="system_select.self.disabled">只读</el-checkbox>
               </el-form-item>
               <template v-if="system_select.type === 'upload'">
@@ -483,7 +523,11 @@ export default {
       visible: false,
       dialogTitle: "",
       elementIcon,
-      elementType
+      elementType,
+      tag: {
+        inputVisible: false,
+        inputValue: ""
+      }
     }
   },
   computed: {
@@ -577,7 +621,26 @@ export default {
      */
     handlePropertyChange: function() {
       this.system_select.model = this.system_select.self.property.split(".")[0] || this.system_select.model;
+    },
+    // ----------------------------tag--------------------------
+    handleTagClose(index) {
+      this.system_select.self.options.splice(index, 1);
+    },
+    showInput() {
+      this.tag.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.tag.inputValue;
+      if (inputValue) {
+        this.system_select.self.options.push(inputValue);
+      }
+      this.tag.inputVisible = false;
+      this.tag.inputValue = "";
     }
+    // ----------------------------tag--------------------------
   }
 }
 </script>
