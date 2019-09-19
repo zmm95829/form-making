@@ -67,9 +67,10 @@ export default {
   methods: {
     handleMoveAdd: function(arr, val) {
       const newIndex = val.newIndex;
-      if ((arr[newIndex].page.needForm || (arr[newIndex].page.type && arr[newIndex].page.type.indexOf("basic") !== -1)) && arr[newIndex].page.position.indexOf("form") === -1 && arr[newIndex].elItem && arr[newIndex].elItem.exist) {
+      if ((arr[newIndex].page.needForm || (arr[newIndex].page.type && arr[newIndex].page.type.indexOf("basic") !== -1)) && arr[newIndex].elItem && arr[newIndex].elItem.exist) {
         arr.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
+        handleSelectItem(this.data.list[0]);
       } else {
         handleMoveAdd(arr, val);
       }

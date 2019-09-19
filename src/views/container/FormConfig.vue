@@ -72,6 +72,25 @@
               <el-input v-model="system_select.self.href"></el-input>
             </el-form-item>
             <!-- ----------------------------------------link------------------------------- -->
+            <!-- ----------------------------------------input_number------------------------------- -->
+            <template v-if="system_select.type === 'input_number'">
+              <el-form-item label="最小值">
+                 <el-input-number v-model="system_select.self.min" :max="system_select.self.max ? system_select.self.max : Infinity"></el-input-number>
+              </el-form-item>
+              <el-form-item label="最大值">
+                 <el-input-number v-model="system_select.self.max" :min="system_select.self.min ? system_select.self.min : -Infinity"></el-input-number>
+              </el-form-item>
+              <el-form-item label="计数器步长">
+                <el-input v-model.number="system_select.self.step"></el-input>
+              </el-form-item>
+              <el-form-item label="数值精度">
+                <el-input v-model.number="system_select.self.precision"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="system_select.self['step-strictly']">是否只能输入step的倍数</el-checkbox>
+              </el-form-item>
+            </template>
+            <!-- ----------------------------------------input_number------------------------------- -->
             <el-form-item
               label="占位内容"
               v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"
@@ -208,6 +227,15 @@
                 <el-input-number v-model="system_select.self.gutter" :step="1" :min="0"></el-input-number>
               </el-form-item>
             </template>
+            
+
+            <el-form-item label="组件尺寸" v-if="Object.keys(system_select.self).includes('size')">
+              <el-radio-group v-model="system_select.self.size" size="small">
+                <el-radio-button label="medium">medium</el-radio-button>
+                <el-radio-button label="small">small</el-radio-button>
+                <el-radio-button label="mini">mini</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
             <template v-if="system_select.type === 'form'">
               <el-form-item label="标签对齐方式">
                 <el-radio-group v-model="system_select.self.labelPosition" size="small">
@@ -224,14 +252,6 @@
                   :max="200"
                   :step="10"
                 ></el-input-number>
-              </el-form-item>
-
-              <el-form-item label="组件尺寸">
-                <el-radio-group v-model="system_select.self.size" size="small">
-                  <el-radio-button label="medium">medium</el-radio-button>
-                  <el-radio-button label="small">small</el-radio-button>
-                  <el-radio-button label="mini">mini</el-radio-button>
-                </el-radio-group>
               </el-form-item>
               <el-form-item label="后缀">
                 <el-input v-model="system_select.self.labelSuffix" />
@@ -368,7 +388,7 @@
       <el-tab-pane v-if="system_select.elItem" label="表单项属性" name="second">
         <el-form label-position="top" style="padding: 10px">
           <el-form-item>
-            <el-checkbox v-model="system_select.elItem.exist">是表单项(由el-form-item包裹)</el-checkbox>
+            <el-checkbox v-model="elItemExist">是表单项(由el-form-item包裹)</el-checkbox>
           </el-form-item>
           <template v-if="system_select.elItem.exist">
             <el-form-item>
@@ -425,6 +445,7 @@ import { mapGetters } from "vuex";
 import VueJsonPretty from "vue-json-pretty"
 import elementIcon from "@/utils/elementIcon";
 import elementType from "@/utils/elementType";
+import { validateForm } from "@/utils/helper";
 export default {
   props: ["formConfig", "swagger"],
   components: {
@@ -453,6 +474,21 @@ export default {
      */
     dialogType: function() {
       return this.dialogTitle === "设置列信息";
+    },
+    /**
+     * 是表单项
+     */
+    elItemExist: {
+      get: function() {
+        return this.system_select.elItem.exist;
+      },
+      set: function(val, a) {
+        if (validateForm(this.system_select, this.system_select.page.position, val)) {
+          this.system_select.elItem.exist = val;
+        } else {
+          this.$alert("请先拖拽表单，将该元素推拽到表单才能勾选", "提示", { type: "warning" });
+        }
+      }
     }
   },
   methods: {

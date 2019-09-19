@@ -228,3 +228,17 @@ export function getOneItemById(list, id, oneType = "form") {
   }
   return item;
 }
+
+/**
+ * 验证是否能正常操作，返回true表示能正常操作，
+ * @param {*} item 元素
+ * @param {*} pItemPosition 父级的位置
+ * @param {*} elItemExist 是否需要是表单项
+ */
+export function validateForm(item, pItemPosition, elItemExist) {
+  if ((item.page.needForm || (item.page.type && item.page.type.indexOf("basic") !== -1)) && pItemPosition.indexOf("form") === -1 && (elItemExist || (item.elItem && item.elItem.exist))) {
+    return false;
+  } else {
+    return true;
+  }
+}

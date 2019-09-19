@@ -129,6 +129,9 @@ function getElFormItemCode(item) {
         const href = item.self.href === "https://" ? "" : item.self.href;
         re = `<el-link${getPropValue("type", item.self.elType)}${getPropValue(":disabled", item.self.disabled)}${getPropValue(":underline", item.self.underline)}${getPropValue("icon", item.self.icon)}${getPropValue("href", href)}${href ? " target=\"_blank\"" : ""}>${item.self.label}</el-link>`;
         break;
+      case "input_number":
+        re = `<el-input-number v-model="model.${item.self.model}"${getPropValue(":disabled", item.self.disabled)}${getPropValue(":min", item.self.min)}${getPropValue(":max", item.self.max)}${getPropValue(":step", item.self.step)}${getPropValue(":precision", item.self.precision)}${getValue("step-strictly", item.self["step-strictly"])}${getPropValue("placeholder", item.self.placeholder)}${getPropValue("size", item.self.size)}/>`;
+        break;
       default: break;
     }
   }
@@ -165,11 +168,27 @@ export function getListCode(list) {
   });
   return items;
 };
-
+/**
+ * 根据属性值是否存在生成代码
+ * @param {*} prop 属性
+ * @param {*} value 属性值
+ */
 function getPropValue(prop, value) {
   if (!value && typeof value !== "boolean") {
     return "";
   } else {
     return ` ${prop}="${value}"`;
+  }
+}
+/**
+ * 根据属性值是否为真生成代码
+ * @param {*} prop 属性
+ * @param {*} value 属性值
+ */
+function getValue(prop, value) {
+  if (value) {
+    return ` ${prop}`;
+  } else {
+    return "";
   }
 }

@@ -313,6 +313,37 @@ export const basicElement = [{
     type: "basic",
     pid: ""
   }
+},
+{
+  type: "input_number",
+  label: "计数器",
+  icon: "",
+  elItem: {
+    exist: false,
+    required: false,
+    label: "计数器",
+    class: ""
+  },
+  self: {
+    defaultValue: 0,
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    // label: "描述文字"
+    placeholder: "",
+    size: "",
+    precision: "", // 精度
+    min: "",
+    max: "",
+    step: 1,
+    "step-strictly": false // 如果这个属性被设置为true，则只能输入步数的倍数
+  },
+  page: {
+    position: "",
+    type: "basic",
+    pid: ""
+  }
 }
 ];
 export const layoutElement = [
