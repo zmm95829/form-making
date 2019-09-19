@@ -498,6 +498,9 @@
           <el-form-item label="后缀">
             <el-input v-model="formConfig.labelSuffix" />
           </el-form-item>
+          <el-form-item label="类名">
+            <el-input v-model="formConfig.class" />
+          </el-form-item>
         </el-form>
       </el-tab-pane>
     </el-tabs>

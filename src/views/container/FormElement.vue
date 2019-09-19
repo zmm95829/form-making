@@ -1,6 +1,7 @@
 <template>
 <section style="display: flex; flex-direction: row; flex-wrap: wrap">
   <div class="form-element-list">
+    <p class="p-title p-title-first">基础控件</p>
     <draggable
       element="ul"
       v-model="basicElement"
@@ -21,6 +22,7 @@
     </draggable>
   </div>
   <div class="form-element-list">
+    <p class="p-title">布局控件</p>
     <draggable
       element="ul"
       v-model="layoutElement"
@@ -41,6 +43,7 @@
     </draggable>
   </div>
   <div class="form-element-list">
+    <p v-if="customElement.length > 0" class="p-title">特殊控件</p>
     <draggable
       element="ul"
       v-model="customElement"
@@ -63,8 +66,9 @@
 </section>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import Draggable from "vuedraggable"
-import { basicElement, layoutElement, customElement } from "./config/elementConfig";
+import { basicElement, layoutElement, customElement } from "./config/common/elementConfig";
 import { cloneDeep } from "lodash";
 export default {
   name: "FormElement",
@@ -76,6 +80,28 @@ export default {
       basicElement: cloneDeep(basicElement),
       layoutElement: JSON.parse(JSON.stringify(layoutElement)),
       customElement: JSON.parse(JSON.stringify(customElement))
+    }
+  },
+  computed: {
+    ...mapGetters(["system_project"]),
+    /**
+     * 项目名称
+     */
+    projectName: function () {
+      return this.system_project.name;
+    }
+  },
+  watch: {
+    projectName: function(val) {
+      import(`./config/${val}/elementConfig`)
+        .then(v => {
+          this.basicElement = JSON.parse(JSON.stringify(v.basicElement));
+          this.layoutElement = JSON.parse(JSON.stringify(v.layoutElement));
+          this.customElement = JSON.parse(JSON.stringify(v.customElement));
+        })
+        .catch(e => {
+          alert(e);
+        });
     }
   },
   methods: {
@@ -91,7 +117,7 @@ export default {
 <style>
 .form-element-list ul {
   margin: 0;
-  padding: 16px;
+  padding: 0px 16px;
   list-style-type: none;
 }
 .form-element-item {
@@ -127,5 +153,12 @@ export default {
   margin-left: 8px;
   font-size: 14px;
   display: inline-block;
+}
+.p-title {
+  margin: 5px 0;
+  padding-left: 16px;
+}
+.p-title:not(.p-title-first) {
+  margin-top: 20px;
 }
 </style>

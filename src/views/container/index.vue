@@ -1,47 +1,47 @@
 <template>
-<el-container class="container-layout">
-  <el-header>Header</el-header>
-  <el-main class="layout-center">
-    <el-container>
-      <el-aside width="262px" class="layout-left">
-        <FormElement />
-      </el-aside>
-      <el-main class="layout-main">
-        <el-container style="width: 100%; height: 100%;">
-          <el-header height="40px" style="display: flex; justify-content: space-between;">
-            <el-button type="text" @click="handleProjectChange">修改项目&nbsp;{{system_project.name +"/"+system_project.page}}</el-button>
-            <form-action
-              :data="data.formElements"
-              :form-config="data.formConfig"
-              @select-empty="handleEmpty"
-            />
-          </el-header>
-          <el-main style="padding: 4px;">
-            <FormView
-              :form-config="data.formConfig"
-              :data="data.formElements"
-            />
-          </el-main>
-        </el-container>
-      </el-main>
-      <el-aside width="300px" class="layout-right">
-        <FormConfig :form-config="data.formConfig" :swagger="data.formElements.swaggerArray"/>
-      </el-aside>
-    </el-container>
-  </el-main>
-  <el-footer>footer</el-footer>
-  <my-dialog :visible.sync="changeProject.visible">
-    <project-config @click="handleClose"/>
-  </my-dialog>
-</el-container>
+  <el-container class="container-layout">
+    <el-header>Header</el-header>
+    <el-main class="layout-center">
+      <el-container>
+        <el-aside width="262px" class="layout-left">
+          <FormElement />
+        </el-aside>
+        <el-main class="layout-main">
+          <el-container style="width: 100%; height: 100%;">
+            <el-header height="40px" style="display: flex; justify-content: space-between;">
+              <el-button
+                type="text"
+                @click="handleProjectChange"
+              >修改项目&nbsp;{{system_project.name +"/"+system_project.page}}</el-button>
+              <form-action
+                :data="data.formElements"
+                :form-config="data.formConfig"
+                @select-empty="handleEmpty"
+              />
+            </el-header>
+            <el-main style="padding: 4px;">
+              <FormView :form-config="data.formConfig" :data="data.formElements" />
+            </el-main>
+          </el-container>
+        </el-main>
+        <el-aside width="300px" class="layout-right">
+          <FormConfig :form-config="data.formConfig" :swagger="data.formElements.swaggerArray" />
+        </el-aside>
+      </el-container>
+    </el-main>
+    <el-footer>footer</el-footer>
+    <my-dialog :visible.sync="changeProject.visible">
+      <project-config @click="handleClose" />
+    </my-dialog>
+  </el-container>
 </template>
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import FormElement from "./FormElement";
 import FormAction from "./components/FormAction.vue";
 import FormView from "./components/MainView";
 import FormConfig from "./FormConfig.vue";
-import formConfig from "./config/formConfig.js";
+import formConfig from "./config/common/formConfig.js";
 import { MyDialog, ProjectConfig } from "@/components/index.js";
 export default {
   name: "Container",
@@ -69,10 +69,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["system_project"])
+    ...mapGetters(["system_project"]),
+    /**
+     * 项目名称
+     */
+    projectName: function() {
+      return this.system_project.name;
+    }
   },
   mounted: function() {
     this.$store.commit("SET_DATA", this.data.formElements);
+  },
+  watch: {
+    projectName: function(val) {
+      import(`./config/${val}/formConfig`)
+        .then(v => {
+          this.data.formConfig = v.default;
+        })
+        .catch(e => {
+          alert(e);
+        });
+    }
   },
   methods: {
     handleEmpty: function() {
@@ -88,7 +105,7 @@ export default {
       this.changeProject.visible = false;
     }
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
       if (vm.system_project.name !== to.params.name) {
         vm.$router.replace({
@@ -101,5 +118,5 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-  @import "~@/style/layout.styl";
+@import '~@/style/layout.styl';
 </style>
