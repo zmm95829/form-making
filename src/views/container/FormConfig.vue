@@ -34,12 +34,13 @@
               </el-form-item>
             </template>
             <!-- -------------------------------cofco项目---------------------------- -->
-            <el-form-item v-if="system_select.self.label" label="按钮名称">
+            <el-form-item v-if="system_select.self.label" label="名称">
               <el-input
                 v-model="system_select.self.label"
               />
             </el-form-item>
-             <el-form-item v-if="system_select.self.icon" label="图标">
+            <!-- ----------------------------------------button、link------------------------------- -->
+             <el-form-item v-if="Object.keys(system_select.self).includes('icon')" label="图标">
               <el-select v-model="system_select.self.icon" placeholder="请选择" filterable clearable>
                 <el-option
                   v-for="(item, index) in elementIcon"
@@ -51,6 +52,26 @@
                 </el-option>
             </el-select>
             </el-form-item>
+            <!-- ----------------------------------------button、link------------------------------- -->
+            <!-- ----------------------------------------link------------------------------- -->
+             <el-form-item v-if="Object.keys(system_select.self).includes('elType')" label="类型">
+              <el-select v-model="system_select.self.elType" placeholder="请选择" filterable clearable>
+                <el-option
+                  v-for="(item, index) in elementType"
+                  :key="index"
+                  :label="item"
+                  :value="item">
+                  <el-link :type="item">{{ item }}</el-link>
+                </el-option>
+            </el-select>
+            </el-form-item>
+            <el-form-item v-if="Object.keys(system_select.self).indexOf('underline')!==-1">
+              <el-checkbox v-model="system_select.self.underline">是否显示下划线</el-checkbox>
+            </el-form-item>
+             <el-form-item label="链接网址" v-if="Object.keys(system_select.self).indexOf('href') !== -1">
+              <el-input v-model="system_select.self.href"></el-input>
+            </el-form-item>
+            <!-- ----------------------------------------link------------------------------- -->
             <el-form-item
               label="占位内容"
               v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"
@@ -403,6 +424,7 @@ import { MyDialog } from "@/components/index.js";
 import { mapGetters } from "vuex";
 import VueJsonPretty from "vue-json-pretty"
 import elementIcon from "@/utils/elementIcon";
+import elementType from "@/utils/elementType";
 export default {
   props: ["formConfig", "swagger"],
   components: {
@@ -414,7 +436,8 @@ export default {
       activeName: "first",
       visible: false,
       dialogTitle: "",
-      elementIcon
+      elementIcon,
+      elementType
     }
   },
   computed: {

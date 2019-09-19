@@ -78,7 +78,7 @@ export const basicElement = [{
   label: "按钮",
   icon: "",
   elItem: {
-    exist: true,
+    exist: false,
     required: false,
     label: "按钮",
     class: itemClass
@@ -264,7 +264,7 @@ export const basicElement = [{
   label: "上传",
   icon: "",
   elItem: {
-    exist: true, // 是在el-form-item包裹下
+    exist: false, // 是在el-form-item包裹下
     required: false, // 该项必填
     label: "上传", // el-form-item显示的标签
     class: "" // el-form-item的样式
@@ -280,6 +280,33 @@ export const basicElement = [{
       btnTitle: "点击上传", // 按钮的文字
       tip: "" // 提示文字, 为空时不生成div
     }
+  },
+  page: {
+    position: "",
+    type: "basic",
+    pid: ""
+  }
+},
+{
+  type: "link",
+  label: "链接",
+  icon: "",
+  elItem: {
+    exist: false,
+    required: false,
+    label: "链接",
+    class: ""
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    label: "链接",
+    elType: "primary",
+    underline: true,
+    icon: "",
+    href: "https://"
   },
   page: {
     position: "",

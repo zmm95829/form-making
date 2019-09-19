@@ -125,6 +125,10 @@ function getElFormItemCode(item) {
           <div slot="tip" class="el-upload__tip">${item.self.slot.tip}</div>
         </el-upload>`;
         break;
+      case "link":
+        const href = item.self.href === "https://" ? "" : item.self.href;
+        re = `<el-link${getPropValue("type", item.self.elType)}${getPropValue(":disabled", item.self.disabled)}${getPropValue(":underline", item.self.underline)}${getPropValue("icon", item.self.icon)}${getPropValue("href", href)}${href ? " target=\"_blank\"" : ""}>${item.self.label}</el-link>`;
+        break;
       default: break;
     }
   }
@@ -163,9 +167,9 @@ export function getListCode(list) {
 };
 
 function getPropValue(prop, value) {
-  if (!value) {
+  if (!value && typeof value !== "boolean") {
     return "";
   } else {
-    return ` ${prop}="${value}"`
+    return ` ${prop}="${value}"`;
   }
 }

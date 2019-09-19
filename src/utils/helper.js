@@ -109,22 +109,22 @@ function getPathSub(item, path, isNotOnlyLeaf) {
         re[item.id] = path + "=" + item.type;
       }
       item.columns.forEach((v, index) => {
-        re = {...re, ...getPath(v.list, `${path}.columns[${index}]`)};
+        re = {...re, ...getPath(v.list, `${path}.columns[${index}]`, isNotOnlyLeaf)};
       });
       break;
     case "form":
       if (isNotOnlyLeaf) {
         re[item.id] = path + "=" + item.type;
       }
-      re = {...re, ...getPath(item.list, path)};
+      re = {...re, ...getPath(item.list, path, isNotOnlyLeaf)};
       break;
     case "collapse":
       if (isNotOnlyLeaf) {
         re[item.id] = path + "=" + item.type;
       }
       item.items.forEach((v, index) => {
-        re = {...re, ...getPath(v.top.list, `${path}.items[${index}].top`)};
-        re = {...re, ...getPath(v.list, `${path}.items[${index}]`)};
+        re = {...re, ...getPath(v.top.list, `${path}.items[${index}].top`, isNotOnlyLeaf)};
+        re = {...re, ...getPath(v.list, `${path}.items[${index}]`, isNotOnlyLeaf)};
       });
       break;
     default:

@@ -104,6 +104,9 @@
           <div slot="tip" class="el-upload__tip">{{ item.self.slot.tip }}</div>
         </el-upload>
       </template>
+      <template v-if="item.type === 'link'">
+        <el-link :type="item.self.elType" :disabled="item.self.disabled" :underline="item.self.underline" :icon="item.self.icon">{{ item.self.label }}</el-link>
+      </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click.stop="handleClone"></i>

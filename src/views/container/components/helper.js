@@ -37,9 +37,7 @@ export function handleMoveAdd(arr, val, position, pid) {
   store.commit("SET_SELECT", arr[newIndex]);
 };
 export function handleDelete(arr, index) {
-  console.log("sdfsdf");
   if (index === arr.length - 1 && index !== 0) {
-    console.log("last", arr[index - 1])
     store.commit("SET_SELECT", arr[index - 1]);
   } else if (arr.length > 1) {
     store.commit("SET_SELECT", arr[index + 1]);

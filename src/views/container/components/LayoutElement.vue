@@ -180,8 +180,7 @@ export default {
     handleGridColAdd: function(event, item, index) {
       const newIndex = event.newIndex;
       const myItem = item.columns[index].list[newIndex];
-      console.log(item)
-      if ((myItem.page.needForm || myItem.page.type.indexOf("basic") !== -1) && item.page.position.indexOf("form") === -1) {
+      if ((myItem.page.needForm || (myItem.page.type && myItem.page.type.indexOf("basic") !== -1)) && item.page.position.indexOf("form") === -1 && myItem.elItem && myItem.elItem.exist) {
         item.columns[index].list.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
       } else {
@@ -193,8 +192,7 @@ export default {
     },
     handleMoveAdd: function(arr, val) {
       const newIndex = val.newIndex;
-      console.log(arr[newIndex])
-      if ((arr[newIndex].page.needForm || arr[newIndex].page.type.indexOf("basic") !== -1) && this.item.page.position.indexOf("form") === -1) {
+      if ((arr[newIndex].page.needForm || (arr[newIndex].page.type && arr[newIndex].page.type.indexOf("basic") !== -1)) && this.item.page.position.indexOf("form") === -1 && arr[newIndex].elItem && arr[newIndex].elItem.exist) {
         arr.splice(newIndex, 1);
         this.$alert("请先拖拽表单", "提示", { type: "warning" });
       } else {

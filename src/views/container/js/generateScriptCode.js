@@ -26,6 +26,7 @@ export function getModel(list) {
         model = {...model, ...getModel(list[index].list)};
         break;
       case "placeholder":
+      case "link":
         break;
       case "upload":
         model[v] = [];
