@@ -91,6 +91,31 @@
               </el-form-item>
             </template>
             <!-- ----------------------------------------input_number------------------------------- -->
+            <!-- ----------------------------------------switch------------------------------- -->
+            <template v-if="system_select.type === 'switch'">
+              <el-form-item label="宽度">
+                 <el-input-number v-model="system_select.self.width"/>
+              </el-form-item>
+              <el-form-item label="打开时的文字描述">
+                 <el-input v-model="system_select.self['active-text']"/>
+              </el-form-item>
+              <el-form-item label="关闭时的文字描述">
+                 <el-input v-model="system_select.self['inactive-text']"/>
+              </el-form-item>
+              <el-form-item label="打开时的值">
+                 <el-input v-model="system_select.self['active-value']"/>
+              </el-form-item>
+              <el-form-item label="关闭时的值">
+                 <el-input v-model="system_select.self['inactive-value']"/>
+              </el-form-item>
+              <el-form-item label="打开时的背景色">
+                 <el-color-picker v-model="system_select.self['active-color']"/>
+              </el-form-item>
+              <el-form-item label="关闭时的背景色">
+                 <el-color-picker v-model="system_select.self['inactive-color']"/>
+              </el-form-item>
+            </template>
+            <!-- ----------------------------------------switch------------------------------- -->
             <el-form-item
               label="占位内容"
               v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"

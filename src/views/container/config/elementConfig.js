@@ -344,6 +344,35 @@ export const basicElement = [{
     type: "basic",
     pid: ""
   }
+},
+{
+  type: "switch",
+  label: "开关",
+  icon: "",
+  elItem: {
+    exist: true,
+    required: false,
+    label: "开关",
+    class: ""
+  },
+  self: {
+    model: "",
+    disabled: false,
+    style: "",
+    class: "",
+    width: 40,
+    "active-text": "",
+    "inactive-text": "",
+    "active-value": "",
+    "inactive-value": "",
+    "active-color": "#409EFF",
+    "inactive-color": "#C0CCDA"
+  },
+  page: {
+    position: "",
+    type: "basic",
+    pid: ""
+  }
 }
 ];
 export const layoutElement = [

@@ -110,6 +110,17 @@
       <template v-if="item.type === 'input_number'">
         <el-input-number v-model="showModel" :disabled="item.self.disabled" :placeholder="item.self.placeholder" :size="item.self.size"></el-input-number>
       </template>
+      <template v-if="item.type === 'switch'">
+        <el-switch
+          v-model="showModel"
+          :disabled="item.self.disabled"
+          :width="Number(item.self.width)"
+          :active-text="item.self['active-text']"
+          :inactive-text="item.self['inactive-text']"
+          :active-color="item.self['active-color']"
+          :inactive-color="item.self['inactive-color']">
+        </el-switch>
+      </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click.stop="handleClone"></i>

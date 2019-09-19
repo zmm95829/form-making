@@ -132,6 +132,9 @@ function getElFormItemCode(item) {
       case "input_number":
         re = `<el-input-number v-model="model.${item.self.model}"${getPropValue(":disabled", item.self.disabled)}${getPropValue(":min", item.self.min)}${getPropValue(":max", item.self.max)}${getPropValue(":step", item.self.step)}${getPropValue(":precision", item.self.precision)}${getValue("step-strictly", item.self["step-strictly"])}${getPropValue("placeholder", item.self.placeholder)}${getPropValue("size", item.self.size)}/>`;
         break;
+      case "switch":
+        re = `<el-switch v-model="model.${item.self.model}"${getValue("disabled", item.self.disabled)}${getPropValue(":width", [40, "40"].includes(item.self.width) ? "" : item.self.width)}${getPropValue("active-text", item.self["active-text"])}${getPropValue("inactive-text", item.self["inactive-text"])}${getPropValue("active-value", item.self["active-value"])}${getPropValue("inactive-value", item.self["inactive-value"])}${getPropValue("active-color", item.self["active-color"])}${getPropValue("inactive-color", item.self["inactive-color"])}/>`
+        break;
       default: break;
     }
   }
