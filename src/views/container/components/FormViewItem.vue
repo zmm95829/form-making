@@ -136,6 +136,9 @@
           <el-button class="button-new-tag" size="small">{{ item.self.canAddNewTitle }}</el-button>
         </template>
       </template>
+      <template v-if="item.type === 'divider'">
+        <el-divider :direction="item.self.direction" :content-position="item.self['content-position']">{{ item.self.label }}</el-divider>
+      </template>
     </div>
     <div v-if="system_select && item && system_select.id === item.id" class="item-view-action">
       <i class="iconfont icon-clone" title="复制" @click.stop="handleClone"></i>

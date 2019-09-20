@@ -494,6 +494,24 @@ export const layoutElement = [
       }],
       name: "1"
     }]
+  },
+  {
+    type: "divider",
+    label: "分割线",
+    icon: "",
+    self: {
+      model: "",
+      style: "",
+      class: "",
+      direction: "horizontal",
+      label: "",
+      "content-position": "center"
+    },
+    page: {
+      position: "",
+      type: "",
+      pid: ""
+    }
   }
 ];
 export const customElement = []

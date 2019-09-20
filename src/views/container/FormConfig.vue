@@ -34,7 +34,7 @@
               </el-form-item>
             </template>
             <!-- -------------------------------cofco项目---------------------------- -->
-            <el-form-item v-if="system_select.self.label" label="名称">
+            <el-form-item v-if="Object.keys(system_select.self).includes('label')" label="名称">
               <el-input
                 v-model="system_select.self.label"
               />
@@ -158,6 +158,23 @@
               </el-form-item>
             </template>
             <!-- ----------------------------------------tag------------------------------- -->
+            <!-- ----------------------------------------divider------------------------------- -->
+            <template v-if="system_select.type === 'divider'">
+              <el-form-item label="分割线方向">
+                <el-radio-group v-model="system_select.self.direction" size="small">
+                  <el-radio-button label="horizontal">horizontal</el-radio-button>
+                  <el-radio-button label="vertical">vertical</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="分割线文案的位置">
+                <el-radio-group v-model="system_select.self['content-position']" size="small">
+                  <el-radio-button label="left">left</el-radio-button>
+                  <el-radio-button label="center">center</el-radio-button>
+                  <el-radio-button label="right">right</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </template>
+            <!-- ----------------------------------------divider------------------------------- -->
             <el-form-item
               label="占位内容"
               v-if="Object.keys(system_select.self).indexOf('placeholder')>=0 && system_select.type!=='date'"
