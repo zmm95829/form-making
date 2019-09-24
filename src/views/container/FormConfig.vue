@@ -139,7 +139,7 @@
                   :key="index"
                   v-for="(sub, index) in system_select.self.options"
                   closable
-                  :size="mini"
+                  size="mini"
                   @close="handleTagClose(index)"
                   >
                   {{ sub }}

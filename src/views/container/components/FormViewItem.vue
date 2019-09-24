@@ -82,6 +82,7 @@
           :placeholder="item.self.placeholder"
           :disabled="true"
           :class="item.self.class"
+          style="width: calc(100% - 35px)"
         />
         <el-button type="primary" style="margin-left:2px" icon="el-icon-more" circle size="mini" />
       </template>

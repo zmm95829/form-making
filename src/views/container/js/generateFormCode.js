@@ -156,10 +156,12 @@ function getElFormItemCode(item) {
         </el-input>
         <el-button v-else size="small" @click="showInput">新增</el-button>`
         break;
+      case "divider":
+        re = `<el-divider${getPropValue("direction", item.self.direction, "horizontal")}${getPropValue("content-position", item.self["content-position"], "center")}>{{ ${item.self.label} }}</el-divider>`;
+        break;
       default: break;
     }
   }
-  console.log(re)
   return item.elItem && item.elItem.exist ? `<el-form-item${getPropValue("label", item.elItem && item.elItem.label)}${getPropValue("class", item.elItem && item.elItem.class)} ${require}>
   ${re}
   </el-form-item>
@@ -197,8 +199,12 @@ export function getListCode(list) {
  * 根据属性值是否存在生成代码
  * @param {*} prop 属性
  * @param {*} value 属性值
+ * @param {*} defaultValue 默认值
  */
-function getPropValue(prop, value) {
+function getPropValue(prop, value, defaultValue) {
+  if (value === defaultValue) {
+    return "";
+  }
   if (!value && typeof value !== "boolean") {
     return "";
   } else {
